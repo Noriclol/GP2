@@ -4,20 +4,25 @@ using UnityEngine;
 
 public class DummyHealthScript : MonoBehaviour
 {
-    private float currentHealth;
-    [SerializeField] private float maxHealth;
+    
+    private Stats stats;
+
+    private void Awake()
+    {
+        stats = GetComponent<Stats>();
+    }
 
     private void Start()
     {
-        currentHealth = maxHealth;
+        stats.currentHealth = stats.maxHealth;
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            currentHealth = Health.ReciveDamage(currentHealth, 10);
-            Debug.Log(currentHealth);
+            stats.currentHealth = Health.ReciveDamage(stats.currentHealth, 10);
+            Debug.Log(stats.currentHealth);
         }
 
     }
