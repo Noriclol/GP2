@@ -58,6 +58,14 @@ public class PlayerController : MonoBehaviour
     }
 
 
+    // Method to handle player action input
+    public void OnAction(InputAction.CallbackContext actionContext)
+    {
+
+        Debug.Log(actionContext);
+
+    }
+
     // Method to handle player jump input
     public void OnJump(InputAction.CallbackContext jumpContext)
     {
