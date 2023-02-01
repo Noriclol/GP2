@@ -1,20 +1,24 @@
 using UnityEngine;
 using Mirror;
+using Mirror.Discovery;
 
 public class MultiplayerMenuScript : MonoBehaviour
 {
     [SerializeField] private TMPro.TMP_InputField hostInputField;
     private NetworkRoomManager networkManager;
+    private NetworkDiscovery networkDiscovery;
 
     private void Awake()
     {
         networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkRoomManager>();
+        networkDiscovery = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkDiscovery>();
     }
 
     public void OnHost()
     {
         networkManager.maxConnections = 2;
         networkManager.StartHost();
+        networkDiscovery.AdvertiseServer();
     }
 
     public void OnLocal()
