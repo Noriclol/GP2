@@ -20,7 +20,7 @@ public class MultiplayerMenuScript : MonoBehaviour
     public void OnLocal()
     {
         networkManager.maxConnections = 1;
-        // TODO: The second local player
+        // TODO: The second local player?
         networkManager.StartHost();
     }
 
