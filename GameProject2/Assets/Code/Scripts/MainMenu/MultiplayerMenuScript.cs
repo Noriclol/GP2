@@ -20,11 +20,11 @@ public class MultiplayerMenuScript : MonoBehaviour
 		NatUtility.DeviceFound += DeviceFound;
 		NatUtility.StartDiscovery();
 
-		Debug.Log(NatUtility.IsSearching);
+		Debug.Log($"Upnp Searching: {NatUtility.IsSearching}");
 
-		// networkManager.maxConnections = 2;
-		// networkManager.StartHost();
-		// networkDiscovery.AdvertiseServer();
+		networkManager.maxConnections = 2;
+		networkManager.StartHost();
+		networkDiscovery.AdvertiseServer();
 	}
 
 	void DeviceFound(object sender, DeviceEventArgs args)
