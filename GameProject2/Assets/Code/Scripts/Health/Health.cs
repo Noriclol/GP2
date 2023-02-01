@@ -1,14 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Data.SqlTypes;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
 
 public static class Health
 {
 
 
-
+    //Could add gameobject to the parameters
     public static float ReciveDamage(float health, float damageRecived)
     {
 
