@@ -91,7 +91,7 @@ public class PlayerController : MonoBehaviour
         if (dodgeCooldownOver && _isGrounded)
         {
             _dodgeTimeStamp = Time.time;
-            Vector3 dodgeDirection = transform.forward * _move.magnitude + Vector3.up;
+            Vector3 dodgeDirection = transform.forward * _move.magnitude;
             _characterRB.AddForce(dodgeDirection * dodgeForce, ForceMode.Impulse);
             _isGrounded = false;
         }
