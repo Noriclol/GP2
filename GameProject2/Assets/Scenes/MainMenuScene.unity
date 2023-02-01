@@ -1011,9 +1011,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1326798780}
-  - component: {fileID: 1326798779}
+  - component: {fileID: 1326798783}
   - component: {fileID: 1326798782}
-  - component: {fileID: 1326798781}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: NetworkManager
@@ -1021,35 +1020,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1326798779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1326798778}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8aab4c8111b7c411b9b92cf3dbc5bd4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 1
-  runInBackground: 1
-  autoStartServerBuild: 1
-  autoConnectClientBuild: 0
-  sendRate: 30
-  offlineScene: Assets/Scenes/MainMenuScene.unity
-  onlineScene: 
-  transport: {fileID: 1326798782}
-  networkAddress: localhost
-  maxConnections: 2
-  authenticator: {fileID: 0}
-  playerPrefab: {fileID: 7193294246354449154, guid: c4015a6ea7903b847a7c9b9a4ffe97d4,
-    type: 3}
-  autoCreatePlayer: 1
-  playerSpawnMethod: 0
-  spawnPrefabs: []
-  timeInterpolationGui: 0
 --- !u!4 &1326798780
 Transform:
   m_ObjectHideFlags: 0
@@ -1065,20 +1035,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1326798781
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1326798778}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6442dc8070ceb41f094e44de0bf87274, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  offsetX: 0
-  offsetY: 0
 --- !u!114 &1326798782
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1106,6 +1062,44 @@ MonoBehaviour:
   debugLog: 0
   statisticsGUI: 0
   statisticsLog: 0
+--- !u!114 &1326798783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1326798778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 615e6c6589cf9e54cad646b5a11e0529, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 1
+  runInBackground: 1
+  autoStartServerBuild: 1
+  autoConnectClientBuild: 0
+  sendRate: 30
+  offlineScene: Assets/Scenes/MainMenuScene.unity
+  onlineScene: 
+  transport: {fileID: 1326798782}
+  networkAddress: localhost
+  maxConnections: 2
+  authenticator: {fileID: 0}
+  playerPrefab: {fileID: 3348712000931367329, guid: daf748be454e7cc4fb9966f2dfdeba1e,
+    type: 3}
+  autoCreatePlayer: 0
+  playerSpawnMethod: 0
+  spawnPrefabs: []
+  timeInterpolationGui: 0
+  showRoomGUI: 1
+  minPlayers: 1
+  roomPlayerPrefab: {fileID: 127621082904393701, guid: c4015a6ea7903b847a7c9b9a4ffe97d4,
+    type: 3}
+  RoomScene: 
+  GameplayScene: 
+  _allPlayersReady: 0
+  roomSlots: []
+  clientIndex: 0
 --- !u!1 &1427408170
 GameObject:
   m_ObjectHideFlags: 0

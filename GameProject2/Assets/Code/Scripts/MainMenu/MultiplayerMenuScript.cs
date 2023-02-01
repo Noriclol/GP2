@@ -4,11 +4,11 @@ using Mirror;
 public class MultiplayerMenuScript : MonoBehaviour
 {
     [SerializeField] private TMPro.TMP_InputField hostInputField;
-    private NetworkManager networkManager;
+    private NetworkRoomManager networkManager;
 
     private void Awake()
     {
-        networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkManager>();
+        networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkRoomManager>();
     }
 
     public void OnHost()
