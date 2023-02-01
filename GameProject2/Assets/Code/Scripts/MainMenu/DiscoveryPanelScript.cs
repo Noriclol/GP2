@@ -10,8 +10,6 @@ public class DiscoveryPanelScript : MonoBehaviour
     [SerializeField] private GameObject content;
     [SerializeField] private GameObject discoveredServerPrefab;
 
-    private int x = 30;
-
     void Start()
     {
         networkDiscovery = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkDiscovery>();
