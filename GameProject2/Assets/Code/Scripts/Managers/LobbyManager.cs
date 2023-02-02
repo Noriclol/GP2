@@ -6,74 +6,33 @@ using UnityEngine.UI;
 
 public class LobbyManager : NetworkBehaviour
 {
-    public GameObject CharacterSelectionPanel;
-    public GameObject LobbyPanel;
+	[SerializeField]
+	private Button button1;
 
-    List<Player> Players;
+	[SerializeField]
+	private Button button2;
 
-    [SyncVar(hook = nameof(UpdateLobbyPanel))]
-    private SelectedCharacter player1Selected;
-    [SyncVar(hook = nameof(UpdateLobbyPanel))]
-    private SelectedCharacter player2Selected;
+	private NetworkRoomManager networkRoomManager;
 
-    public int localPlayer;
+	private void Start()
+	{
+		networkRoomManager = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkRoomManager>();
 
-    [SerializeField]
-    private Button button1;
-    [SerializeField]
-    private Button button2;
+		const string lobbyPlayersTag = "LobbyPlayer";
+		var players = GameObject.FindGameObjectsWithTag(lobbyPlayersTag);
 
-    private NetworkRoomManager networkRoomManager;
+		foreach (GameObject player in players)
+		{
+			var selection = player.GetComponent<LobbyPlayerScript>().selection;
 
-    private void Start()
-    {
-        networkRoomManager = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkRoomManager>();
-    }
-
-    [Command]
-    private void CMDSetPlayerCharacter(SelectedCharacter selection, int player)
-    {
-        if(player == 1) { player1Selected = selection; }
-        else { player2Selected = selection; }
-    }
-
-    public void SetPlayerCharacter(SelectedCharacter selection)
-    {
-        CMDSetPlayerCharacter(selection, localPlayer);
-    }
-
-    public void UpdateLobbyPanel(SelectedCharacter _Old, SelectedCharacter _New)
-    {
-        if(player1Selected == SelectedCharacter.Attack || player2Selected == SelectedCharacter.Attack)
-        {
-            button1.interactable = false;
-        }
-        else if(player1Selected == SelectedCharacter.Support || player2Selected == SelectedCharacter.Support)
-        {
-            button2.interactable = false;
-        }
-
-        if(networkRoomManager.allPlayersReady)
-        {
-            Debug.Log("Start Game");
-            //play
-        }
-        
-
-    }
-
-    public void SetLocalPlayer()
-    {
-        localPlayer = networkRoomManager.numPlayers;
-    }
-
-
-
-}
-
-
-public class Player
-{
-    public string name;
-    public SelectedCharacter role;
+			if (selection == SelectedCharacter.Attack)
+			{
+				button1.interactable = false;
+			}
+			else if (selection == SelectedCharacter.Attack)
+			{
+				button2.interactable = false;
+			}
+		}
+	}
 }

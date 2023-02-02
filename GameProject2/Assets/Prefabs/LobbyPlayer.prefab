@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -3615022730623532805}
   m_Layer: 0
   m_Name: LobbyPlayer
-  m_TagString: Untagged
+  m_TagString: LobbyPlayer
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,3 +84,4 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  selection: 0

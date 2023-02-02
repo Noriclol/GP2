@@ -6,36 +6,57 @@ using UnityEngine.UI;
 
 public class LobbyPlayerScript : NetworkBehaviour
 {
-    private Button Button1;
-    private Button Button2;
+	private Button button1;
+	private Button button2;
 
-    private LobbyManager lobbyManager;
+	private LobbyManager lobbyManager;
 
-    public void Start()
-    {
-        if(isLocalPlayer)
-        {
-            lobbyManager = GameObject.FindGameObjectWithTag("LobbyManager").GetComponent<LobbyManager>();
-            lobbyManager.SetLocalPlayer();
+	[SyncVar(hook = nameof(SelectionChanged))]
+	public SelectedCharacter selection = SelectedCharacter.none;
 
-            Button1 = GameObject.Find("ButtonPlayer1").GetComponent<Button>();
-            Button2 = GameObject.Find("ButtonPlayer2").GetComponent<Button>();
+	void Start()
+	{
+		button1 = GameObject.Find("ButtonPlayer1").GetComponent<Button>();
+		button2 = GameObject.Find("ButtonPlayer2").GetComponent<Button>();
+		lobbyManager = GameObject.FindGameObjectWithTag("LobbyManager").GetComponent<LobbyManager>();
 
-            Button1.onClick.AddListener(() => OnButton1Click());
-            Button2.onClick.AddListener(() => OnButton2Click());
-        }
-    }
+		if (isLocalPlayer)
+		{
+			button1.onClick.AddListener(() => OnButton1Click());
+			button2.onClick.AddListener(() => OnButton2Click());
+		}
+	}
 
-    public void OnButton1Click()
-    {
-        lobbyManager.SetPlayerCharacter(SelectedCharacter.Attack);
-        GetComponent<NetworkRoomPlayer>().readyToBegin = true;
-    }
+	private void SelectionChanged(SelectedCharacter _Old, SelectedCharacter _New)
+	{
+		if (_New == SelectedCharacter.Attack)
+		{
+			button1.interactable = false;
+		}
+		else if (_New == SelectedCharacter.Support)
+		{
+			button2.interactable = false;
+		}
+	}
 
-    public void OnButton2Click()
-    {
-        lobbyManager.SetPlayerCharacter(SelectedCharacter.Support);
-        GetComponent<NetworkRoomPlayer>().readyToBegin = true;
-    }
+	private void OnButton1Click() // Attack select
+	{
+		GetComponent<NetworkRoomPlayer>().CmdChangeReadyState(true);
+		CMDSetPlayerSelection(SelectedCharacter.Attack);
+	}
 
+	private void OnButton2Click() // Support select
+	{
+		GetComponent<NetworkRoomPlayer>().CmdChangeReadyState(true);
+		CMDSetPlayerSelection(SelectedCharacter.Support);
+	}
+
+	[Command]
+	private void CMDSetPlayerSelection(SelectedCharacter selected)
+	{
+		if (selection == SelectedCharacter.none)
+		{
+			selection = selected;
+		}
+	}
 }
