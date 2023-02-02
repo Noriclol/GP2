@@ -8,14 +8,15 @@ public class PlayerController : MonoBehaviour
 
     // Serialized fields for the Rigidbody component of the player and the move speed and jump force values
     [SerializeField] private Rigidbody _characterRB;
-    [SerializeField] public float moveSpeed, jumpForce;
+    [SerializeField] public float moveSpeed, jumpForce, dodgeForce;
 
     // Private Vector2 field to store the player's movement input
     private Vector2 _move;
 
-    // Timestamp for the last time the player jumped and the minimum interval for jumping
+    // Timestamp for the last time the player jumped, dodged and the minimum interval for jumping and dodging
     private float _jumpTimeStamp = 0;
-    public float minJumpInterval;
+    private float _dodgeTimeStamp = 0;
+    public float minJumpInterval, minDodgeInterval;
 
     // Bool to check if the player is grounded
     private bool _isGrounded;
@@ -62,7 +63,7 @@ public class PlayerController : MonoBehaviour
     public void OnAction(InputAction.CallbackContext actionContext)
     {
 
-        Debug.Log(actionContext);
+        Debug.Log("Action Input called.");
 
     }
 
@@ -80,6 +81,22 @@ public class PlayerController : MonoBehaviour
             _isGrounded = false;
         }
     }
+
+    public void OnDodge(InputAction.CallbackContext dodgeContext)
+    {
+        // Check if the dodge cooldown has ended
+        bool dodgeCooldownOver = (Time.time - _dodgeTimeStamp) >= minDodgeInterval;
+
+        // If the dodge cooldown has ended and the player is grounded, dodge
+        if (dodgeCooldownOver && _isGrounded)
+        {
+            _dodgeTimeStamp = Time.time;
+            Vector3 dodgeDirection = transform.forward * _move.magnitude;
+            _characterRB.AddForce(dodgeDirection * dodgeForce, ForceMode.Impulse);
+            _isGrounded = false;
+        }
+    }
+    
 
     // Method to check if the player is touching the ground
     private void OnCollisionEnter(Collision col)
