@@ -1889,12 +1889,12 @@ MonoBehaviour:
   playerSpawnMethod: 0
   spawnPrefabs: []
   timeInterpolationGui: 0
-  showRoomGUI: 1
+  showRoomGUI: 0
   minPlayers: 2
   roomPlayerPrefab: {fileID: 127621082904393701, guid: c4015a6ea7903b847a7c9b9a4ffe97d4,
     type: 3}
   RoomScene: Assets/Scenes/Lobby.unity
-  GameplayScene: 
+  GameplayScene: Assets/Scenes/SampleScene.unity
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0

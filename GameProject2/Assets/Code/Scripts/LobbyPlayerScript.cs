@@ -1,29 +1,41 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.UI;
 
-public class LobbyPlayerScript : NetworkBehaviour
+public class LobbyPlayerScript : NetworkRoomPlayer
 {
-	private Button button1;
-	private Button button2;
-
-	private LobbyManager lobbyManager;
+	private Button attackButton;
+	private Button supportButton;
 
 	[SyncVar(hook = nameof(SelectionChanged))]
 	public SelectedCharacter selection = SelectedCharacter.none;
 
-	void Start()
+	private LobbyManager lobbyManager;
+
+	private new void Start()
 	{
-		button1 = GameObject.Find("ButtonPlayer1").GetComponent<Button>();
-		button2 = GameObject.Find("ButtonPlayer2").GetComponent<Button>();
-		lobbyManager = GameObject.FindGameObjectWithTag("LobbyManager").GetComponent<LobbyManager>();
+		lobbyManager = GameObject.FindWithTag("LobbyManager").GetComponent<LobbyManager>();
+
+		attackButton = GameObject.Find("AttackCharacterButton").GetComponent<Button>();
+		supportButton = GameObject.Find("SupportCharacterButton").GetComponent<Button>();
 
 		if (isLocalPlayer)
 		{
-			button1.onClick.AddListener(() => OnButton1Click());
-			button2.onClick.AddListener(() => OnButton2Click());
+			attackButton.onClick.AddListener(OnAttackButtonClick);
+			supportButton.onClick.AddListener(OnSupportButtonClick);
+		}
+		else
+		{
+			lobbyManager.otherPlayerJoined = true;
+		}
+	}
+
+	public override void OnClientExitRoom()
+	{
+		if (!isLocalPlayer)
+		{
+		    SelectionChanged(selection, SelectedCharacter.none);
+			lobbyManager.otherPlayerJoined = false;
 		}
 	}
 
@@ -31,21 +43,32 @@ public class LobbyPlayerScript : NetworkBehaviour
 	{
 		if (_New == SelectedCharacter.Attack)
 		{
-			button1.interactable = false;
+			attackButton.interactable = false;
+			return;
 		}
 		else if (_New == SelectedCharacter.Support)
 		{
-			button2.interactable = false;
+			supportButton.interactable = false;
+			return;
+		}
+
+		if (_Old == SelectedCharacter.Attack)
+		{
+			attackButton.interactable = true;
+		}
+		else if (_Old == SelectedCharacter.Support)
+		{
+			supportButton.interactable = true;
 		}
 	}
 
-	private void OnButton1Click() // Attack select
+	private void OnAttackButtonClick() // Attack select
 	{
 		GetComponent<NetworkRoomPlayer>().CmdChangeReadyState(true);
 		CMDSetPlayerSelection(SelectedCharacter.Attack);
 	}
 
-	private void OnButton2Click() // Support select
+	private void OnSupportButtonClick() // Support select
 	{
 		GetComponent<NetworkRoomPlayer>().CmdChangeReadyState(true);
 		CMDSetPlayerSelection(SelectedCharacter.Support);

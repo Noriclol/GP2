@@ -7,19 +7,42 @@ using UnityEngine.UI;
 public class LobbyManager : NetworkBehaviour
 {
 	[SerializeField]
-	private Button button1;
+	private Button attackButton;
 
 	[SerializeField]
-	private Button button2;
+	private Button supportButton;
 
-	private NetworkRoomManager networkRoomManager;
+	[SerializeField]
+	private GameObject secondPlayerIndicator;
 
+	private bool _otherPlayerJoined = false;
+    public bool otherPlayerJoined {
+        get { return _otherPlayerJoined; }
+        set 
+        {
+			SetOtherPlayerIndicator(value);
+			_otherPlayerJoined = value;
+		}
+    }
+
+	// Makes sure that if a character has already been selected then that button will be grayed out.
+    // As well as second player indicator
 	private void Start()
 	{
-		networkRoomManager = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkRoomManager>();
-
 		const string lobbyPlayersTag = "LobbyPlayer";
 		var players = GameObject.FindGameObjectsWithTag(lobbyPlayersTag);
+
+		var networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkRoomManager>();
+		var playerCount = networkManager.numPlayers;
+
+        if (playerCount == 2)
+        {
+			otherPlayerJoined = true;
+		}
+        else 
+        {
+			otherPlayerJoined = false;
+		}
 
 		foreach (GameObject player in players)
 		{
@@ -27,12 +50,30 @@ public class LobbyManager : NetworkBehaviour
 
 			if (selection == SelectedCharacter.Attack)
 			{
-				button1.interactable = false;
+				attackButton.interactable = false;
 			}
 			else if (selection == SelectedCharacter.Attack)
 			{
-				button2.interactable = false;
+				supportButton.interactable = false;
 			}
 		}
+	}
+
+    private void SetOtherPlayerIndicator(bool joined)
+    {
+        if (joined)
+        {
+			secondPlayerIndicator.SetActive(true);
+		}
+        else    
+        {
+			secondPlayerIndicator.SetActive(false);
+		}
+        
+    }
+
+	public void OnExitButtonClick()
+	{
+		GameObject.FindWithTag("NetworkManager").GetComponent<NetworkRoomManager>().StopHost();
 	}
 }
