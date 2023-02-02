@@ -1,36 +1,73 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
+using UnityEngine.UI;
 
-public class LobbyManager : MonoBehaviour
+public class LobbyManager : NetworkBehaviour
 {
     public GameObject CharacterSelectionPanel;
     public GameObject LobbyPanel;
 
     List<Player> Players;
 
-    public void SetPlayerCharacter(SelectedCharacter selection, Player player)
+    [SyncVar(hook = nameof(UpdateLobbyPanel))]
+    private SelectedCharacter player1Selected;
+    [SyncVar(hook = nameof(UpdateLobbyPanel))]
+    private SelectedCharacter player2Selected;
+
+    public int localPlayer;
+
+    [SerializeField]
+    private Button button1;
+    [SerializeField]
+    private Button button2;
+
+    private NetworkRoomManager networkRoomManager;
+
+    private void Start()
     {
-        player.role = selection;
+        networkRoomManager = GameObject.FindGameObjectWithTag("NetworkManager").GetComponent<NetworkRoomManager>();
     }
 
-    public void RefreshLobbyPanel()
+    [Command]
+    private void CMDSetPlayerCharacter(SelectedCharacter selection, int player)
     {
-       // clear lobby panel
-
-        //for each player in Players
-
-            // Instantiate Text in lobby panel
-            // Set Text to player name and ping
+        if(player == 1) { player1Selected = selection; }
+        else { player2Selected = selection; }
     }
 
-    public void UpdateLobbyPanel()
+    public void SetPlayerCharacter(SelectedCharacter selection)
     {
-        //for each player in Players
+        CMDSetPlayerCharacter(selection, localPlayer);
+    }
 
-            // update each player ping on board
+    public void UpdateLobbyPanel(SelectedCharacter _Old, SelectedCharacter _New)
+    {
+        if(player1Selected == SelectedCharacter.Attack || player2Selected == SelectedCharacter.Attack)
+        {
+            button1.interactable = false;
+        }
+        else if(player1Selected == SelectedCharacter.Support || player2Selected == SelectedCharacter.Support)
+        {
+            button2.interactable = false;
+        }
+
+        if(networkRoomManager.allPlayersReady)
+        {
+            Debug.Log("Start Game");
+            //play
+        }
+        
 
     }
+
+    public void SetLocalPlayer()
+    {
+        localPlayer = networkRoomManager.numPlayers;
+    }
+
+
 
 }
 
