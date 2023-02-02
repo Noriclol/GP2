@@ -173,7 +173,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""8daaef0b-8085-42de-909a-da86742cdb21"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""path"": ""<Keyboard>/v"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
