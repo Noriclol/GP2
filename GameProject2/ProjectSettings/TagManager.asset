@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - NetworkManager
+  - LobbyManager
+  - LobbyPlayer
   layers:
   - Default
   - TransparentFX
