@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,18 +8,20 @@ public class DummyHealthScript : MonoBehaviour
 {
     
     [SerializeField] private Stats stats;
+    private HealthBar healthBar;
     private ResourceSystem healthSystem;
 
     private void Awake()
     {
-        
         healthSystem = new ResourceSystem(stats.maxHealth);
+        healthBar = GetComponent<HealthBar>();
     }
 
     private void Start()
     {
         stats.SetUp();
-        Debug.Log(stats.currentHealth);
+        healthBar.SetValue(stats.currentHealth, stats.maxHealth);
+        
     }
 
     private void Update()
@@ -26,16 +29,18 @@ public class DummyHealthScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             stats.currentHealth = healthSystem.SubtractResource(10);
-            Debug.Log(healthSystem.GetResourceAmount());
+            healthBar.UpdateValue(stats.currentHealth);
+
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            healthSystem.GainResource(10);
-            Debug.Log(healthSystem.GetResourceAmount());
+            stats.currentHealth = healthSystem.GainResource(10);
+            healthBar.UpdateValue(stats.currentHealth);
+            
         }
 
-        #region Older Healt System
+        #region Older Health System
         //if (Input.GetKeyDown(KeyCode.Space))
         //{
         //    stats.currentHealth = Health.ReciveDamage(stats.currentHealth, 10);
@@ -56,7 +61,8 @@ public class DummyHealthScript : MonoBehaviour
         if (stats.enableHealthRegeneration)
         {
             stats.currentHealth = healthSystem.PassivelyGainResource(stats.healthRegeneration);
-            Debug.Log(stats.currentHealth);
+            healthBar.UpdateValue(stats.currentHealth);
+            //Debug.Log(stats.currentHealth);
 
         }
     }
