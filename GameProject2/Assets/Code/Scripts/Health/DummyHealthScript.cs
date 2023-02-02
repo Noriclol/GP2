@@ -8,12 +8,16 @@ public class DummyHealthScript : MonoBehaviour
 {
     
     [SerializeField] private Stats stats;
+    
     private HealthBar healthBar;
     private ResourceSystem healthSystem;
+    private ResourceSystem manaSystem;
+
 
     private void Awake()
     {
         healthSystem = new ResourceSystem(stats.maxHealth);
+        manaSystem = new ResourceSystem(stats.maxEnergy);
         healthBar = GetComponent<HealthBar>();
     }
 
