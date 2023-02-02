@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ResourceSystem
 {
-    //Amount is a general name for a resource for example health, mana... heck could prob work with coins/score
+    //Amount is a general name for a resource for example health, mana... heck could probably work with coins/score
     private float maxAmount;
     private float amount;
 
@@ -26,10 +26,11 @@ public class ResourceSystem
 
     }
 
-    public void GainResource(float amountToGain)
+    public float GainResource(float amountToGain)
     {
         amount += amountToGain;
         AmountCheck();
+        return amount;
     }
 
     public float PassivelyGainResource(float regenerationAmount)

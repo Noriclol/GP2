@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8464ed843e8d7ac47a22555a09993665, type: 3}
   m_Name: CharacterStats
   m_EditorClassIdentifier: 
-  currentHealth: 88
+  currentHealth: 0
   maxHealth: 100
   enableHealthRegeneration: 1
-  healthRegeneration: 1
+  healthRegeneration: 2
   currentEnergy: 100
   maxEnergy: 100
   movementSpeed: 2
