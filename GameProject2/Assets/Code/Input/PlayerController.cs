@@ -21,11 +21,13 @@ public class PlayerController : MonoBehaviour
     // Bool to check if the player is grounded
     private bool _isGrounded;
 
+    private PlayerDamage _playerDamage;
 
 
     void Awake()
     {
         _characterRB = GetComponent<Rigidbody>();
+        _playerDamage = GetComponent<PlayerDamage>();
     }
 
 
@@ -62,7 +64,7 @@ public class PlayerController : MonoBehaviour
     // Method to handle player action input
     public void OnAction(InputAction.CallbackContext actionContext)
     {
-
+        _playerDamage.Fire();
         Debug.Log("Action Input called.");
 
     }
@@ -88,12 +90,11 @@ public class PlayerController : MonoBehaviour
         bool dodgeCooldownOver = (Time.time - _dodgeTimeStamp) >= minDodgeInterval;
 
         // If the dodge cooldown has ended and the player is grounded, dodge
-        if (dodgeCooldownOver && _isGrounded)
+        if (dodgeCooldownOver)
         {
             _dodgeTimeStamp = Time.time;
-            Vector3 dodgeDirection = transform.forward * _move.magnitude;
+            Vector3 dodgeDirection = transform.forward;
             _characterRB.AddForce(dodgeDirection * dodgeForce, ForceMode.Impulse);
-            _isGrounded = false;
         }
     }
     
