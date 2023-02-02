@@ -19,7 +19,6 @@ public class ResourceSystem
         return amount;
     }
 
-    //Removes X amount 
     public float SubtractResource(float amountToSubtract)
     {
         amount -= amountToSubtract;
@@ -27,7 +26,6 @@ public class ResourceSystem
 
     }
 
-    //Adds X amount
     public float GainResource(float amountToGain)
     {
         amount += amountToGain;
@@ -35,7 +33,6 @@ public class ResourceSystem
         return amount;
     }
 
-    //Passivel amount (hp, mana) overtime
     public float PassivelyGainResource(float regenerationAmount)
     {
         if (amount < maxAmount)
@@ -53,7 +50,6 @@ public class ResourceSystem
         return amount;
     }
 
-    //Used to make sure u can't go beyond the maximum value
     private void AmountCheck()
     {
         if (amount > maxAmount)
@@ -62,7 +58,6 @@ public class ResourceSystem
         }
     }
 
-    //Rounding the number incase of printing it out, looks better without 5 decimals
     private void RoundUp()
     {
         amount = Mathf.Round(amount * 100.0f) * 0.01f;
