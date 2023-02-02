@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
     public void MovePlayer()
     {
         // Calculate the movement vector
-        Vector3 movement = new Vector3(_move.x, 0, _move.y);
+        Vector3 movement = new Vector3(-_move.x, 0, -_move.y);
 
         // Translate the player's position based on the movement vector
         transform.Translate(movement * moveSpeed * Time.deltaTime, Space.World);
