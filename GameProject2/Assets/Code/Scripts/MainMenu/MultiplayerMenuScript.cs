@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using Mirror;
 using Mirror.Discovery;
 using Mono.Nat;
@@ -16,23 +17,11 @@ public class MultiplayerMenuScript : MonoBehaviour
 	}
 
 	public void OnHost()
-	{
-		NatUtility.DeviceFound += DeviceFound;
-		NatUtility.StartDiscovery();
-
-		Debug.Log($"Upnp Searching: {NatUtility.IsSearching}");
-
+	{		
+		StartCoroutine("UpnpPortMapping", 10.0f);
 		networkManager.maxConnections = 2;
 		networkManager.StartHost();
 		networkDiscovery.AdvertiseServer();
-	}
-
-	void DeviceFound(object sender, DeviceEventArgs args)
-	{
-		Debug.Log("abow");
-		INatDevice device = args.Device;
-		device.CreatePortMap(new Mapping(Protocol.Udp, 7777, 7777));
-		Debug.Log("pog");
 	}
 
 	public void OnLocal()
@@ -55,5 +44,36 @@ public class MultiplayerMenuScript : MonoBehaviour
 		uriBuilder.Scheme = scheme;
 
 		networkManager.StartClient(uriBuilder.Uri);
+	}
+
+	IEnumerator UpnpPortMapping(float maxTime)
+	{
+		NatUtility.DeviceFound += DeviceFound;
+		NatUtility.StartDiscovery();
+
+		Debug.Log($"Upnp Searching: {NatUtility.IsSearching}");
+
+		while (maxTime > 0.0f)
+		{
+			if (!NatUtility.IsSearching) 
+			{
+				yield break;
+			}
+			
+			maxTime -= 0.5f;
+			yield return new WaitForSeconds(.5f);
+		}
+
+		NatUtility.StopDiscovery();
+		Debug.Log("Upnp Port forwarding has failes.");
+		yield break;
+	}
+
+	async void DeviceFound(object sender, DeviceEventArgs args)
+	{
+		NatUtility.StopDiscovery();
+		INatDevice device = args.Device;
+		await device.CreatePortMapAsync(new Mapping(Protocol.Udp, 7777, 7777));
+		Debug.Log("Upnp has successfully port forwarded.");
 	}
 }
