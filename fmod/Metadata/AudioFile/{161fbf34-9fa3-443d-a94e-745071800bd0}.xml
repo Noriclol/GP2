@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{161fbf34-9fa3-443d-a94e-745071800bd0}">
+		<property name="assetPath">
+			<value>men vi vet.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>2.4839166666666666</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{599bdb6e-c63b-4d4b-b7bb-c97c3c2ce9e8}</destination>
+		</relationship>
+	</object>
+</objects>
