@@ -14,10 +14,25 @@ public class ResourceSystem
         amount = maxAmount;
     }
 
-    public float GetResourceAmount()
+    public float Amount
     {
-        return amount;
+        get { return amount; }
     }
+
+    public float MaxAmount
+    {
+        get { return maxAmount; }
+    }
+
+    //public float GetResourceAmount()
+    //{
+    //    return amount;
+    //}
+
+    //public float GetMaximumResourceAmount()
+    //{
+    //    return maxAmount;
+    //}
 
     public float SubtractResource(float amountToSubtract)
     {
@@ -48,6 +63,18 @@ public class ResourceSystem
 
         
         return amount;
+    }
+
+    public bool CheckIfResourceIsEmpty(float value)
+    {
+        if (value <= 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     private void AmountCheck()

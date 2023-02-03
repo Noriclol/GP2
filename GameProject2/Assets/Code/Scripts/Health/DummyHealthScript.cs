@@ -13,6 +13,12 @@ public class DummyHealthScript : MonoBehaviour
     private ResourceSystem healthSystem;
     private ResourceSystem manaSystem;
 
+    private bool isPlayerDowned;
+    private bool isTimerStarted;
+    private bool isTimerPaused;
+    private float downedTime;
+    private float timeCountdown;
+
 
     private void Awake()
     {
@@ -24,26 +30,42 @@ public class DummyHealthScript : MonoBehaviour
     private void Start()
     {
         stats.SetUp();
-        healthBar.SetValue(stats.currentHealth, stats.maxHealth);
+        healthBar.SetValue(healthSystem.Amount, healthSystem.MaxAmount);
+        isPlayerDowned = false;
+        isTimerStarted = false;
+        isTimerPaused = false;
+        downedTime = 45;
         
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            stats.currentHealth = healthSystem.SubtractResource(10);
-            healthBar.UpdateValue(stats.currentHealth);
+        #region Space to loose hp code
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    healthSystem.SubtractResource(10);
+        //    //Not the best solution, probably gonna change this.
+        //    if (healthSystem.CheckIfResourceIsEmpty(healthSystem.Amount))
+        //    {
+        //        stats.healthState = Stats.HealthState.Downed;
+        //    }
 
-        }
+        //    healthBar.UpdateValue(healthSystem.Amount);
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        //}
+        #endregion
+
+        if (isPlayerDowned && !isTimerStarted)
         {
-            stats.currentHealth = healthSystem.GainResource(10);
-            healthBar.UpdateValue(stats.currentHealth);
             
         }
 
+        if (Input.GetKeyDown(KeyCode.LeftShift) && stats.healthState == Stats.HealthState.Alive)
+        {
+            healthSystem.GainResource(10);
+            healthBar.UpdateValue(healthSystem.Amount);
+            
+        }
         #region Older Health System
         //if (Input.GetKeyDown(KeyCode.Space))
         //{
@@ -58,16 +80,33 @@ public class DummyHealthScript : MonoBehaviour
         //}
         #endregion
 
+
     }
 
     private void FixedUpdate()
     {
-        if (stats.enableHealthRegeneration)
+        if (stats.enableHealthRegeneration && stats.healthState == Stats.HealthState.Alive)
         {
-            stats.currentHealth = healthSystem.PassivelyGainResource(stats.healthRegeneration);
-            healthBar.UpdateValue(stats.currentHealth);
+            healthSystem.PassivelyGainResource(stats.healthRegeneration);
+            healthBar.UpdateValue(healthSystem.Amount);
             //Debug.Log(stats.currentHealth);
 
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Danger"))
+        {
+            healthSystem.SubtractResource(30);
+            //Not the best solution, probably gonna change this.
+            if (healthSystem.CheckIfResourceIsEmpty(healthSystem.Amount))
+            {
+                stats.healthState = Stats.HealthState.Downed;
+            }
+
+            healthBar.UpdateValue(healthSystem.Amount);
+        }
+    }
+
 }
