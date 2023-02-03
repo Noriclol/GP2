@@ -52,8 +52,8 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Action",
-                    "type": "Button",
+                    "name": "Shoot",
+                    "type": "PassThrough",
                     "id": "0a019890-04b4-4101-b873-489786414458",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -65,6 +65,15 @@
                     "type": "Button",
                     "id": "7e3d6802-249f-4f64-9761-949daa59f3ea",
                     "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Look",
+                    "type": "PassThrough",
+                    "id": "5f92aa7a-cd60-45a7-8d31-33e1293d60b7",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
@@ -140,11 +149,11 @@
                 {
                     "name": "",
                     "id": "dafeff94-5abf-47df-b47b-8719b27c3fe1",
-                    "path": "<Keyboard>/e",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Action",
+                    "action": "Shoot",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -156,6 +165,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Dodge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d216fbd1-802d-4253-9000-89e22087357d",
+                    "path": "<Mouse>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

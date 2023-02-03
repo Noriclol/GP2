@@ -222,6 +222,9 @@ MonoBehaviour:
   dodgeForce: 2
   minJumpInterval: 0
   minDodgeInterval: 0
+  projectilePrefab: {fileID: 0}
+  projectileSpawnPoint: {fileID: 0}
+  projectileSpeed: 0
 --- !u!114 &8531655738261601419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -288,7 +291,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4522581806748112593}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnAction
+        m_MethodName: OnShoot
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -316,6 +319,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 7e3d6802-249f-4f64-9761-949daa59f3ea
     m_ActionName: Player/Dodge[/Keyboard/v]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4522581806748112593}
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: OnLook
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 5f92aa7a-cd60-45a7-8d31-33e1293d60b7
+    m_ActionName: Player/Look[/Mouse/position]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
