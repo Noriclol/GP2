@@ -55,9 +55,9 @@ public class DummyHealthScript : MonoBehaviour
         //}
         #endregion
 
-        if (isPlayerDowned && !isTimerStarted)
+        if (stats.healthState == Stats.HealthState.Downed)
         {
-            
+            healthBar.reviveIcon.SetActive(true);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && stats.healthState == Stats.HealthState.Alive)
