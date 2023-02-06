@@ -163,9 +163,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4963091466846131055}
   - component: {fileID: 8162909270412409732}
-  - component: {fileID: 7144844768735136009}
   - component: {fileID: 6434654757371386867}
   - component: {fileID: 7144844768735136010}
+  - component: {fileID: 8122419179933149889}
   m_Layer: 0
   m_Name: healthBar
   m_TagString: Untagged
@@ -245,20 +245,6 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7144844768735136009
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6038407210297735095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 21fd25a4d6030534fa0064f031311437, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  healthBar: {fileID: 8162909270412409732}
-  canvas: {fileID: 0}
 --- !u!114 &6434654757371386867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -286,6 +272,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Target: {fileID: 0}
   Offset: {x: 0, y: 1.5, z: 0}
+--- !u!114 &8122419179933149889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6038407210297735095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f16d61a19f8900f48a6299d5131bb743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiGameObject: {fileID: 6038407210297735095}
+  canvas: {fileID: 0}
 --- !u!1 &6055388963928619302
 GameObject:
   m_ObjectHideFlags: 0
