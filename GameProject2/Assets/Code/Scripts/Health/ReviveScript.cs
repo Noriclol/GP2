@@ -146,7 +146,7 @@ public class ReviveScript : MonoBehaviour
         if (other.gameObject.CompareTag("Player") && other.gameObject != this.gameObject)
         {
             isPlayerInRange = true;
-            
+            Debug.Log(other.gameObject.name + " has entered " + this.gameObject.name);
         }
     }
 
@@ -155,7 +155,7 @@ public class ReviveScript : MonoBehaviour
         if (other.gameObject.CompareTag("Player") && other.gameObject != this.gameObject)
         {
             isPlayerInRange = false;
-            
+            Debug.Log(other.gameObject.name + " has left " + this.gameObject.name);
         }
     }
 }
