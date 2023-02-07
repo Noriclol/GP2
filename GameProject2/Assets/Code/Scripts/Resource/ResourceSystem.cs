@@ -37,6 +37,10 @@ public class ResourceSystem
     public float SubtractResource(float amountToSubtract)
     {
         amount -= amountToSubtract;
+        if (amount < 0)
+        {
+            amount = 0;
+        }
         return amount;
 
     }

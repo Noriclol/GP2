@@ -11,6 +11,7 @@ public class Stats : ScriptableObject
     {
         Alive,
         Downed,
+        Reviving,
         Dead
     }
 
