@@ -19,7 +19,7 @@ public class DiscoveredServerScript : MonoBehaviour
 
     public void OnButton()
     {
-        var networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkRoomManager>();
+        var networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<CustomNetworkRoomManager>();
 
         const string scheme = "kcp";
         const int port = 7777;

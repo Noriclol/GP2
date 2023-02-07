@@ -8,12 +8,12 @@ using Mono.Nat;
 public class MultiplayerMenuScript : MonoBehaviour
 {
 	[SerializeField] private TMPro.TMP_InputField hostInputField;
-	private NetworkRoomManager networkManager;
+	private CustomNetworkRoomManager networkManager;
 	private NetworkDiscovery networkDiscovery;
 
 	private void Awake()
 	{
-		networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkRoomManager>();
+		networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<CustomNetworkRoomManager>();
 		networkDiscovery = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkDiscovery>();
 	}
 

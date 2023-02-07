@@ -28,13 +28,15 @@ public class LobbyPlayerScript : NetworkRoomPlayer
 		{
 			lobbyManager.otherPlayerJoined = true;
 		}
+
+		DontDestroyOnLoad(this);
 	}
 
 	public override void OnClientExitRoom()
 	{
 		if (!isLocalPlayer)
 		{
-		    SelectionChanged(selection, SelectedCharacter.none);
+			SelectionChanged(selection, SelectedCharacter.none);
 			lobbyManager.otherPlayerJoined = false;
 		}
 	}
@@ -46,7 +48,8 @@ public class LobbyPlayerScript : NetworkRoomPlayer
 			attackButton.interactable = false;
 			return;
 		}
-		else if (_New == SelectedCharacter.Support)
+
+		if (_New == SelectedCharacter.Support)
 		{
 			supportButton.interactable = false;
 			return;
@@ -64,14 +67,14 @@ public class LobbyPlayerScript : NetworkRoomPlayer
 
 	private void OnAttackButtonClick() // Attack select
 	{
-		GetComponent<NetworkRoomPlayer>().CmdChangeReadyState(true);
 		CMDSetPlayerSelection(SelectedCharacter.Attack);
+		GetComponent<NetworkRoomPlayer>().CmdChangeReadyState(true);
 	}
 
 	private void OnSupportButtonClick() // Support select
 	{
-		GetComponent<NetworkRoomPlayer>().CmdChangeReadyState(true);
 		CMDSetPlayerSelection(SelectedCharacter.Support);
+		GetComponent<NetworkRoomPlayer>().CmdChangeReadyState(true);
 	}
 
 	[Command]
