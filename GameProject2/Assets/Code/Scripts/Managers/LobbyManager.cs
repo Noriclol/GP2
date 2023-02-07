@@ -16,31 +16,34 @@ public class LobbyManager : NetworkBehaviour
 	private GameObject secondPlayerIndicator;
 
 	private bool _otherPlayerJoined = false;
-    public bool otherPlayerJoined {
-        get { return _otherPlayerJoined; }
-        set 
-        {
+	public bool otherPlayerJoined
+	{
+		get { return _otherPlayerJoined; }
+		set
+		{
 			SetOtherPlayerIndicator(value);
 			_otherPlayerJoined = value;
 		}
-    }
+	}
+
+	private CustomNetworkRoomManager networkManager;
 
 	// Makes sure that if a character has already been selected then that button will be grayed out.
-    // As well as second player indicator
+	// As well as second player indicator
 	private void Start()
 	{
 		const string lobbyPlayersTag = "LobbyPlayer";
 		var players = GameObject.FindGameObjectsWithTag(lobbyPlayersTag);
 
-		var networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<NetworkRoomManager>();
+		networkManager = GameObject.FindWithTag("NetworkManager").GetComponent<CustomNetworkRoomManager>();
 		var playerCount = networkManager.numPlayers;
 
-        if (playerCount == 2)
-        {
+		if (playerCount == 2)
+		{
 			otherPlayerJoined = true;
 		}
-        else 
-        {
+		else
+		{
 			otherPlayerJoined = false;
 		}
 
@@ -59,21 +62,21 @@ public class LobbyManager : NetworkBehaviour
 		}
 	}
 
-    private void SetOtherPlayerIndicator(bool joined)
-    {
-        if (joined)
-        {
+	private void SetOtherPlayerIndicator(bool joined)
+	{
+		if (joined)
+		{
 			secondPlayerIndicator.SetActive(true);
 		}
-        else    
-        {
+		else
+		{
 			secondPlayerIndicator.SetActive(false);
 		}
-        
-    }
+
+	}
 
 	public void OnExitButtonClick()
 	{
-		GameObject.FindWithTag("NetworkManager").GetComponent<NetworkRoomManager>().StopHost();
+		GameObject.FindWithTag("NetworkManager").GetComponent<CustomNetworkRoomManager>().StopHost();
 	}
 }

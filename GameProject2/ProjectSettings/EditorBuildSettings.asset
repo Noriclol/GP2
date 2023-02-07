@@ -14,7 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Lobby.unity
     guid: 5a22dd76211e0d14886b84a5563729f8
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Testing/MalteTesting.unity
+    guid: 6837ba918b4b16e47b4a72a0ae45537f
   m_configObjects: {}
