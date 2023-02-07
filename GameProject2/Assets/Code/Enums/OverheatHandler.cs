@@ -13,39 +13,45 @@ public enum OverheatState
 // Class to handle the overheating mechanic
 public class OverheatHandler: MonoBehaviour
 {
+    // Treshold settings for the overheating.
+    [SerializeField] private int coolThreshold, warningTreshold, overheatThreshold;
+
     // The duration of the cooldown in seconds
     public float cooldownDuration = 2.0f;
+
     // Boolean to track whether the system is currently cooling down
     private bool _isCoolingDown = false;
 
     // Method to check the current overheating state
     public OverheatState CheckOverheat(int overheating)
     {
-        if(overheating <= 0)
+        if(overheating <= coolThreshold)
         {
             // The system is not overheating
             _isCoolingDown = false;
             return OverheatState.Cool;
         }
-        else if(overheating > 0 && overheating <= 75)
+        else if(overheating > warningTreshold)
         {
             // The system is approaching overheating
             return OverheatState.Warning;
         }
-        else
+        else if(overheating > overheatThreshold)
         {
             // The system has overheated
             if (!_isCoolingDown)
             {
                 // Start the cooldown if it's not already in progress
-                StartCoroutine(CoolDown());
+                StartCoroutine(CoolDown());                
             }
             return OverheatState.Overheated;
         }
+        return OverheatState.Cool;
+       
     }
 
     // Coroutine to handle the cooldown period
-    private IEnumerator CoolDown()
+    public IEnumerator CoolDown()
     {
         // Set the bool to indicate that the cooldown has started
         _isCoolingDown = true;
@@ -56,6 +62,7 @@ public class OverheatHandler: MonoBehaviour
         // Wait for the cooldown duration
         yield return new WaitForSeconds(cooldownDuration);
 
+        
         // Set the bool to indicate that the cooldown has completed
         _isCoolingDown = false;
 
