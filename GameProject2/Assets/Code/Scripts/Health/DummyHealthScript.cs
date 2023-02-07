@@ -6,18 +6,13 @@ using UnityEngine;
 
 public class DummyHealthScript : MonoBehaviour
 {
-    
+    //A ScriptableObject holding data
     [SerializeField] private Stats stats;
-    
+
+    private ReviveScript reviveScript;
     private HealthBar healthBar;
     private ResourceSystem healthSystem;
     private ResourceSystem manaSystem;
-
-    private bool isPlayerDowned;
-    private bool isTimerStarted;
-    private bool isTimerPaused;
-    private float downedTime;
-    private float timeCountdown;
 
 
     private void Awake()
@@ -25,16 +20,13 @@ public class DummyHealthScript : MonoBehaviour
         healthSystem = new ResourceSystem(stats.maxHealth);
         manaSystem = new ResourceSystem(stats.maxEnergy);
         healthBar = GetComponent<HealthBar>();
+        reviveScript = GetComponent<ReviveScript>();   
     }
 
     private void Start()
     {
         stats.SetUp();
         healthBar.SetValue(healthSystem.Amount, healthSystem.MaxAmount);
-        isPlayerDowned = false;
-        isTimerStarted = false;
-        isTimerPaused = false;
-        downedTime = 45;
         
     }
 
@@ -55,10 +47,6 @@ public class DummyHealthScript : MonoBehaviour
         //}
         #endregion
 
-        if (stats.healthState == Stats.HealthState.Downed)
-        {
-            healthBar.reviveIcon.SetActive(true);
-        }
 
         if (Input.GetKeyDown(KeyCode.LeftShift) && stats.healthState == Stats.HealthState.Alive)
         {
@@ -98,11 +86,16 @@ public class DummyHealthScript : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Danger"))
         {
+            //Instead of hard coding the value the attack/collision could have a damage value, obviously
             healthSystem.SubtractResource(30);
+
             //Not the best solution, probably gonna change this.
             if (healthSystem.CheckIfResourceIsEmpty(healthSystem.Amount))
             {
                 stats.healthState = Stats.HealthState.Downed;
+
+                reviveScript.ToggleReviveIcon(true);
+                reviveScript.isPlayerDowned = true;
             }
 
             healthBar.UpdateValue(healthSystem.Amount);

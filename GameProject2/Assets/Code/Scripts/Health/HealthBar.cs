@@ -7,11 +7,12 @@ public class HealthBar : MonoBehaviour
 {
     private float currentHealth;
     private float maxHealth;
+    //The reason theres two icons is because one is supposed to on their own canvas 
+    //while the other is supposed to be on the other player canvas
     [SerializeField] private Slider mainHealthBar;
     [SerializeField] private Slider secondaryHealthBar;
 
-    public GameObject reviveIcon;
-
+  
     //public HealthBar(/*float currentHealth, float maxHealth*/)
     //{
     //    //this.currentHealth = currentHealth;

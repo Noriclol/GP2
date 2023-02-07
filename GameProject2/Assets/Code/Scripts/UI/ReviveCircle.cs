@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ReviveCircle : MonoBehaviour
 {
-    [SerializeField] private Image reviveImage;
+    [SerializeField] private Image reviveBorder;
 
     private float countDown;
     private float downedTime;
@@ -24,7 +24,7 @@ public class ReviveCircle : MonoBehaviour
         countDown -= Time.deltaTime;
 
         scaledValue = countDown / downedTime;
-        reviveImage.fillAmount = scaledValue;
+        reviveBorder.fillAmount = scaledValue;
     }
 
 }
