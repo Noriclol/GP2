@@ -9,8 +9,7 @@ public class HealthBar : MonoBehaviour
     private float maxHealth;
     //The reason theres two icons is because one is supposed to on their own canvas 
     //while the other is supposed to be on the other player canvas
-    [SerializeField] private Slider mainHealthBar;
-    [SerializeField] private Slider secondaryHealthBar;
+    [SerializeField] private Slider healthBar;
 
   
     //public HealthBar(/*float currentHealth, float maxHealth*/)
@@ -21,32 +20,22 @@ public class HealthBar : MonoBehaviour
 
     public void SetValue(float currentHealth, float maxHealth)
     {
-        if (mainHealthBar != null)
+        if (healthBar != null)
         {
-            mainHealthBar.maxValue = maxHealth;
-            mainHealthBar.value = currentHealth;
+            healthBar.maxValue = maxHealth;
+            healthBar.value = currentHealth;
 
         }
 
-        if (secondaryHealthBar !=  null)
-        {
-            secondaryHealthBar.maxValue = maxHealth;
-            secondaryHealthBar.value = currentHealth;
-
-        }
     }
 
     public void UpdateValue(float currentHealth)
     {
-        if (mainHealthBar != null)
+        if (healthBar != null)
         {
-            mainHealthBar.value = currentHealth;
+            healthBar.value = currentHealth;
 
         }
-        if (secondaryHealthBar != null)
-        {
-            secondaryHealthBar.value = currentHealth;
 
-        }
     }
 }
