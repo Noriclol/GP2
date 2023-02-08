@@ -24,8 +24,14 @@ public class HealthBar : NetworkBehaviour
         var Hud = GameObject.FindGameObjectWithTag(hudTag);
 
         GameObject playerProfile;
-        if (isLocalPlayer) playerProfile = Hud.transform.Find("PlayerProfile").gameObject;
-        else playerProfile = Hud.transform.Find("SecondPlayerProfile").gameObject;
+        if (isLocalPlayer)
+        {
+            playerProfile = Hud.transform.Find("PlayerProfile").gameObject;
+        }
+        else
+        {
+            playerProfile = Hud.transform.Find("SecondPlayerProfile").gameObject;
+        }
 
         healthBar = playerProfile.transform.Find("PlayerHealthbar").GetComponent<Slider>();
     }
