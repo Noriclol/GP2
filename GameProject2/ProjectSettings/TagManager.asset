@@ -10,6 +10,7 @@ TagManager:
   - LobbyPlayer
   - LobbyManager
   - Throwable
+  - Hud
   layers:
   - Default
   - TransparentFX

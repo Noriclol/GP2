@@ -8,6 +8,12 @@ public class ResourceSystem
     private float maxAmount;
     private float amount;
 
+    public ResourceSystem()
+    {
+        amount = 0.0f;
+        maxAmount = 0.0f;
+    }
+
     public ResourceSystem(float maxAmount)
     {
         this.maxAmount = maxAmount;
@@ -65,7 +71,7 @@ public class ResourceSystem
 
         }
 
-        
+
         return amount;
     }
 
