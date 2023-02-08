@@ -89,8 +89,7 @@ public class DummyHealthScript : MonoBehaviour
             //Instead of hard coding the value the attack/collision could have a damage value, obviously
             healthSystem.SubtractResource(30);
 
-            //Not the best solution, probably gonna change this.
-            if (healthSystem.CheckIfResourceIsEmpty(healthSystem.Amount))
+            if (healthSystem.CheckIfResourceIsEmpty())
             {
                 stats.healthState = Stats.HealthState.Downed;
 
