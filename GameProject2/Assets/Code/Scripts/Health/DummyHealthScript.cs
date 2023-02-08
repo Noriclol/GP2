@@ -12,13 +12,13 @@ public class DummyHealthScript : MonoBehaviour
     private ReviveScript reviveScript;
     private HealthBar healthBar;
     private ResourceSystem healthSystem;
-    private ResourceSystem manaSystem;
+    private ResourceSystem energySystem;
 
 
     private void Awake()
     {
         healthSystem = new ResourceSystem(stats.maxHealth);
-        manaSystem = new ResourceSystem(stats.maxEnergy);
+        energySystem = new ResourceSystem(stats.maxEnergy);
         healthBar = GetComponent<HealthBar>();
         reviveScript = GetComponent<ReviveScript>();   
     }
@@ -89,13 +89,12 @@ public class DummyHealthScript : MonoBehaviour
             //Instead of hard coding the value the attack/collision could have a damage value, obviously
             healthSystem.SubtractResource(30);
 
-            //Not the best solution, probably gonna change this.
-            if (healthSystem.CheckIfResourceIsEmpty(healthSystem.Amount))
+            if (healthSystem.CheckIfResourceIsEmpty())
             {
                 stats.healthState = Stats.HealthState.Downed;
 
-                reviveScript.ToggleReviveIcon(true);
-                reviveScript.isPlayerDowned = true;
+                reviveScript.PlayerDown(true);
+                
             }
 
             healthBar.UpdateValue(healthSystem.Amount);

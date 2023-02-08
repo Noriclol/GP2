@@ -69,9 +69,9 @@ public class ResourceSystem
         return amount;
     }
 
-    public bool CheckIfResourceIsEmpty(float value)
+    public bool CheckIfResourceIsEmpty(/*float value*/)
     {
-        if (value <= 0)
+        if (amount <= 0)
         {
             return true;
         }
