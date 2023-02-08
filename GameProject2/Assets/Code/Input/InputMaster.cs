@@ -80,7 +80,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Dodge"",
@@ -95,7 +95,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""name"": ""Look"",
                     ""type"": ""PassThrough"",
                     ""id"": ""5f92aa7a-cd60-45a7-8d31-33e1293d60b7"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Vector2"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false

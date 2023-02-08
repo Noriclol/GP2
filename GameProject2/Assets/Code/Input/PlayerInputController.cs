@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-
+    
     // Serialized fields for the Rigidbody component of the player and the move speed and jump force values
     [SerializeField] private Rigidbody _characterRB;
     [SerializeField] public float moveSpeed, jumpForce, dodgeForce;
@@ -24,10 +24,6 @@ public class PlayerController : MonoBehaviour
     // Bool to check if the player is grounded
     private bool _isGrounded;
 
-    // Projectile 
-    public GameObject projectilePrefab;
-    public Transform projectileSpawnPoint;
-    public float projectileSpeed;
 
     void Awake()
     {
@@ -92,14 +88,7 @@ public class PlayerController : MonoBehaviour
     // Method to handle player action input
     public void OnShoot(InputAction.CallbackContext shootContext)
     {
-        if (shootContext.performed)
-        {
-            Vector3 shootDirection = transform.forward;
-            GameObject newProjectile = Instantiate(projectilePrefab, projectileSpawnPoint.position, projectileSpawnPoint.rotation);
-            newProjectile.GetComponent<Rigidbody>().velocity = shootDirection * projectileSpeed;
 
-            Destroy(newProjectile, 5f);
-        }
     }
 
     // Method to handle player jump input

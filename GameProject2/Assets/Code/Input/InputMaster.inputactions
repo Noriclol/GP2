@@ -58,7 +58,7 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 },
                 {
                     "name": "Dodge",
@@ -73,7 +73,7 @@
                     "name": "Look",
                     "type": "PassThrough",
                     "id": "5f92aa7a-cd60-45a7-8d31-33e1293d60b7",
-                    "expectedControlType": "",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
