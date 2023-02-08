@@ -357,7 +357,7 @@ GameObject:
   - component: {fileID: 8371208771078876656}
   - component: {fileID: 1205556074467497237}
   m_Layer: 5
-  m_Name: ReviveCircle
+  m_Name: ReviveIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
