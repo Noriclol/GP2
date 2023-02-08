@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731715, g: 0.13414735, b: 0.121078536, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1938,20 +1938,22 @@ MonoBehaviour:
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 210313982762696299, guid: 94daf1a3d5ce869469c9c4946a7797ee, type: 3}
+  - {fileID: 3626152247069801311, guid: 65f79ab0b3762334b81ad2b322b24324, type: 3}
   timeInterpolationGui: 0
   showRoomGUI: 0
   minPlayers: 2
   roomPlayerPrefab: {fileID: -3615022730623532805, guid: c4015a6ea7903b847a7c9b9a4ffe97d4,
     type: 3}
   RoomScene: Assets/Scenes/Lobby.unity
-  GameplayScene: Assets/Scenes/Testing/MalteTesting.unity
+  GameplayScene: Assets/Scenes/Game.unity
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
-  damagePrefab: {fileID: 8730972921890570989, guid: b18382ec95576c94bad2063d08ca98f1,
+  damagePrefab: {fileID: 6429813150572686744, guid: 1606dc9c777d52d41835ba62bc71578a,
     type: 3}
-  supportPrefab: {fileID: 8850015815381643055, guid: 1628aa90291472c4d8939ce5045fbf02,
+  supportPrefab: {fileID: 1937083189167438604, guid: a9c0787c8600a1145bfb70aa9f46b443,
     type: 3}
   localPlayerCharacter: 0
 --- !u!1 &1365362682
