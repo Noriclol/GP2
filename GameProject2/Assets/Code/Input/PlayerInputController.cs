@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mirror;
 
-public class PlayerController : MonoBehaviour
+public class PlayerInputController : NetworkBehaviour
 {
-    
+
     // Serialized fields for the Rigidbody component of the player and the move speed and jump force values
     [SerializeField] private Rigidbody _characterRB;
     [SerializeField] public float moveSpeed, jumpForce, dodgeForce;
@@ -30,6 +31,14 @@ public class PlayerController : MonoBehaviour
         _characterRB = GetComponent<Rigidbody>();
     }
 
+    public override void OnStartAuthority()
+    {
+        base.OnStartAuthority();
+
+        var playerInput = GetComponent<PlayerInput>();
+        playerInput.enabled = true;
+    }
+
 
     // Call the MovePlayer method in the Update method
     void Update()
@@ -47,6 +56,7 @@ public class PlayerController : MonoBehaviour
     // Method to update the player's position based on movement input
     public void MovePlayer()
     {
+        if (!isLocalPlayer) return;
         // Calculate the movement vector
         Vector3 movement = new Vector3(_move.x, 0, _move.y);
 
@@ -64,7 +74,7 @@ public class PlayerController : MonoBehaviour
     public void OnLook(InputAction.CallbackContext lookContext)
     {
         // Get the mouse position in screen coordinates
-        Vector2 mousePosition = Input.mousePosition;
+        Vector2 mousePosition = lookContext.ReadValue<Vector2>(); ;
 
         // Convert the mouse position to a ray that projects into the scene
         Ray mouseRay = Camera.main.ScreenPointToRay(mousePosition);
@@ -82,13 +92,6 @@ public class PlayerController : MonoBehaviour
             // Make the object look at the look point
             transform.LookAt(lookPoint);
         }
-    }
-
-
-    // Method to handle player action input
-    public void OnShoot(InputAction.CallbackContext shootContext)
-    {
-
     }
 
     // Method to handle player jump input
@@ -119,7 +122,7 @@ public class PlayerController : MonoBehaviour
             _characterRB.AddForce(dodgeDirection * dodgeForce, ForceMode.Impulse);
         }
     }
-    
+
     // Method to check if the player is touching the ground
     private void OnCollisionEnter(Collision col)
     {

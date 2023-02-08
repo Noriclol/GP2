@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Mirror;
 
-public class PlayerDamage : MonoBehaviour
+public class PlayerDamage : NetworkBehaviour
 {
     public int ammoCapacity;
     public float fireRate;
@@ -29,9 +30,8 @@ public class PlayerDamage : MonoBehaviour
     private void Start()
     {
         currentAmmo = ammoCapacity;
-        InputActions.Player.Shoot.performed += OnFire;
-
     }
+
     public void OnFire(InputAction.CallbackContext shootContext)
     {
             Shoot();
@@ -48,7 +48,7 @@ public class PlayerDamage : MonoBehaviour
         switch (state)
         {
             case OverheatState.Cool:
-                Debug.Log("System is cool.");
+                // Debug.Log("System is cool.");
                 break;
             case OverheatState.Warning:
                 Debug.Log("System is approaching overheating");
@@ -65,19 +65,27 @@ public class PlayerDamage : MonoBehaviour
     private void Shoot()
     {
         if (overheatHandler.CheckOverheat(overheating) != OverheatState.Overheated) 
-        { 
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        rb.AddForce(firePoint.forward * bulletSpeed, ForceMode.Impulse);
-        currentAmmo--;
-        fireCooldown = fireRate;
-        overheating += bulletHeat;
-
-        BulletController bc = bullet.GetComponent<BulletController>();
-        bc.damageAmount = damage;
-
-        OnShoot.Invoke();
-            return;
+        {
+			CMDShoot();
+			return;
         }
+    }
+
+    [Command]
+    void CMDShoot()
+    {
+		GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+		Rigidbody rb = bullet.GetComponent<Rigidbody>();
+		rb.AddForce(firePoint.forward * bulletSpeed, ForceMode.Impulse);
+		currentAmmo--;
+		fireCooldown = fireRate;
+		overheating += bulletHeat;
+
+		BulletController bc = bullet.GetComponent<BulletController>();
+		bc.damageAmount = damage;
+
+		NetworkServer.Spawn(bullet);
+
+		OnShoot.Invoke();
     }
 }
