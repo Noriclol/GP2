@@ -1,6 +1,7 @@
 using UnityEngine;
 using Mirror;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LobbyPlayerScript : NetworkRoomPlayer
 {
@@ -12,12 +13,17 @@ public class LobbyPlayerScript : NetworkRoomPlayer
 
 	private LobbyManager lobbyManager;
 
-	private new void Start()
+	private void Awake()
 	{
 		lobbyManager = GameObject.FindWithTag("LobbyManager").GetComponent<LobbyManager>();
 
 		attackButton = GameObject.Find("AttackCharacterButton").GetComponent<Button>();
 		supportButton = GameObject.Find("SupportCharacterButton").GetComponent<Button>();
+	}
+
+	public override void OnStartLocalPlayer()
+	{
+		base.OnStartLocalPlayer();
 
 		if (isLocalPlayer)
 		{
@@ -28,8 +34,6 @@ public class LobbyPlayerScript : NetworkRoomPlayer
 		{
 			lobbyManager.otherPlayerJoined = true;
 		}
-
-		DontDestroyOnLoad(this);
 	}
 
 	public override void OnClientExitRoom()
@@ -43,6 +47,8 @@ public class LobbyPlayerScript : NetworkRoomPlayer
 
 	private void SelectionChanged(SelectedCharacter _Old, SelectedCharacter _New)
 	{
+		if (SceneManager.GetActiveScene().name != "Lobby") return;
+
 		if (_New == SelectedCharacter.Attack)
 		{
 			attackButton.interactable = false;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LobbyManager : NetworkBehaviour
 {
@@ -64,6 +65,7 @@ public class LobbyManager : NetworkBehaviour
 
 	private void SetOtherPlayerIndicator(bool joined)
 	{
+		if (SceneManager.GetActiveScene().name != "Lobby") return;
 		if (joined)
 		{
 			secondPlayerIndicator.SetActive(true);

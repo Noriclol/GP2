@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Mirror;
 using UnityEngine.UI;
 
-public class PlayerDamage : MonoBehaviour
+public class PlayerDamage : NetworkBehaviour
 {
 
     public float fireRate;
@@ -23,7 +24,6 @@ public class PlayerDamage : MonoBehaviour
     [SerializeField] private int bulletHeat;
     [SerializeField] private int cooldownRate;
 
-
     public void OnFire(InputAction.CallbackContext shootContext)
     {
         Shoot();
@@ -40,7 +40,7 @@ public class PlayerDamage : MonoBehaviour
         switch (state)
         {
             case OverheatState.Cool:
-                Debug.Log("System is cool.");
+                // Debug.Log("System is cool.");
                 break;
             case OverheatState.Warning:
                 Debug.Log("System is approaching overheating");
@@ -63,18 +63,25 @@ public class PlayerDamage : MonoBehaviour
 
     private void Shoot()
     {
-        if (overheatHandler.CheckOverheat(overheating) != OverheatState.Overheated)
+        if (overheatHandler.CheckOverheat(overheating) != OverheatState.Overheated) 
         {
-            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-            Rigidbody rb = bullet.GetComponent<Rigidbody>();
-            rb.AddForce(firePoint.forward * bulletSpeed, ForceMode.Impulse);
-            fireCooldown = fireRate;
-            overheating += bulletHeat;
-
-            BulletController bc = bullet.GetComponent<BulletController>();
-            bc.damageAmount = damage;
-
-            return;
+			CMDShoot();
+			return;
         }
+    }
+
+    [Command]
+    void CMDShoot()
+    {
+		GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+		Rigidbody rb = bullet.GetComponent<Rigidbody>();
+		rb.AddForce(firePoint.forward * bulletSpeed, ForceMode.Impulse);
+		fireCooldown = fireRate;
+		overheating += bulletHeat;
+
+		BulletController bc = bullet.GetComponent<BulletController>();
+		bc.damageAmount = damage;
+
+		NetworkServer.Spawn(bullet);
     }
 }
