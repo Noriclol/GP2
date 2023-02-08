@@ -28,6 +28,7 @@ public class ReviveScript : MonoBehaviour
     private float reviveTime;
     private float reviveRadius;
     private Vector3 reviveVisualizationSize;
+    private Vector3 reviveVisualizationLocation;
 
     private void Awake()
     {
@@ -49,7 +50,9 @@ public class ReviveScript : MonoBehaviour
         reviveZone.isTrigger = true;
         reviveZone.radius = reviveRadius;
         reviveVisualizationSize = new Vector3(reviveRadius * 2, 0.3f, reviveRadius * 2);
+        reviveVisualizationLocation = new Vector3(0, -1, 0);
         reviveVisualization.transform.localScale = reviveVisualizationSize;
+        reviveVisualization.transform.localPosition = reviveVisualizationLocation;
         reviveVisualization.SetActive(false);
     }
 
