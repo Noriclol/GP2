@@ -47,9 +47,10 @@ public class Throwable : NetworkBehaviour
 
 	private void Start()
 	{
-		players = GameObject.FindGameObjectsWithTag(playerTag);
 
 		if (!isServer) return;
+
+		players = GameObject.FindGameObjectsWithTag(playerTag);
 
 		transform.position = path[0];
 

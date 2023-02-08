@@ -1,16 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 
-public class HealthScript : MonoBehaviour
+public class HealthScript : NetworkBehaviour, IThrowableAction
 {
     //A ScriptableObject holding data
     [SerializeField] private Stats stats;
 
     private ReviveScript reviveScript;
     private HealthBar healthBar;
+
+    [SyncVar]
     private ResourceSystem healthSystem;
+
+    [SyncVar]
     private ResourceSystem energySystem;
 
 
@@ -29,25 +34,16 @@ public class HealthScript : MonoBehaviour
 
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && stats.healthState == Stats.HealthState.Alive)
-        {
-            healthSystem.GainResource(10);
-            healthBar.UpdateValue(healthSystem.Amount);
-
-        }
-        
-    }
     private void FixedUpdate()
-    {
-        if (stats.enableHealthRegeneration && stats.healthState == Stats.HealthState.Alive)
+    { 
+        if (!isServer) return;
+		if (stats.enableHealthRegeneration && stats.healthState == Stats.HealthState.Alive)
         {
             healthSystem.PassivelyGainResource(stats.healthRegeneration);
-            healthBar.UpdateValue(healthSystem.Amount);
-            //Debug.Log(stats.currentHealth);
+			RPCUpdateBars();
+			//Debug.Log(stats.currentHealth);
 
-        }
+		}
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -69,4 +65,20 @@ public class HealthScript : MonoBehaviour
         }
     }
 
+
+    [ClientRpc]
+    private void RPCUpdateBars() // Gets called on all clients, currently only after Throwaction as in player stands in healing field
+    {
+        healthBar.UpdateValue(healthSystem.Amount);
+        //healthBar.UpdateValue(healthSystem.Amount);
+
+        Debug.Log($"Health Updated to: {healthSystem.Amount}");
+    }
+
+    // Only runs on the server
+    public void ThrowAction(ThrowableAction action, float value)
+    {
+        healthSystem.GainResource(value);
+        RPCUpdateBars();
+    }
 }

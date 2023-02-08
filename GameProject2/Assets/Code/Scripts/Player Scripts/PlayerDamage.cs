@@ -55,7 +55,7 @@ public class PlayerDamage : NetworkBehaviour
         if (overheating > 0 && state != OverheatState.Overheated)
         {
             overheating -= (int)(cooldownRate * Time.deltaTime);
-            overheatingSlider.value = overheating;
+            // overheatingSlider.value = overheating;
         }
 
     }
