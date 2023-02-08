@@ -3,14 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
+using UnityEngine.InputSystem;
 
 
 [RequireComponent(typeof(SphereCollider))]
-public class ReviveScript : MonoBehaviour
+public class ReviveScript : NetworkBehaviour
 {
 
-    [SerializeField] private GameObject reviveIcon;
-    [SerializeField] private Image reviveBorder;
+    private GameObject reviveIcon;
+    private Image reviveBorder;
     [SerializeField] private GameObject reviveVisualization;
     private SphereCollider reviveZone;
 
@@ -32,7 +34,19 @@ public class ReviveScript : MonoBehaviour
 
     private void Awake()
     {
-        reviveZone = GetComponent<SphereCollider>();
+		const string hudTag = "Hud";
+		var Hud = GameObject.FindGameObjectWithTag(hudTag);
+
+		GameObject playerProfile;
+		if (isLocalPlayer) playerProfile = Hud.transform.Find("PlayerProfile").gameObject;
+		else playerProfile = Hud.transform.Find("SecondPlayerProfile").gameObject;
+
+		reviveIcon = playerProfile.transform.Find("ReviveIcon").gameObject;
+		reviveBorder = reviveIcon.transform.Find("Border").GetComponent<Image>();
+
+		reviveIcon.SetActive(false);
+
+		reviveZone = GetComponent<SphereCollider>();
     }
 
     private void Start()
@@ -58,22 +72,6 @@ public class ReviveScript : MonoBehaviour
 
     private void Update()
     {
-        //Gonna swap this out for the new input system
-        #region Cursed Old Input
-        if (Input.GetKey(KeyCode.F) && isPlayerInRange)
-        {
-            isPlayerBeingRevived = true;
-        }
-        else
-        {
-            isPlayerBeingRevived = false;
-        }
-
-        if (Input.GetKeyUp(KeyCode.F))
-        {
-            countUp = 0;
-        }
-        #endregion
         if (isReviveTimed && isPlayerDowned && !isPlayerBeingRevived)
         {
             ReviveCountdown();
@@ -83,6 +81,22 @@ public class ReviveScript : MonoBehaviour
         {
             RevivingPlayer();
         }
+    }
+
+	public void OnRevive(InputAction.CallbackContext context)
+    {
+		if (!context.performed) return;
+
+		if (context.ReadValue<float>() > 0.5f)
+		{ // Pressed
+			if (isPlayerInRange) isPlayerBeingRevived = true;
+            else isPlayerBeingRevived = false;
+		}
+		else
+		{ // Released
+			isPlayerBeingRevived = false;
+			countUp = 0;
+		}
     }
 
     //Gets a scaled value and changes the images fill based on the scaled value
