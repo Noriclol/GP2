@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class PlayerDamage : MonoBehaviour
 {
-    public int ammoCapacity;
+
     public float fireRate;
     public float bulletSpeed;
     public int damage;
@@ -14,32 +15,23 @@ public class PlayerDamage : MonoBehaviour
     public Transform firePoint;
     public OverheatHandler overheatHandler;
 
-    public UnityEvent OnShoot;
-
     private float fireCooldown;
-    private int currentAmmo;
     private int overheating = 0;
+    public Slider overheatingSlider;
 
     // New variable to store how much each bullet heats up the weapon
     [SerializeField] private int bulletHeat;
+    [SerializeField] private int cooldownRate;
 
-    public InputMaster InputActions;
 
-
-    private void Start()
-    {
-        currentAmmo = ammoCapacity;
-        InputActions.Player.Shoot.performed += OnFire;
-
-    }
     public void OnFire(InputAction.CallbackContext shootContext)
     {
-            Shoot();
+        Shoot();
     }
 
     private void Update()
     {
-        if(fireCooldown > 0)
+        if (fireCooldown > 0)
         {
             fireCooldown -= Time.deltaTime;
         }
@@ -58,25 +50,30 @@ public class PlayerDamage : MonoBehaviour
                 break;
             default:
                 break;
+        }       
+
+        if (overheating > 0 && state != OverheatState.Overheated)
+        {
+            overheating -= (int)(cooldownRate * Time.deltaTime);
+            overheatingSlider.value = overheating;
         }
+
     }
 
 
     private void Shoot()
     {
-        if (overheatHandler.CheckOverheat(overheating) != OverheatState.Overheated) 
-        { 
-        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-        Rigidbody rb = bullet.GetComponent<Rigidbody>();
-        rb.AddForce(firePoint.forward * bulletSpeed, ForceMode.Impulse);
-        currentAmmo--;
-        fireCooldown = fireRate;
-        overheating += bulletHeat;
+        if (overheatHandler.CheckOverheat(overheating) != OverheatState.Overheated)
+        {
+            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            Rigidbody rb = bullet.GetComponent<Rigidbody>();
+            rb.AddForce(firePoint.forward * bulletSpeed, ForceMode.Impulse);
+            fireCooldown = fireRate;
+            overheating += bulletHeat;
 
-        BulletController bc = bullet.GetComponent<BulletController>();
-        bc.damageAmount = damage;
+            BulletController bc = bullet.GetComponent<BulletController>();
+            bc.damageAmount = damage;
 
-        OnShoot.Invoke();
             return;
         }
     }
