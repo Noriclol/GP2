@@ -4,10 +4,11 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Mirror;
+using UnityEngine.UI;
 
 public class PlayerDamage : NetworkBehaviour
 {
-    public int ammoCapacity;
+
     public float fireRate;
     public float bulletSpeed;
     public int damage;
@@ -15,31 +16,22 @@ public class PlayerDamage : NetworkBehaviour
     public Transform firePoint;
     public OverheatHandler overheatHandler;
 
-    public UnityEvent OnShoot;
-
     private float fireCooldown;
-    private int currentAmmo;
     private int overheating = 0;
+    public Slider overheatingSlider;
 
     // New variable to store how much each bullet heats up the weapon
     [SerializeField] private int bulletHeat;
-
-    public InputMaster InputActions;
-
-
-    private void Start()
-    {
-        currentAmmo = ammoCapacity;
-    }
+    [SerializeField] private int cooldownRate;
 
     public void OnFire(InputAction.CallbackContext shootContext)
     {
-            Shoot();
+        Shoot();
     }
 
     private void Update()
     {
-        if(fireCooldown > 0)
+        if (fireCooldown > 0)
         {
             fireCooldown -= Time.deltaTime;
         }
@@ -58,7 +50,14 @@ public class PlayerDamage : NetworkBehaviour
                 break;
             default:
                 break;
+        }       
+
+        if (overheating > 0 && state != OverheatState.Overheated)
+        {
+            overheating -= (int)(cooldownRate * Time.deltaTime);
+            overheatingSlider.value = overheating;
         }
+
     }
 
 
@@ -77,7 +76,6 @@ public class PlayerDamage : NetworkBehaviour
 		GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 		Rigidbody rb = bullet.GetComponent<Rigidbody>();
 		rb.AddForce(firePoint.forward * bulletSpeed, ForceMode.Impulse);
-		currentAmmo--;
 		fireCooldown = fireRate;
 		overheating += bulletHeat;
 
@@ -85,7 +83,5 @@ public class PlayerDamage : NetworkBehaviour
 		bc.damageAmount = damage;
 
 		NetworkServer.Spawn(bullet);
-
-		OnShoot.Invoke();
     }
 }

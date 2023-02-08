@@ -16,17 +16,13 @@ public class BulletController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        ResourceSystem health = collision.gameObject.GetComponent<ResourceSystem>();
+        if (health != null)
+        {
+            health.SubtractResource(damageAmount);
+        }
 
-
-        // This need to be setup properly with the right health script and damage taken method. 
-
-        //Health health = collision.gameObject.GetComponent<Health>();
-        //if(health != null)
-        //{
-        //    health.damageTaken(damageAmount);
-        //}
-
-        //Destroy(gameObject);
+        Destroy(gameObject);
     }
 
     private void Update()
