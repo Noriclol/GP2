@@ -611,7 +611,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u200B"
+  m_text: "localhost\u200B"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1938,20 +1938,22 @@ MonoBehaviour:
     type: 3}
   autoCreatePlayer: 1
   playerSpawnMethod: 0
-  spawnPrefabs: []
+  spawnPrefabs:
+  - {fileID: 210313982762696299, guid: 94daf1a3d5ce869469c9c4946a7797ee, type: 3}
+  - {fileID: 3626152247069801311, guid: 65f79ab0b3762334b81ad2b322b24324, type: 3}
   timeInterpolationGui: 0
   showRoomGUI: 0
   minPlayers: 2
   roomPlayerPrefab: {fileID: -3615022730623532805, guid: c4015a6ea7903b847a7c9b9a4ffe97d4,
     type: 3}
   RoomScene: Assets/Scenes/Lobby.unity
-  GameplayScene: Assets/Scenes/Testing/MalteTesting.unity
+  GameplayScene: Assets/Scenes/Game.unity
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
-  damagePrefab: {fileID: 8730972921890570989, guid: b18382ec95576c94bad2063d08ca98f1,
+  damagePrefab: {fileID: 6429813150572686744, guid: 1606dc9c777d52d41835ba62bc71578a,
     type: 3}
-  supportPrefab: {fileID: 8850015815381643055, guid: 1628aa90291472c4d8939ce5045fbf02,
+  supportPrefab: {fileID: 1937083189167438604, guid: a9c0787c8600a1145bfb70aa9f46b443,
     type: 3}
   localPlayerCharacter: 0
 --- !u!1 &1365362682
@@ -2379,7 +2381,7 @@ MonoBehaviour:
   m_CaretColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
   m_CustomCaretColor: 0
   m_SelectionColor: {r: 0.65882355, g: 0.80784315, b: 1, a: 0.7529412}
-  m_Text: 
+  m_Text: localhost
   m_CaretBlinkRate: 0.85
   m_CaretWidth: 1
   m_ReadOnly: 0
@@ -2668,7 +2670,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1693814924}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 

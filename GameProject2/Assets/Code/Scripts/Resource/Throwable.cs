@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using Mirror;
 
-[ExecuteInEditMode]
-public class Throwable : MonoBehaviour
+public class Throwable : NetworkBehaviour
 {
 	[SerializeField] private float energyConsumption = 1.0f;
 	[SerializeField] private float areaRadius = 5f;
@@ -47,6 +47,9 @@ public class Throwable : MonoBehaviour
 
 	private void Start()
 	{
+
+		if (!isServer) return;
+
 		players = GameObject.FindGameObjectsWithTag(playerTag);
 
 		foreach (GameObject throwable in GameObject.FindGameObjectsWithTag(throwableTag))
@@ -61,6 +64,7 @@ public class Throwable : MonoBehaviour
 	private void Update()
 	{
 		if (!moving) return;
+		if (!isServer) return;
 		if (transform.position != path[current])
 		{
 			var pos = Vector3.MoveTowards(transform.position, path[current], moveSpeed * Time.deltaTime);
@@ -70,7 +74,7 @@ public class Throwable : MonoBehaviour
 		{
 			current++;
 
-			if (current < path.Count) return;
+			if (current != path.Count) return;
 
 			moving = false;
 			Landed();
@@ -79,16 +83,27 @@ public class Throwable : MonoBehaviour
 
 	private void Landed()
 	{
-		coloring.GetComponent<MeshRenderer>().enabled = true;
+		if (!isServer) return;
+
 		StartCoroutine(Timer());
 		doAction = StartCoroutine(DoAction());
+		RPCLanded();
 	}
 
+	[ClientRpc]
+	private void RPCLanded()
+	{
+		coloring.GetComponent<MeshRenderer>().enabled = true;
+	}
+
+	[ClientRpc]
 	public void DestroyThrowable()
 	{
-		// Debug.Log($"Ran out: {this.name}");
-		StopCoroutine(doAction);
 		Destroy(this.gameObject);
+
+		if (moving) return;
+		if (!isServer) return;
+		StopCoroutine(doAction);
 	}
 
 	IEnumerator DoAction()
@@ -103,7 +118,7 @@ public class Throwable : MonoBehaviour
 	}
 
 
-	private void Action()
+	private void Action() // Only runs on the server
 	{
 		var position = transform.position;
 
@@ -129,6 +144,7 @@ public class Throwable : MonoBehaviour
 		DestroyThrowable();
 	}
 
+	[ExecuteInEditMode]
 	private void OnRenderObject()
 	{
 		UpdateInternalSize();

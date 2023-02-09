@@ -10,11 +10,12 @@ TagManager:
   - LobbyPlayer
   - LobbyManager
   - Throwable
+  - Hud
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
   - 

@@ -16,7 +16,7 @@ MonoBehaviour:
   currentHealth: 100
   maxHealth: 100
   enableHealthRegeneration: 1
-  healthRegeneration: 10
+  healthRegeneration: 1
   currentEnergy: 100
   maxEnergy: 100
   movementSpeed: 2
