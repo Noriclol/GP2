@@ -52,8 +52,6 @@ public class Throwable : NetworkBehaviour
 
 		players = GameObject.FindGameObjectsWithTag(playerTag);
 
-		transform.position = path[0];
-
 		foreach (GameObject throwable in GameObject.FindGameObjectsWithTag(throwableTag))
 		{
 			if (throwable != this.gameObject)
@@ -76,7 +74,7 @@ public class Throwable : NetworkBehaviour
 		{
 			current++;
 
-			if (current < path.Count) return;
+			if (current != path.Count) return;
 
 			moving = false;
 			Landed();
