@@ -27,13 +27,6 @@ public class Thrower : NetworkBehaviour
 	private void Awake()
 	{
 		RemoveLine();
-
-		path = new List<Vector3>(linePoints);
-
-		for (int i = 0; i < linePoints; i++)
-		{
-			path.Add(Vector3.zero);
-		}
 	}
 
 	public void OnMouse(InputAction.CallbackContext mouseContext)
@@ -59,8 +52,9 @@ public class Thrower : NetworkBehaviour
 
 	private void Throw()
 	{
-		RemoveLine();
+		if (path == null) return;
 		CMDThrow(path);
+		RemoveLine();
 	}
 
 	[Command] // Spawns it on server and then forces that onto the clients.
@@ -101,12 +95,14 @@ public class Thrower : NetworkBehaviour
 
 		var tSize = 1.0f / (float)linePoints;
 
+		path = new List<Vector3>();
+
 		for (int i = 0; i < linePoints; i++)
 		{
-			float t = tSize * (float)i;
+			float t = tSize * (float)(i + 1);
 			var point = SampleParabola(start, end, distance / 3, t);
 			lineRenderer.SetPosition(i, point);
-			path[i] = point;
+			path.Add(point);
 		}
 	}
 
@@ -136,6 +132,7 @@ public class Thrower : NetworkBehaviour
 	private void RemoveLine()
 	{
 		lineRenderer.enabled = false;
+		path = null;
 	}
 
 	private Vector3? CalcTarget()
@@ -144,7 +141,7 @@ public class Thrower : NetworkBehaviour
 
 		RaycastHit hit;
 		Vector3 target;
-		if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+		if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
 		{
 			target = hit.point;
 		}
@@ -155,13 +152,15 @@ public class Thrower : NetworkBehaviour
 
 		if (distance <= range)
 		{
-			if (distance < 1f) return null;
+			if (distance < 2f) return null;
 
 			return target;
 		}
 
 		var direction = (target - currentPosition).normalized;
 		var newTarget = currentPosition + (direction * range);
+
+		newTarget.y += 2.0f;
 
 		RaycastHit hitUp;
 		bool up = Physics.Raycast(newTarget, Vector3.up, out hitUp, Mathf.Infinity);

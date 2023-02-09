@@ -346,6 +346,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 5f92aa7a-cd60-45a7-8d31-33e1293d60b7
     m_ActionName: Player/Look[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0e0e4c11-39c3-484a-af93-831963ae57da
+    m_ActionName: Player/Revive[/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: KeyboardMouse
   m_DefaultActionMap: Player
@@ -372,6 +376,7 @@ MonoBehaviour:
   range: 10
   cooldown: 30
   lineRenderer: {fileID: 944603541108214770}
+  instance: {fileID: 100002, guid: 1fe56a0e685b8434ebfeb53c69b59a5e, type: 3}
 --- !u!120 &944603541108214770
 LineRenderer:
   m_ObjectHideFlags: 0
