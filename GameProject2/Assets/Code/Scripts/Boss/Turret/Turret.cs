@@ -2,47 +2,86 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class Turret : MonoBehaviour
+public class Turret : NetworkBehaviour
 {
     [SerializeField]
-    private Transform target;
-
-    [SerializeField]
+    [SyncVar]
     private float range;
 
-    [SerializeField] 
+    [SerializeField]
     private Projectile projectile;
 
-    [SerializeField] 
+    [SerializeField]
     private Transform projectileSpawn;
-    
-    
+
     private float timeSinceFire;
 
     private bool targetInBounds;
-    
-    
-    
+
+    private List<Transform> targets = new List<Transform>();
+
+    [SyncVar]
+    private Transform currentTarget;
+
+    private void Start()
+    {
+        if (!isServer) return;
+
+		StartCoroutine(FindTargets());
+		timeSinceFire = 5;
+    }
+
+    IEnumerator FindTargets()
+    {
+        while(true)        
+        {
+			var players = GameObject.FindGameObjectsWithTag("Player"); // Get all possible targets
+			float minDistance = Mathf.Infinity;
+			foreach (var player in players)
+			{
+				targets.Add(player.transform);
+				var distance = Vector3.Distance(player.transform.position, transform.position);
+				if (minDistance > distance)
+                {
+					minDistance = distance;
+					currentTarget = player.transform;
+				}
+
+			}
+
+
+
+			yield return new WaitForSeconds(0.5f);
+		}
+	}
+
     private void Update()
     {
         //Look At TargetPosition
-        if (Vector3.Distance(this.transform.position, target.position) <= range)
+        if (Vector3.Distance(this.transform.position, currentTarget.position) <= range)
         {
-            transform.LookAt(target);
+            transform.LookAt(currentTarget);
             targetInBounds = true;
+            if (isServer)
+            {
+                TryShoot();
+            }
         }
         else
         {
             targetInBounds = false;
         }
-        timeSinceFire += Time.deltaTime;
+
+        if (!isServer) return;
+		timeSinceFire += Time.deltaTime;
     }
-    
-    
+
+
     private void OnDrawGizmos()
     {
-        
+
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, range);
 
@@ -54,23 +93,27 @@ public class Turret : MonoBehaviour
         {
             Gizmos.color = Color.red;
         }
-        
-        Gizmos.DrawWireSphere(target.position, 0.5f);
+
+        if (currentTarget != null)
+        {
+            Gizmos.DrawWireSphere(currentTarget.position, 0.5f);
+        }
     }
 
-    [ContextMenu("Shoot")]
-    private void Shoot()
+
+    private void TryShoot()
     {
-        Debug.Log("Shooting");
+        if(!isServer) return;
+        if (timeSinceFire > 5)
+        {
+            timeSinceFire = 0;
+            var newBullet = Instantiate(projectile.Prefab, projectileSpawn.position, Quaternion.LookRotation(currentTarget.position));
 
-        var newBullet = Instantiate(projectile.Prefab, projectileSpawn.position, Quaternion.LookRotation(target.position));
+            var rb = newBullet.GetComponent<Rigidbody>();
 
-        var rb = newBullet.GetComponent<Rigidbody>();
-        
-        rb.AddForce(projectileSpawn.forward * projectile.MuzzleSpeed, ForceMode.Impulse);
+            rb.AddForce(projectileSpawn.forward * projectile.MuzzleSpeed, ForceMode.Impulse);
+
+            NetworkServer.Spawn(newBullet);
+        }
     }
-    
-    
-    
-    
 }

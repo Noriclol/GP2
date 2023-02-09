@@ -2,24 +2,28 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class ProjectileInstance : MonoBehaviour
+public class ProjectileInstance : NetworkBehaviour
 {
     private Rigidbody rb;
 
     private Vector3 LookPos;
     void Start()
     {
-        Destroy(this.gameObject, 5f);
+        if (!isServer) return;
+		Destroy(this.gameObject, 5f);
     }
 
 
     private void LateUpdate()
     {
-        rb ??= gameObject.GetComponent<Rigidbody>();
+		if (!isServer) return;
+
+		rb ??= gameObject.GetComponent<Rigidbody>();
         
         var LookPos = rb.velocity.normalized;
-         transform.LookAt(transform.position + LookPos);
+        transform.LookAt(transform.position + LookPos);
     }
 
 
