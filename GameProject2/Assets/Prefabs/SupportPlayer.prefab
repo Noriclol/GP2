@@ -347,6 +347,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 5f92aa7a-cd60-45a7-8d31-33e1293d60b7
     m_ActionName: Player/Look[/Mouse/position]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0e0e4c11-39c3-484a-af93-831963ae57da
+    m_ActionName: Player/Revive[/Keyboard/f]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: KeyboardMouse
   m_DefaultActionMap: Player
@@ -487,7 +491,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  stats: {fileID: 11400000, guid: c405c7f3acbd5164db0c41935028ed03, type: 2}
+  stats: {fileID: 11400000, guid: 7514deef11d62a14684fb74c9230b191, type: 2}
 --- !u!114 &1882750184979811702
 MonoBehaviour:
   m_ObjectHideFlags: 0

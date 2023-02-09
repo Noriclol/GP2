@@ -8,37 +8,42 @@ public class HealthBar : NetworkBehaviour
 {
     private float currentHealth;
     private float maxHealth;
-    //The reason theres two icons is because one is supposed to on their own canvas 
-    //while the other is supposed to be on the other player canvas
-    private Slider healthBar;
 
-    //public HealthBar(/*float currentHealth, float maxHealth*/)
-    //{
-    //    //this.currentHealth = currentHealth;
-    //    //this.maxHealth = maxHealth;
-    //}
+    private Slider healthBar;
+    private Slider localHealthBar;
 
     private void Awake()
     {
         const string hudTag = "Hud";
         var Hud = GameObject.FindGameObjectWithTag(hudTag);
 
+        GameObject localPlayerProfile;
         GameObject playerProfile;
-        if (isLocalPlayer)
-        {
-            playerProfile = Hud.transform.Find("PlayerProfile").gameObject;
-        }
-        else
-        {
-            playerProfile = Hud.transform.Find("SecondPlayerProfile").gameObject;
-        }
 
+
+        localPlayerProfile = Hud.transform.Find("PlayerProfile").gameObject;
+
+        playerProfile = Hud.transform.Find("SecondPlayerProfile").gameObject;
+
+
+        localHealthBar = localPlayerProfile.transform.Find("PlayerHealthbar").GetComponent<Slider>();
         healthBar = playerProfile.transform.Find("PlayerHealthbar").GetComponent<Slider>();
+
+        Debug.Log(this.gameObject.name + healthBar);
     }
+
+
+
 
     public void SetValue(float currentHealth, float maxHealth)
     {
-        if (healthBar != null)
+        if (isLocalPlayer)
+        {
+            localHealthBar.maxValue = maxHealth;
+            localHealthBar.value = currentHealth;
+
+        }
+        else
         {
             healthBar.maxValue = maxHealth;
             healthBar.value = currentHealth;
@@ -49,7 +54,12 @@ public class HealthBar : NetworkBehaviour
 
     public void UpdateValue(float currentHealth)
     {
-        if (healthBar != null)
+        if (isLocalPlayer)
+        {
+            localHealthBar.value = currentHealth;
+
+        }
+        else
         {
             healthBar.value = currentHealth;
 
