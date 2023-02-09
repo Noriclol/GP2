@@ -11,7 +11,10 @@ using UnityEngine.InputSystem;
 public class ReviveScript : NetworkBehaviour
 {
 
+    private HealthScript healthScript;
+
     private GameObject reviveIcon;
+
     private Image reviveBorder;
     [SerializeField] private GameObject reviveVisualization;
     private SphereCollider reviveZone;
@@ -34,6 +37,8 @@ public class ReviveScript : NetworkBehaviour
 
     private void Awake()
     {
+        healthScript = GetComponent<HealthScript>();
+
 		const string hudTag = "Hud";
 		var Hud = GameObject.FindGameObjectWithTag(hudTag);
 
@@ -142,8 +147,8 @@ public class ReviveScript : NetworkBehaviour
         
         if (countUp >= reviveTime)
         {
-            //Heal Player
             PlayerDown(false);
+            healthScript.healthSystem.GainResource(30);
             countDown = downedTime;
             Debug.Log("player Healed");
         }

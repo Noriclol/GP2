@@ -30,15 +30,7 @@ public class ResourceSystem
         get { return maxAmount; }
     }
 
-    //public float GetResourceAmount()
-    //{
-    //    return amount;
-    //}
 
-    //public float GetMaximumResourceAmount()
-    //{
-    //    return maxAmount;
-    //}
 
     public float SubtractResource(float amountToSubtract)
     {
