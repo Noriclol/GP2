@@ -28,13 +28,13 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
         healthBar = GetComponent<HealthBar>();
         reviveScript = GetComponent<ReviveScript>();
         playerInputController = GetComponent<PlayerInputController>();
-        healthSystem = new ResourceSystem(100);
 
     }
 
     private void Start()
     {
-        healthTest = 100;
+        healthSystem = new ResourceSystem(100);
+        healthTest = healthSystem.Amount;
         healthBar.SetValue(healthTest, healthTest);
     }
 
@@ -91,7 +91,7 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
     [Command]
     private void CMDChangedHealth(float health) // Gets called on all clients, currently only after Throwaction as in player stands in healing field
     {
-        healthTest += health;
+        healthTest = healthSystem.GainResource(health);
         RPCUpdateBars();
     }
 
