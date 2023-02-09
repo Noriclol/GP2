@@ -6,44 +6,54 @@ using UnityEngine;
 
 public class DummyHealthScript : MonoBehaviour
 {
-    
+    //A ScriptableObject holding data
     [SerializeField] private Stats stats;
-    
+
+    private ReviveScript reviveScript;
     private HealthBar healthBar;
     private ResourceSystem healthSystem;
-    private ResourceSystem manaSystem;
+    private ResourceSystem energySystem;
 
 
     private void Awake()
     {
         healthSystem = new ResourceSystem(stats.maxHealth);
-        manaSystem = new ResourceSystem(stats.maxEnergy);
+        energySystem = new ResourceSystem(stats.maxEnergy);
         healthBar = GetComponent<HealthBar>();
+        reviveScript = GetComponent<ReviveScript>();   
     }
 
     private void Start()
     {
         stats.SetUp();
-        healthBar.SetValue(stats.currentHealth, stats.maxHealth);
+        healthBar.SetValue(healthSystem.Amount, healthSystem.MaxAmount);
         
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            stats.currentHealth = healthSystem.SubtractResource(10);
-            healthBar.UpdateValue(stats.currentHealth);
+        #region Space to loose hp code
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    healthSystem.SubtractResource(10);
+        //    //Not the best solution, probably gonna change this.
+        //    if (healthSystem.CheckIfResourceIsEmpty(healthSystem.Amount))
+        //    {
+        //        stats.healthState = Stats.HealthState.Downed;
+        //    }
 
-        }
+        //    healthBar.UpdateValue(healthSystem.Amount);
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        //}
+        #endregion
+
+
+        if (Input.GetKeyDown(KeyCode.LeftShift) && stats.healthState == Stats.HealthState.Alive)
         {
-            stats.currentHealth = healthSystem.GainResource(10);
-            healthBar.UpdateValue(stats.currentHealth);
+            healthSystem.GainResource(10);
+            healthBar.UpdateValue(healthSystem.Amount);
             
         }
-
         #region Older Health System
         //if (Input.GetKeyDown(KeyCode.Space))
         //{
@@ -58,16 +68,37 @@ public class DummyHealthScript : MonoBehaviour
         //}
         #endregion
 
+
     }
 
     private void FixedUpdate()
     {
-        if (stats.enableHealthRegeneration)
+        if (stats.enableHealthRegeneration && stats.healthState == Stats.HealthState.Alive)
         {
-            stats.currentHealth = healthSystem.PassivelyGainResource(stats.healthRegeneration);
-            healthBar.UpdateValue(stats.currentHealth);
+            healthSystem.PassivelyGainResource(stats.healthRegeneration);
+            healthBar.UpdateValue(healthSystem.Amount);
             //Debug.Log(stats.currentHealth);
 
         }
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Danger"))
+        {
+            //Instead of hard coding the value the attack/collision could have a damage value, obviously
+            healthSystem.SubtractResource(30);
+
+            if (healthSystem.CheckIfResourceIsEmpty())
+            {
+                stats.healthState = Stats.HealthState.Downed;
+
+                reviveScript.PlayerDown(true);
+                
+            }
+
+            healthBar.UpdateValue(healthSystem.Amount);
+        }
+    }
+
 }

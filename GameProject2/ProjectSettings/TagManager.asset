@@ -6,6 +6,10 @@ TagManager:
   tags:
   - Ground
   - NetworkManager
+  - Danger
+  - LobbyPlayer
+  - LobbyManager
+  - Throwable
   layers:
   - Default
   - TransparentFX
