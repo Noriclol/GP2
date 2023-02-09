@@ -4,6 +4,7 @@ using UnityEngine;
 using Mirror;
 using UnityEngine.SceneManagement;
 
+
 public class CustomNetworkRoomManager : NetworkRoomManager
 {
 	[SerializeField] private NetworkIdentity damagePrefab;
@@ -12,12 +13,9 @@ public class CustomNetworkRoomManager : NetworkRoomManager
 	[HideInInspector]
 	public SelectedCharacter localPlayerCharacter = SelectedCharacter.none;
 
-	// private bool isServer = false;
-
 	public override void OnRoomStartServer()
 	{
 		base.OnRoomStartServer();
-		// isServer = true;
 	}
 
 	public override void OnRoomStartClient()
@@ -31,15 +29,20 @@ public class CustomNetworkRoomManager : NetworkRoomManager
 	public override GameObject OnRoomServerCreateGamePlayer(NetworkConnectionToClient conn, GameObject roomPlayer)
 	{
 		var selected = roomPlayer.GetComponent<LobbyPlayerScript>().selection;
+
 		Destroy(roomPlayer);
 
 		if (selected == SelectedCharacter.Attack) return Instantiate(damagePrefab.gameObject);
 		else return Instantiate(supportPrefab.gameObject);
+
 	}
 
 	public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnectionToClient conn)
 	{
-		return Instantiate(roomPlayerPrefab.gameObject);
-	}
+		var obj = Instantiate(roomPlayerPrefab.gameObject);
 
+		DontDestroyOnLoad(obj);
+
+		return obj;
+	}
 }

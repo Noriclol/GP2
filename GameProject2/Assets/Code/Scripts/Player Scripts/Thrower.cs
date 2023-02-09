@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Mirror;
 
-public class Thrower : MonoBehaviour
+public class Thrower : NetworkBehaviour
 {
-	[SerializeField] private List<Throwable> throwables;
+	[SerializeField] private Throwable healingThrowable;
 	// if less than 0, then no throwable is selected
 	[SerializeField] private int selected = 0;
 	[SerializeField] private float range = 10.0f;
@@ -21,16 +22,11 @@ public class Thrower : MonoBehaviour
 
 	private List<Vector3> path;
 
+	private Vector2 mousePosition = new Vector2(0.0f, 0.0f);
+
 	private void Awake()
 	{
 		RemoveLine();
-
-		path = new List<Vector3>(linePoints);
-
-		for (int i = 0; i < linePoints; i++)
-		{
-			path.Add(Vector3.zero);
-		}
 	}
 
 	public void OnMouse(InputAction.CallbackContext mouseContext)
@@ -49,11 +45,25 @@ public class Thrower : MonoBehaviour
 		}
 	}
 
+	public void OnLook(InputAction.CallbackContext lookContext)
+	{
+		mousePosition = lookContext.ReadValue<Vector2>();
+	}
+
 	private void Throw()
 	{
+		if (path == null) return;
+		CMDThrow(path);
 		RemoveLine();
+	}
 
-		Instantiate(throwables[selected], path[0], Quaternion.identity).GetComponent<Throwable>().path = path;
+	[Command] // Spawns it on server and then forces that onto the clients.
+	void CMDThrow(List<Vector3> followPath)
+	{
+		var obj = Instantiate(healingThrowable, path[0], Quaternion.identity);
+		obj.path = followPath;
+
+		NetworkServer.Spawn(obj.gameObject);
 	}
 
 	private void Update()
@@ -85,12 +95,14 @@ public class Thrower : MonoBehaviour
 
 		var tSize = 1.0f / (float)linePoints;
 
+		path = new List<Vector3>();
+
 		for (int i = 0; i < linePoints; i++)
 		{
-			float t = tSize * (float)i;
+			float t = tSize * (float)(i + 1);
 			var point = SampleParabola(start, end, distance / 3, t);
 			lineRenderer.SetPosition(i, point);
-			path[i] = point;
+			path.Add(point);
 		}
 	}
 
@@ -120,17 +132,16 @@ public class Thrower : MonoBehaviour
 	private void RemoveLine()
 	{
 		lineRenderer.enabled = false;
+		path = null;
 	}
 
 	private Vector3? CalcTarget()
 	{
-		var mousePos = Input.mousePosition;
-
-		Ray ray = Camera.main.ScreenPointToRay(mousePos);
+		Ray ray = Camera.main.ScreenPointToRay(mousePosition);
 
 		RaycastHit hit;
 		Vector3 target;
-		if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+		if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
 		{
 			target = hit.point;
 		}
@@ -141,13 +152,15 @@ public class Thrower : MonoBehaviour
 
 		if (distance <= range)
 		{
-			if (distance < 1f) return null;
+			if (distance < 2f) return null;
 
 			return target;
 		}
 
 		var direction = (target - currentPosition).normalized;
 		var newTarget = currentPosition + (direction * range);
+
+		newTarget.y += 2.0f;
 
 		RaycastHit hitUp;
 		bool up = Physics.Raycast(newTarget, Vector3.up, out hitUp, Mathf.Infinity);

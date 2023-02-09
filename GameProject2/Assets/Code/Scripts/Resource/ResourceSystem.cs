@@ -8,6 +8,12 @@ public class ResourceSystem
     private float maxAmount;
     private float amount;
 
+    public ResourceSystem()
+    {
+        amount = 0.0f;
+        maxAmount = 0.0f;
+    }
+
     public ResourceSystem(float maxAmount)
     {
         this.maxAmount = maxAmount;
@@ -24,15 +30,7 @@ public class ResourceSystem
         get { return maxAmount; }
     }
 
-    //public float GetResourceAmount()
-    //{
-    //    return amount;
-    //}
 
-    //public float GetMaximumResourceAmount()
-    //{
-    //    return maxAmount;
-    //}
 
     public float SubtractResource(float amountToSubtract)
     {
@@ -65,7 +63,7 @@ public class ResourceSystem
 
         }
 
-        
+
         return amount;
     }
 
@@ -94,3 +92,4 @@ public class ResourceSystem
         amount = Mathf.Round(amount * 100.0f) * 0.01f;
     }
 }
+
