@@ -1941,6 +1941,7 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 210313982762696299, guid: 94daf1a3d5ce869469c9c4946a7797ee, type: 3}
   - {fileID: 3626152247069801311, guid: 65f79ab0b3762334b81ad2b322b24324, type: 3}
+  - {fileID: 1582381843119449205, guid: dee701545eb68b1479d18b69fb2905fe, type: 3}
   timeInterpolationGui: 0
   showRoomGUI: 0
   minPlayers: 2
