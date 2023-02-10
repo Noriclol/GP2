@@ -71,7 +71,7 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
 
             if (isLocalPlayer)
             {
-               CMDChangedHealth(-10);
+               CMDChangedHealth(-50);
 
             }
 
@@ -91,6 +91,10 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
     private void CMDChangedHealth(float health) // Gets called on all clients, currently only after Throwaction as in player stands in healing field
     {
         playerHealth = healthSystem.ChangeValue(health);
+        if (playerHealth == 0)
+        {
+            reviveScript.PlayerDown(true);
+        }
         RPCUpdateBars();
     }
 
