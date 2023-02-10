@@ -6,8 +6,6 @@ using Mirror;
 
 public class HealthBar : NetworkBehaviour
 {
-    private float currentHealth;
-    private float maxHealth;
 
     private Slider healthBar;
     private Slider localHealthBar;
@@ -31,8 +29,6 @@ public class HealthBar : NetworkBehaviour
 
         Debug.Log(this.gameObject.name + healthBar);
     }
-
-
 
 
     public void SetValue(float currentHealth, float maxHealth)

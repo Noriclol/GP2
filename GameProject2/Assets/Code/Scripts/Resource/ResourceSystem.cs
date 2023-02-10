@@ -30,7 +30,27 @@ public class ResourceSystem
         get { return maxAmount; }
     }
 
+    public float ChangeValue(float value)
+    {
+        amount += value;
+        CheckValue();
+        return amount;
+    }
 
+    private void CheckValue()
+    {
+        if (amount > maxAmount)
+        {
+            amount = maxAmount;
+        }
+
+        if (amount < 0)
+        {
+            amount = 0;
+        }
+
+
+    }
 
     public float SubtractResource(float amountToSubtract)
     {
@@ -58,13 +78,12 @@ public class ResourceSystem
 
             AmountCheck();
 
-            RoundUp();
             return amount;
 
         }
 
-
         return amount;
+
     }
 
     public bool CheckIfResourceIsEmpty(/*float value*/)
