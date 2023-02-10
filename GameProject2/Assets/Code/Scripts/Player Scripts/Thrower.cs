@@ -53,15 +53,28 @@ public class Thrower : NetworkBehaviour
 	private void Throw()
 	{
 		if (path == null) return;
-		CMDThrow(path);
+		CMDThrow(target);
 		RemoveLine();
 	}
 
 	[Command] // Spawns it on server and then forces that onto the clients.
-	void CMDThrow(List<Vector3> followPath)
+	void CMDThrow(Vector3 target)
 	{
+		var distance = Vector3.Distance(target, transform.position);
+
+		var tSize = 1.0f / (float)linePoints;
+
+		var path = new List<Vector3>();
+
+		for (int i = 0; i < linePoints; i++)
+		{
+			float t = tSize * (float)(i + 1);
+			var point = SampleParabola(transform.position, target, distance / 3, t);
+			path.Add(point);
+		}
+
 		var obj = Instantiate(healingThrowable, path[0], Quaternion.identity);
-		obj.path = followPath;
+		obj.path = path;
 
 		NetworkServer.Spawn(obj.gameObject);
 	}
