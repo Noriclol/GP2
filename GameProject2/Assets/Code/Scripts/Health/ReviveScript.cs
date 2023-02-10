@@ -13,25 +13,28 @@ public class ReviveScript : NetworkBehaviour
 
     private HealthScript healthScript;
 
+    private GameObject localReviveIcon;
     private GameObject reviveIcon;
 
+    private Image localReviveBorder;
     private Image reviveBorder;
+
     [SerializeField] private GameObject reviveVisualization;
     private SphereCollider reviveZone;
 
     [Header("Revive Settings")]
-    //A bool so desginers can disable timed revived or not
-    [SerializeField] private bool isReviveTimed;
-    [NonSerialized] public bool isPlayerDowned;
-    [NonSerialized] public bool isPlayerBeingRevived;
-    private bool isPlayerInRange;
-    private bool isReveiveButtonPressed;
+    //BOOLS
+    private bool isPlayerDowned;
+
+    //FLOATS
     [SerializeField] private float downedTime;
     private float countDown;
     private float scaledValue;
     private float countUp;
     private float reviveTime;
     private float reviveRadius;
+
+    //VECTORS
     private Vector3 reviveVisualizationSize;
     private Vector3 reviveVisualizationLocation;
 
@@ -39,24 +42,16 @@ public class ReviveScript : NetworkBehaviour
     {
         healthScript = GetComponent<HealthScript>();
 
-		const string hudTag = "Hud";
-		var Hud = GameObject.FindGameObjectWithTag(hudTag);
+        const string hudTag = "Hud";
+        var Hud = GameObject.FindGameObjectWithTag(hudTag);
 
-		GameObject playerProfile;
+        GameObject localPlayerProfile;
+        GameObject playerProfile;
 
-        if (isLocalPlayer)
-        {
-            playerProfile = Hud.transform.Find("PlayerProfile").gameObject;
+        localPlayerProfile = Hud.transform.Find("PlayerProfile").gameObject;
+        playerProfile = Hud.transform.Find("SecondPlayerProfile").gameObject;
 
-        }
-        else
-        {
-            playerProfile = Hud.transform.Find("SecondPlayerProfile").gameObject;
-
-        }
-            
-
-		reviveIcon = playerProfile.transform.Find("ReviveIcon").gameObject;
+        reviveIcon = playerProfile.transform.Find("ReviveIcon").gameObject;
 		reviveBorder = reviveIcon.transform.Find("Border").GetComponent<Image>();
 
 		reviveIcon.SetActive(false);
@@ -66,15 +61,16 @@ public class ReviveScript : NetworkBehaviour
 
     private void Start()
     {
+        //REVIVE BOOLS
         isPlayerDowned = false;
-        isPlayerBeingRevived = false;
-        isReviveTimed = true;
-        isPlayerInRange = false;
+
+        //REVIVE TIMER VARIABLES
         downedTime = 25;
         countDown = downedTime;
         countUp = 0;
         reviveTime = 5;
 
+        //REVIVE RANGE VARIABLES
         reviveRadius = 5;
         reviveZone.isTrigger = true;
         reviveZone.radius = reviveRadius;
@@ -87,31 +83,12 @@ public class ReviveScript : NetworkBehaviour
 
     private void Update()
     {
-        if (isReviveTimed && isPlayerDowned && !isPlayerBeingRevived)
-        {
-            ReviveCountdown();
-        }
-
-        if (isPlayerDowned && isPlayerBeingRevived)
-        {
-            RevivingPlayer();
-        }
+        
     }
 
 	public void OnRevive(InputAction.CallbackContext context)
     {
-		if (!context.performed) return;
-
-		if (context.ReadValue<float>() > 0.5f)
-		{ // Pressed
-			if (isPlayerInRange) isPlayerBeingRevived = true;
-            else isPlayerBeingRevived = false;
-		}
-		else
-		{ // Released
-			isPlayerBeingRevived = false;
-			countUp = 0;
-		}
+		
     }
 
     //Gets a scaled value and changes the images fill based on the scaled value
@@ -173,21 +150,21 @@ public class ReviveScript : NetworkBehaviour
 
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player") && other.gameObject != this.gameObject)
-        {
-            isPlayerInRange = true;
-            Debug.Log(other.gameObject.name + " has entered " + this.gameObject.name);
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag("Player") && other.gameObject != this.gameObject)
+    //    {
+    //        isPlayerInRange = true;
+    //        Debug.Log(other.gameObject.name + " has entered " + this.gameObject.name);
+    //    }
+    //}
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player") && other.gameObject != this.gameObject)
-        {
-            isPlayerInRange = false;
-            Debug.Log(other.gameObject.name + " has left " + this.gameObject.name);
-        }
-    }
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.gameObject.CompareTag("Player") && other.gameObject != this.gameObject)
+    //    {
+    //        isPlayerInRange = false;
+    //        Debug.Log(other.gameObject.name + " has left " + this.gameObject.name);
+    //    }
+    //}
 }
