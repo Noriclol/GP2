@@ -19,8 +19,6 @@ public class OverheatHandler: MonoBehaviour
     // The duration of the cooldown in seconds
     public float cooldownDuration = 2.0f;
 
-    public float cooldownRate;
-
     // Boolean to track whether the system is currently cooling down
     private bool _isCoolingDown = false;
 
