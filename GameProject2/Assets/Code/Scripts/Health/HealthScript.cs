@@ -4,6 +4,7 @@ using UnityEngine;
 using Mirror;
 using TMPro;
 using Unity.VisualScripting;
+using System;
 
 public class HealthScript : NetworkBehaviour, IThrowableAction
 {
@@ -11,31 +12,30 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
     [SerializeField] private Stats stats;
 
     [SyncVar]
-    [SerializeField] private float healthTest;
+    [NonSerialized] public float playerHealth;
     TMP_Text testText;
 
     private ReviveScript reviveScript;
-
     private HealthBar healthBar;
-
     private PlayerInputController playerInputController;
-
-    [SyncVar]
     public ResourceSystem healthSystem;
+
+
 
     private void Awake()
     {
         healthBar = GetComponent<HealthBar>();
         reviveScript = GetComponent<ReviveScript>();
         playerInputController = GetComponent<PlayerInputController>();
+        stats.SetUp();
 
     }
 
     private void Start()
     {
-        healthSystem = new ResourceSystem(100);
-        healthTest = healthSystem.Amount;
-        healthBar.SetValue(healthTest, healthTest);
+        healthSystem = new ResourceSystem(stats.maxHealth);
+        playerHealth = healthSystem.Amount;
+        healthBar.SetValue(playerHealth, playerHealth);
     }
 
     public override void OnStartLocalPlayer()
@@ -52,12 +52,12 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
 	    //RPCUpdateBars();
 
         if (!isLocalPlayer) return;
-        testText.text = healthTest.ToString();
+        testText.text = playerHealth.ToString();
 
-        if (!isServer) return;
+        if (!isLocalPlayer) return;
 		if (stats.enableHealthRegeneration && stats.healthState == Stats.HealthState.Alive)
         {
-            //healthSystem.PassivelyGainResource(stats.healthRegeneration);
+            CMDChangedHealth(stats.healthRegeneration);
 			//Debug.Log(stats.currentHealth);
 
 		}
@@ -71,10 +71,9 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
 
             if (isLocalPlayer)
             {
-               CMDChangedHealth(-1);
+               CMDChangedHealth(-10);
 
             }
-
 
         }
     }
@@ -82,7 +81,7 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
     [ClientRpc]
     private void RPCUpdateBars() // Gets called on all clients, currently only after Throwaction as in player stands in healing field
     {
-        healthBar.UpdateValue(healthTest);
+        healthBar.UpdateValue(playerHealth);
         //healthBar.UpdateValue(healthSystem.Amount);
 
         //Debug.Log($"Health Updated to: {healthSystem.Amount}");
@@ -91,7 +90,7 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
     [Command]
     private void CMDChangedHealth(float health) // Gets called on all clients, currently only after Throwaction as in player stands in healing field
     {
-        healthTest = healthSystem.GainResource(health);
+        playerHealth = healthSystem.ChangeValue(health);
         RPCUpdateBars();
     }
 
