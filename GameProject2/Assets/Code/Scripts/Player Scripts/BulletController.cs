@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    public int damageAmount;
     public float lifeTime;
-
+    PlayerDamage PlayerDamage;
     private float startTime;
 
     private void Start()
@@ -16,10 +15,13 @@ public class BulletController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if(collision.gameObject.tag == "Player"){
+            return;
+        }
         HealthScript health = collision.gameObject.GetComponent<HealthScript>();
         if (health != null)
         {
-            health.healthSystem.SubtractResource(damageAmount);
+            health.healthSystem.SubtractResource(PlayerDamage.damage);
         }
 
         Destroy(gameObject);

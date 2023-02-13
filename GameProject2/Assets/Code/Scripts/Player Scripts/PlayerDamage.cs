@@ -46,9 +46,10 @@ public class PlayerDamage : NetworkBehaviour
                 Shoot();
             }
             else{
-                GameObject bullet = Instantiate(bigBulletPrefab, firePoint);
+                GameObject bullet = Instantiate(bigBulletPrefab, firePoint.position, firePoint.rotation);
                 Rigidbody rb = bullet.GetComponent<Rigidbody>();
                 rb.AddForce(firePoint.forward * bigBulletSpeed, ForceMode.Impulse);
+                BulletController bc = bullet.GetComponent<BulletController>();
             }
             isCharging = false;
         }
@@ -105,7 +106,6 @@ public class PlayerDamage : NetworkBehaviour
 		overheating += bulletHeat;
 
 		BulletController bc = bullet.GetComponent<BulletController>();
-		bc.damageAmount = damage;
 
 		NetworkServer.Spawn(bullet);
     }
