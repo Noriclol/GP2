@@ -5,7 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Mirror;
 using UnityEngine.InputSystem;
-
+using System.Net.Http.Headers;
+using System.Text;
 
 [RequireComponent(typeof(SphereCollider))]
 public class ReviveScript : NetworkBehaviour
@@ -24,13 +25,15 @@ public class ReviveScript : NetworkBehaviour
 
     [Header("Revive Settings")]
     //BOOLS
-    private bool isPlayerDowned;
+    [SyncVar] [NonSerialized] public bool isPlayerDowned;
+    [SyncVar] private bool flag;
+    [SyncVar] private bool testRevive;
 
     //FLOATS
     [SerializeField] private float downedTime;
-    private float countDown;
-    private float scaledValue;
-    private float countUp;
+    [SyncVar] private float countDown;
+    [SyncVar] private float scaledValue;
+    [SyncVar] private float countUp;
     private float reviveTime;
     private float reviveRadius;
 
@@ -52,17 +55,23 @@ public class ReviveScript : NetworkBehaviour
         playerProfile = Hud.transform.Find("SecondPlayerProfile").gameObject;
 
         reviveIcon = playerProfile.transform.Find("ReviveIcon").gameObject;
-		reviveBorder = reviveIcon.transform.Find("Border").GetComponent<Image>();
+        reviveBorder = reviveIcon.transform.Find("Border").GetComponent<Image>();
 
-		reviveIcon.SetActive(false);
+        localReviveIcon = localPlayerProfile.transform.Find("ReviveIcon").gameObject;
+        localReviveBorder = localReviveIcon.transform.Find("Border").GetComponent<Image>();
 
-		reviveZone = GetComponent<SphereCollider>();
+        reviveIcon.SetActive(false);    
+        localReviveIcon.SetActive(false);
+
+        reviveZone = GetComponent<SphereCollider>();
     }
 
     private void Start()
     {
         //REVIVE BOOLS
         isPlayerDowned = false;
+        flag = true;
+        testRevive = false;
 
         //REVIVE TIMER VARIABLES
         downedTime = 25;
@@ -75,7 +84,7 @@ public class ReviveScript : NetworkBehaviour
         reviveZone.isTrigger = true;
         reviveZone.radius = reviveRadius;
         reviveVisualizationSize = new Vector3(reviveRadius * 2, 0.3f, reviveRadius * 2);
-        reviveVisualizationLocation = new Vector3(0, -1, 0);
+        reviveVisualizationLocation = new Vector3(0, 0, 0);
         reviveVisualization.transform.localScale = reviveVisualizationSize;
         reviveVisualization.transform.localPosition = reviveVisualizationLocation;
         reviveVisualization.SetActive(false);
@@ -83,12 +92,36 @@ public class ReviveScript : NetworkBehaviour
 
     private void Update()
     {
-        
+        if (isPlayerDowned && flag)
+        {
+            PlayerDown(true); //Wanted to run this code in HealthScript, CMDChangedHealth but it didn't work if i did that. But it works if I run it directly in ReviveScript
+            flag = false;
+        }
+        if (isPlayerDowned && !testRevive)
+        {
+            ReviveCountdown();
+        }
+
+        if (isPlayerDowned && testRevive)
+        {
+            RevivingPlayer();
+        }
     }
 
-	public void OnRevive(InputAction.CallbackContext context)
+    
+
+    public void OnRevive(InputAction.CallbackContext context)
     {
-		
+        if (isPlayerDowned && context.performed)
+        {
+            testRevive = true;
+        }
+
+        if (isPlayerDowned && context.canceled)
+        {
+            testRevive = false;
+            countUp = 0;
+        }
     }
 
     //Gets a scaled value and changes the images fill based on the scaled value
@@ -97,7 +130,12 @@ public class ReviveScript : NetworkBehaviour
         countDown -= Time.deltaTime;
         scaledValue = countDown / downedTime;
 
-        if (reviveBorder != null)
+        if (isLocalPlayer)
+        {
+            localReviveBorder.fillAmount = scaledValue;
+        }
+
+        if (!isLocalPlayer)
         {
             reviveBorder.fillAmount = scaledValue;
 
@@ -116,55 +154,49 @@ public class ReviveScript : NetworkBehaviour
         countUp += Time.deltaTime;
         scaledValue = countUp / reviveTime;
 
-        if (reviveBorder != null)
+        if (isLocalPlayer)
+        {
+            localReviveBorder.fillAmount = scaledValue;
+
+        }
+        if (!isLocalPlayer)
         {
             reviveBorder.fillAmount = scaledValue;
 
         }
-        
+
         if (countUp >= reviveTime)
         {
             PlayerDown(false);
-            healthScript.healthSystem.GainResource(30);
+            healthScript.health = healthScript.healthSystem.GainResource(100);
             countDown = downedTime;
-            Debug.Log("player Healed");
+            //Debug.Log("player Healed");
         }
 
-    }
-
-    public void PlayerDown(bool toggle)
-    {
-        isPlayerDowned = toggle;
-        reviveIcon.SetActive(toggle);
-        reviveVisualization.SetActive(toggle);
     }
 
     //Method to enable or disable to revive icons
-    private void ToggleReviveIcon(bool toggle)
+    public void PlayerDown(bool toggle)
     {
-        if (reviveIcon != null) 
-        { 
-            reviveIcon.SetActive(toggle);
 
+        if (isLocalPlayer)
+        {
+            localReviveIcon.SetActive(toggle);
         }
+        if (!isLocalPlayer)
+        {
+            reviveIcon.SetActive(toggle);
+        }
+        isPlayerDowned = toggle;
 
+        reviveVisualization.SetActive(toggle);
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.CompareTag("Player") && other.gameObject != this.gameObject)
-    //    {
-    //        isPlayerInRange = true;
-    //        Debug.Log(other.gameObject.name + " has entered " + this.gameObject.name);
-    //    }
-    //}
+    [Command]
+    private void CMDUpdateBorders()
+    {
+        ReviveCountdown();
+    }
 
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.gameObject.CompareTag("Player") && other.gameObject != this.gameObject)
-    //    {
-    //        isPlayerInRange = false;
-    //        Debug.Log(other.gameObject.name + " has left " + this.gameObject.name);
-    //    }
-    //}
+
 }
