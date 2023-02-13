@@ -6,7 +6,20 @@ public class BM_AtLocation : IBossMoveState
 {
     public IBossMoveState DoState(BossMoveFSM obj)
     {
-        Debug.Log("Run AtLocation");
+        //State
+        
+        
+        
+        //State Exit
+        if (obj.TargetNode == obj.CurrentNode)
+        {
+            return obj.AtLocation;
+        }
+        else
+        {
+            return obj.MovingToLocation;
+        }
+        
         return null;
     }
 }
