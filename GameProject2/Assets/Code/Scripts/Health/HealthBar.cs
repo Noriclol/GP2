@@ -48,11 +48,7 @@ public class HealthBar : NetworkBehaviour
             healthBar.value = currentHealth;
 
         }
-        else
-        {
-            bossHealthBar.maxValue = maxHealth;
-            bossHealthBar.value = currentHealth;
-        }
+
 
     }
 
@@ -68,10 +64,7 @@ public class HealthBar : NetworkBehaviour
             healthBar.value = currentHealth;
 
         }
-        else
-        {
-            bossHealthBar.value = currentHealth;
-        }
+
 
     }
 }
