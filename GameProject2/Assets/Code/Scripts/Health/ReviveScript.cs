@@ -25,14 +25,16 @@ public class ReviveScript : NetworkBehaviour
 
     [Header("Revive Settings")]
     //BOOLS
-    [SyncVar][NonSerialized] public bool isPlayerDowned;
+    [SyncVar]
+    [NonSerialized] public bool isPlayerDowned;
     private bool flag;
     private bool testRevive;
 
     //FLOATS
     [SerializeField] private float downedTime;
     private float countDown;
-    [SyncVar] private float scaledValue;
+    [SyncVar(hook = nameof(SetScaledValue))]
+    private float scaledValue;
     private float countUp;  
     private float reviveTime;
     private float reviveRadius;
@@ -104,7 +106,7 @@ public class ReviveScript : NetworkBehaviour
 
         if (isPlayerDowned && testRevive)
         {
-            CMDRevive();
+            RevivingPlayer();
         }
     }
 
@@ -130,17 +132,6 @@ public class ReviveScript : NetworkBehaviour
         countDown -= Time.deltaTime;
         scaledValue = countDown / downedTime;
 
-        if (isLocalPlayer)
-        {
-            localReviveBorder.fillAmount = scaledValue;
-        }
-
-        if (!isLocalPlayer)
-        {
-            reviveBorder.fillAmount = scaledValue;
-
-        }
-
         if (countDown <= 0)
         {
             //Replace with kill code
@@ -154,21 +145,10 @@ public class ReviveScript : NetworkBehaviour
         countUp += Time.deltaTime;
         scaledValue = countUp / reviveTime;
 
-        if (isLocalPlayer)
-        {
-            localReviveBorder.fillAmount = scaledValue;
-
-        }
-        if (!isLocalPlayer)
-        {
-            reviveBorder.fillAmount = scaledValue;
-
-        }
-
         if (countUp >= reviveTime)
         {
             PlayerDown(false);
-            healthScript.health = healthScript.healthSystem.GainResource(100);
+            healthScript.health = healthScript.healthSystem.GainResource(healthScript.healthSystem.MaxAmount / 5);
             countDown = downedTime;
             //Debug.Log("player Healed");
         }
@@ -193,10 +173,36 @@ public class ReviveScript : NetworkBehaviour
     }
 
     [Command]
-    private void CMDRevive()
+    private void CMDScaledValueChange(float counter, float reviveTime)
     {
-        RevivingPlayer();
+        scaledValue = counter/reviveTime;
+
+        if (isLocalPlayer)
+        {
+            localReviveBorder.fillAmount = scaledValue;
+
+        }
+        if (!isLocalPlayer)
+        {
+            reviveBorder.fillAmount = scaledValue;
+
+        }
     }
 
+    private void SetScaledValue(float oldValue, float newValue)
+    {
+        scaledValue = newValue;
+
+        if (isLocalPlayer)
+        {
+            localReviveBorder.fillAmount = scaledValue;
+
+        }
+        if (!isLocalPlayer)
+        {
+            reviveBorder.fillAmount = scaledValue;
+
+        }
+    }
 
 }
