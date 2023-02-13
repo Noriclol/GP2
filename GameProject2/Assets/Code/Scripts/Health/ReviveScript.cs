@@ -25,15 +25,15 @@ public class ReviveScript : NetworkBehaviour
 
     [Header("Revive Settings")]
     //BOOLS
-    [SyncVar] [NonSerialized] public bool isPlayerDowned;
-    [SyncVar] private bool flag;
-    [SyncVar] private bool testRevive;
+    [SyncVar][NonSerialized] public bool isPlayerDowned;
+    private bool flag;
+    private bool testRevive;
 
     //FLOATS
     [SerializeField] private float downedTime;
-    [SyncVar] private float countDown;
+    private float countDown;
     [SyncVar] private float scaledValue;
-    [SyncVar] private float countUp;
+    private float countUp;  
     private float reviveTime;
     private float reviveRadius;
 
@@ -60,7 +60,7 @@ public class ReviveScript : NetworkBehaviour
         localReviveIcon = localPlayerProfile.transform.Find("ReviveIcon").gameObject;
         localReviveBorder = localReviveIcon.transform.Find("Border").GetComponent<Image>();
 
-        reviveIcon.SetActive(false);    
+        reviveIcon.SetActive(false);
         localReviveIcon.SetActive(false);
 
         reviveZone = GetComponent<SphereCollider>();
@@ -104,11 +104,11 @@ public class ReviveScript : NetworkBehaviour
 
         if (isPlayerDowned && testRevive)
         {
-            RevivingPlayer();
+            CMDRevive();
         }
     }
 
-    
+
 
     public void OnRevive(InputAction.CallbackContext context)
     {
@@ -193,9 +193,9 @@ public class ReviveScript : NetworkBehaviour
     }
 
     [Command]
-    private void CMDUpdateBorders()
+    private void CMDRevive()
     {
-        ReviveCountdown();
+        RevivingPlayer();
     }
 
 
