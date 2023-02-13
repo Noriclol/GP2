@@ -19,8 +19,11 @@ public class BulletController : MonoBehaviour
             return;
         }
 
+        if(collision.gameObject.tag == "Bullet"){
+            return;
+        }
         HealthScript health = collision.gameObject.GetComponent<HealthScript>();
-        
+
         if(collision.gameObject.tag == "Enemy"){
             if (health != null)
             {

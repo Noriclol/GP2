@@ -38,7 +38,7 @@ public class PlayerDamage : NetworkBehaviour
     private void Awake(){
         rapidFireWait = new WaitForSeconds(1 / fireRate);
     }
-    
+
     public void OnFire(InputAction.CallbackContext shootContext)
     {
         Shoot();
@@ -131,9 +131,14 @@ public class PlayerDamage : NetworkBehaviour
     }
 
     public IEnumerator RapidFire(){
+        float nextFire = 0f;
+
         while(true){
+            if (Time.time >= nextFire){
             Shoot();
+            nextFire = Time.time + 1 /fireRate;
             yield return rapidFireWait;
+            }
         }
     }
 
