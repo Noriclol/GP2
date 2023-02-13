@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
+using UnityEngine.Animations;
 
 public class PlayerInputController : NetworkBehaviour
 {
@@ -10,6 +11,8 @@ public class PlayerInputController : NetworkBehaviour
     // Serialized fields for the Rigidbody component of the player and the move speed and jump force values
     [SerializeField] private Rigidbody _characterRB;
     [SerializeField] public float moveSpeed, jumpForce, dodgeForce, acceleration, deceleration;
+
+    private Animator _animator;
     private float currentSpeed;
 
     // Private Vector2 field to store the player's movement input
@@ -30,6 +33,8 @@ public class PlayerInputController : NetworkBehaviour
     void Awake()
     {
         _characterRB = GetComponent<Rigidbody>();
+        //_animator = GetComponent<Animator>();
+
     }
 
     public override void OnStartAuthority()
@@ -58,8 +63,12 @@ public class PlayerInputController : NetworkBehaviour
     public void MovePlayer()
     {
         if (!isLocalPlayer) return;
+        
         // Calculate the movement vector
         Vector3 movement = new Vector3(_move.x, 0, _move.y);
+        //_animator.SetFloat("Run", movement.magnitude);
+        transform.Translate(movement * currentSpeed * Time.deltaTime, Space.World);
+        
         if(movement != Vector3.zero){
             currentSpeed = Mathf.Lerp(currentSpeed, moveSpeed, acceleration * Time.deltaTime);
         }
@@ -67,7 +76,7 @@ public class PlayerInputController : NetworkBehaviour
             currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
         }
         // Translate the player's position based on the movement vector
-        transform.Translate(movement * currentSpeed * Time.deltaTime, Space.World);
+
     }
 
     // This method is called whenever a "look" action is performed
