@@ -16,6 +16,8 @@ public class ReviveScript : NetworkBehaviour
 
     private HealthScript healthScript;
 
+    private GameObject secondPlayer;
+
     private GameObject localReviveIcon;
     private GameObject reviveIcon;
 
@@ -31,6 +33,7 @@ public class ReviveScript : NetworkBehaviour
     [NonSerialized] public bool isPlayerDowned;
     private bool flag;
     private bool testRevive;
+    private bool isPlayerCloseEnough;
 
     //FLOATS
     [SerializeField] private float downedTime;
@@ -47,6 +50,7 @@ public class ReviveScript : NetworkBehaviour
 
     private void Awake()
     {
+
         healthScript = GetComponent<HealthScript>();
 
         const string hudTag = "Hud";
@@ -76,6 +80,7 @@ public class ReviveScript : NetworkBehaviour
         isPlayerDowned = false;
         flag = true;
         testRevive = false;
+        isPlayerCloseEnough = false;
 
         //REVIVE TIMER VARIABLES
         downedTime = 25;
@@ -92,15 +97,20 @@ public class ReviveScript : NetworkBehaviour
         reviveVisualization.transform.localScale = reviveVisualizationSize;
         reviveVisualization.transform.localPosition = reviveVisualizationLocation;
         reviveVisualization.SetActive(false);
+
     }
 
     private void Update()
     {
-        //if (isPlayerDowned && flag)
-        //{
-        //    PlayerDown(true); //Wanted to run this code in HealthScript, CMDChangedHealth but it didn't work if i did that. But it works if I run it directly in ReviveScript
-        //    flag = false;
-        //}
+        if (isPlayerDowned)
+        {
+            if (Vector3.Distance(this.gameObject.transform.position, secondPlayer.transform.position) <= 5) //NullReference
+            {
+                isPlayerCloseEnough = true;
+            }
+
+            
+        }
         if (isPlayerDowned && !testRevive)
         {
             ReviveCountdown();
@@ -116,9 +126,10 @@ public class ReviveScript : NetworkBehaviour
 
     public void OnRevive(InputAction.CallbackContext context)
     {
-        if (isPlayerDowned && context.performed)
+        if (isPlayerDowned && isPlayerCloseEnough && !isLocalPlayer && context.performed)
         {
             testRevive = true;
+            //RevivingPlayer();
         }
 
         if (isPlayerDowned && context.canceled)
@@ -157,22 +168,6 @@ public class ReviveScript : NetworkBehaviour
 
     }
 
-    //Method to enable or disable to revive icons
-    //public void PlayerDown(bool toggle)
-    //{
-
-    //    if (isLocalPlayer)
-    //    {
-    //        localReviveIcon.SetActive(toggle);
-    //    }
-    //    if (!isLocalPlayer)
-    //    {
-    //        reviveIcon.SetActive(toggle);
-    //    }
-    //    isPlayerDowned = toggle;
-
-    //    reviveVisualization.SetActive(toggle);
-    //}
 
     private void SetScaledValue(float oldValue, float newValue)
     {
