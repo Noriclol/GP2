@@ -7,6 +7,11 @@ public class HackingCollider : MonoBehaviour
 {
     [SerializeField] private Hacking hackingScript;
 
+    private void Awake()
+    {
+        hackingScript = transform.parent.GetComponent<Hacking>();
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<IHackable>(out IHackable comp))

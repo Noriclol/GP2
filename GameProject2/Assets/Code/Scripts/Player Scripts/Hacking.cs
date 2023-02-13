@@ -11,22 +11,30 @@ public class Hacking : NetworkBehaviour
     // [SerializeField] private Stats stats;
     [SerializeField] private float energyDrain;
     [SerializeField] private float activeTime;
+    [SerializeField] private float activeMoveSpeed;
+    [SerializeField] private PlayerInputController playerInputController;
+
     private bool hacking = false;
+    private float originalMoveSpeed;
 
-    private List<IHackable> hackedObjects;
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
 
+        originalMoveSpeed = playerInputController.moveSpeed;
+    }
 
     public void OnHackClick(InputAction.CallbackContext context)
     {
         if (!context.performed) return;
+        if (hacking) return;
 
         if (context.ReadValue<float>() > 0.5f)
         { // Pressed
             // Hacking started
-            hacking = true;
-            hackingField.SetActive(true);
 
-            StartHacking();
+
+            CMDStartHacking();
         }
     }
 
@@ -37,17 +45,35 @@ public class Hacking : NetworkBehaviour
     }
 
     [Command]
-    private void StartHacking()
+    private void CMDStartHacking()
     {
+        RPCStartHacking();
         DrainEnergy();
         StartCoroutine(ActiveTime());
     }
 
     [ClientRpc]
-    private void StopHacking()
+    private void RPCStartHacking()
+    {
+        hacking = true;
+        hackingField.SetActive(true);
+
+        if (isLocalPlayer)
+        {
+            playerInputController.moveSpeed = activeMoveSpeed;
+        }
+    }
+
+    [ClientRpc]
+    private void RPCStopHacking()
     {
         hacking = false;
         hackingField.SetActive(false);
+
+        if (isLocalPlayer)
+        {
+            playerInputController.moveSpeed = originalMoveSpeed;
+        }
     }
 
     IEnumerator ActiveTime()
@@ -55,7 +81,7 @@ public class Hacking : NetworkBehaviour
         yield return new WaitForSeconds(activeTime);
 
         // Hacking disabled
-        StopHacking();
+        RPCStopHacking();
         hacking = false;
         hackingField.SetActive(false);
     }
