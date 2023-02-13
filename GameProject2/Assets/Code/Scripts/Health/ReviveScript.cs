@@ -7,6 +7,8 @@ using Mirror;
 using UnityEngine.InputSystem;
 using System.Net.Http.Headers;
 using System.Text;
+using UnityEngine.UIElements;
+using Image = UnityEngine.UI.Image;
 
 [RequireComponent(typeof(SphereCollider))]
 public class ReviveScript : NetworkBehaviour
@@ -25,7 +27,7 @@ public class ReviveScript : NetworkBehaviour
 
     [Header("Revive Settings")]
     //BOOLS
-    [SyncVar]
+    [SyncVar(hook = nameof(SetPlayerDownedBool))]
     [NonSerialized] public bool isPlayerDowned;
     private bool flag;
     private bool testRevive;
@@ -94,11 +96,11 @@ public class ReviveScript : NetworkBehaviour
 
     private void Update()
     {
-        if (isPlayerDowned && flag)
-        {
-            PlayerDown(true); //Wanted to run this code in HealthScript, CMDChangedHealth but it didn't work if i did that. But it works if I run it directly in ReviveScript
-            flag = false;
-        }
+        //if (isPlayerDowned && flag)
+        //{
+        //    PlayerDown(true); //Wanted to run this code in HealthScript, CMDChangedHealth but it didn't work if i did that. But it works if I run it directly in ReviveScript
+        //    flag = false;
+        //}
         if (isPlayerDowned && !testRevive)
         {
             ReviveCountdown();
@@ -147,7 +149,7 @@ public class ReviveScript : NetworkBehaviour
 
         if (countUp >= reviveTime)
         {
-            PlayerDown(false);
+            isPlayerDowned = false;
             healthScript.health = healthScript.healthSystem.GainResource(healthScript.healthSystem.MaxAmount / 5);
             countDown = downedTime;
             //Debug.Log("player Healed");
@@ -156,38 +158,21 @@ public class ReviveScript : NetworkBehaviour
     }
 
     //Method to enable or disable to revive icons
-    public void PlayerDown(bool toggle)
-    {
+    //public void PlayerDown(bool toggle)
+    //{
 
-        if (isLocalPlayer)
-        {
-            localReviveIcon.SetActive(toggle);
-        }
-        if (!isLocalPlayer)
-        {
-            reviveIcon.SetActive(toggle);
-        }
-        isPlayerDowned = toggle;
+    //    if (isLocalPlayer)
+    //    {
+    //        localReviveIcon.SetActive(toggle);
+    //    }
+    //    if (!isLocalPlayer)
+    //    {
+    //        reviveIcon.SetActive(toggle);
+    //    }
+    //    isPlayerDowned = toggle;
 
-        reviveVisualization.SetActive(toggle);
-    }
-
-    [Command]
-    private void CMDScaledValueChange(float counter, float reviveTime)
-    {
-        scaledValue = counter/reviveTime;
-
-        if (isLocalPlayer)
-        {
-            localReviveBorder.fillAmount = scaledValue;
-
-        }
-        if (!isLocalPlayer)
-        {
-            reviveBorder.fillAmount = scaledValue;
-
-        }
-    }
+    //    reviveVisualization.SetActive(toggle);
+    //}
 
     private void SetScaledValue(float oldValue, float newValue)
     {
@@ -203,6 +188,22 @@ public class ReviveScript : NetworkBehaviour
             reviveBorder.fillAmount = scaledValue;
 
         }
+    }
+
+    private void SetPlayerDownedBool(bool oldBool, bool newBool)
+    {
+        isPlayerDowned = newBool;
+
+        if (isLocalPlayer)
+        {
+            localReviveIcon.SetActive(isPlayerDowned);
+        }
+        if (!isLocalPlayer)
+        {
+            reviveIcon.SetActive(isPlayerDowned);
+        }
+
+        reviveVisualization.SetActive(isPlayerDowned);
     }
 
 }
