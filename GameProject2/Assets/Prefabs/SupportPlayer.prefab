@@ -225,6 +225,8 @@ MonoBehaviour:
   moveSpeed: 4
   jumpForce: 4
   dodgeForce: 4
+  acceleration: 0
+  deceleration: 0
   minJumpInterval: 1
   minDodgeInterval: 1
 --- !u!114 &1937083189167438603
@@ -354,6 +356,10 @@ MonoBehaviour:
     m_ActionId: 0e0e4c11-39c3-484a-af93-831963ae57da
     m_ActionName: Player/Revive[/Keyboard/f]
   - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0dfb9b34-2eb7-4338-affd-f3611852bd05
+    m_ActionName: Player/Secondary Fire[/Mouse/rightButton]
+  - m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 6746772800875339968}
         m_TargetAssemblyTypeName: Hacking, Assembly-CSharp
@@ -367,7 +373,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 49f17008-4aca-4c6a-8b2e-71adb60c44f3
+    m_ActionId: 386d68d3-7a7b-47a6-ba04-f1ff0f185411
     m_ActionName: Player/Hack[/Keyboard/c]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: KeyboardMouse
