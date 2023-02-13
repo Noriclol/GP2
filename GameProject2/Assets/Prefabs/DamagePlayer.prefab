@@ -436,6 +436,8 @@ MonoBehaviour:
   moveSpeed: 4
   jumpForce: 4
   dodgeForce: 4
+  acceleration: 1
+  deceleration: 1
   minJumpInterval: 1
   minDodgeInterval: 1
 --- !u!114 &6429813150572686751
@@ -502,7 +504,7 @@ MonoBehaviour:
     m_ActionName: Player/Jump[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: -4511905426154981379}
         m_TargetAssemblyTypeName: PlayerDamage, Assembly-CSharp
         m_MethodName: OnFire
         m_Mode: 0
@@ -553,9 +555,25 @@ MonoBehaviour:
     m_ActionId: 0e0e4c11-39c3-484a-af93-831963ae57da
     m_ActionName: Player/Revive[/Keyboard/f]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -4511905426154981379}
+        m_TargetAssemblyTypeName: PlayerDamage, Assembly-CSharp
+        m_MethodName: OnSecondaryFire
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 0dfb9b34-2eb7-4338-affd-f3611852bd05
     m_ActionName: Player/Secondary Fire[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 386d68d3-7a7b-47a6-ba04-f1ff0f185411
+    m_ActionName: Player/Hack[/Keyboard/c]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: KeyboardMouse
   m_DefaultActionMap: Player
@@ -623,7 +641,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   stats: {fileID: 11400000, guid: c405c7f3acbd5164db0c41935028ed03, type: 2}
-  healthTest: 0
 --- !u!114 &4364993002339089012
 MonoBehaviour:
   m_ObjectHideFlags: 0
