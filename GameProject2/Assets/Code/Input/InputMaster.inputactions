@@ -88,13 +88,13 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Hack",
-                    "type": "Button",
-                    "id": "49f17008-4aca-4c6a-8b2e-71adb60c44f3",
-                    "expectedControlType": "Button",
+                    "name": "Secondary Fire",
+                    "type": "Value",
+                    "id": "0dfb9b34-2eb7-4338-affd-f3611852bd05",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": false
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -210,12 +210,12 @@
                 },
                 {
                     "name": "",
-                    "id": "14a3bd8c-21af-414d-948d-580f205b4e72",
-                    "path": "<Keyboard>/c",
-                    "interactions": "",
+                    "id": "bc91b97d-2e1b-4510-b88f-5f27c8d28d25",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Press",
                     "processors": "",
                     "groups": "",
-                    "action": "Hack",
+                    "action": "Secondary Fire",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

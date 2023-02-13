@@ -110,13 +110,13 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Hack"",
-                    ""type"": ""Button"",
-                    ""id"": ""49f17008-4aca-4c6a-8b2e-71adb60c44f3"",
-                    ""expectedControlType"": ""Button"",
+                    ""name"": ""Secondary Fire"",
+                    ""type"": ""Value"",
+                    ""id"": ""0dfb9b34-2eb7-4338-affd-f3611852bd05"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -232,12 +232,12 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""14a3bd8c-21af-414d-948d-580f205b4e72"",
-                    ""path"": ""<Keyboard>/c"",
-                    ""interactions"": """",
+                    ""id"": ""bc91b97d-2e1b-4510-b88f-5f27c8d28d25"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Press"",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Hack"",
+                    ""action"": ""Secondary Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -274,7 +274,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
         m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Revive = m_Player.FindAction("Revive", throwIfNotFound: true);
-        m_Player_Hack = m_Player.FindAction("Hack", throwIfNotFound: true);
+        m_Player_SecondaryFire = m_Player.FindAction("Secondary Fire", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -373,7 +373,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dodge;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Revive;
-    private readonly InputAction m_Player_Hack;
+    private readonly InputAction m_Player_SecondaryFire;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -384,7 +384,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
         public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Revive => m_Wrapper.m_Player_Revive;
-        public InputAction @Hack => m_Wrapper.m_Player_Hack;
+        public InputAction @SecondaryFire => m_Wrapper.m_Player_SecondaryFire;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -412,9 +412,9 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 @Revive.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRevive;
                 @Revive.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRevive;
                 @Revive.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRevive;
-                @Hack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHack;
-                @Hack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHack;
-                @Hack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHack;
+                @SecondaryFire.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondaryFire;
+                @SecondaryFire.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondaryFire;
+                @SecondaryFire.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondaryFire;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -437,9 +437,9 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 @Revive.started += instance.OnRevive;
                 @Revive.performed += instance.OnRevive;
                 @Revive.canceled += instance.OnRevive;
-                @Hack.started += instance.OnHack;
-                @Hack.performed += instance.OnHack;
-                @Hack.canceled += instance.OnHack;
+                @SecondaryFire.started += instance.OnSecondaryFire;
+                @SecondaryFire.performed += instance.OnSecondaryFire;
+                @SecondaryFire.canceled += instance.OnSecondaryFire;
             }
         }
     }
@@ -465,6 +465,6 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
         void OnDodge(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnRevive(InputAction.CallbackContext context);
-        void OnHack(InputAction.CallbackContext context);
+        void OnSecondaryFire(InputAction.CallbackContext context);
     }
 }

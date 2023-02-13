@@ -1,32 +1,57 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using Mirror;
 using UnityEngine.UI;
 
 public class PlayerDamage : NetworkBehaviour
 {
+    [Header("GameObjects")]
+    public GameObject bulletPrefab;
+    public GameObject bigBulletPrefab;
+    public Transform firePoint;
+    public OverheatHandler overheatHandler;
+    public Slider overheatingSlider;
 
+    [Header("Primary fire settings")]
     public float fireRate;
     public float bulletSpeed;
     public int damage;
-    public GameObject bulletPrefab;
-    public Transform firePoint;
-    public OverheatHandler overheatHandler;
-
     private float fireCooldown;
     private int overheating = 0;
-    public Slider overheatingSlider;
-
-    // New variable to store how much each bullet heats up the weapon
-    [SerializeField] private int bulletHeat;
     [SerializeField] private int cooldownRate;
+    [SerializeField] private int bulletHeat;
+
+    [Header("Secondary fire settings")]
+    [SerializeField] private float chargeTime;
+    public int chargedDamage;
+    public float bigBulletSpeed;
+    private bool isCharging = false;
+    private float chargeStartTime;
+  
 
     public void OnFire(InputAction.CallbackContext shootContext)
     {
         Shoot();
+    }
+
+    public void OnSecondaryFire(InputAction.CallbackContext chargeContext){
+        if(chargeContext.started){
+            isCharging = true;
+            chargeStartTime = Time.time;
+        }
+        if(chargeContext.canceled){
+            if(chargeTime < 2){
+                Shoot();
+            }
+            else{
+                GameObject bullet = Instantiate(bigBulletPrefab, firePoint);
+                Rigidbody rb = bullet.GetComponent<Rigidbody>();
+                rb.AddForce(firePoint.forward * bigBulletSpeed, ForceMode.Impulse);
+            }
+            isCharging = false;
+        }
     }
 
     private void Update()

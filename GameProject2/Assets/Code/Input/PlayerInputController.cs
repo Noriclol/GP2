@@ -9,7 +9,8 @@ public class PlayerInputController : NetworkBehaviour
 
     // Serialized fields for the Rigidbody component of the player and the move speed and jump force values
     [SerializeField] private Rigidbody _characterRB;
-    [SerializeField] public float moveSpeed, jumpForce, dodgeForce;
+    [SerializeField] public float moveSpeed, jumpForce, dodgeForce, acceleration, deceleration;
+    private float currentSpeed;
 
     // Private Vector2 field to store the player's movement input
     private Vector2 _move;
@@ -59,15 +60,14 @@ public class PlayerInputController : NetworkBehaviour
         if (!isLocalPlayer) return;
         // Calculate the movement vector
         Vector3 movement = new Vector3(_move.x, 0, _move.y);
-
+        if(movement != Vector3.zero){
+            currentSpeed = Mathf.Lerp(currentSpeed, moveSpeed, acceleration * Time.deltaTime);
+        }
+        else{
+            currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
+        }
         // Translate the player's position based on the movement vector
-        transform.Translate(movement * moveSpeed * Time.deltaTime, Space.World);
-
-        //// If there is movement input, rotate the player towards the movement direction
-        //if (movement != Vector3.zero)
-        //{
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(movement), 0.15f);
-        //}
+        transform.Translate(movement * currentSpeed * Time.deltaTime, Space.World);
     }
 
     // This method is called whenever a "look" action is performed
