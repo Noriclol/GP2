@@ -1,7 +1,7 @@
 
 public enum TurretCombatFSMStates
 {
-    none,
-    idle,
-    attack,
+    None,
+    Idle,
+    Attack,
 }

@@ -47,13 +47,13 @@ public class TurretCombatFSM : MonoBehaviour
 
         switch (stateIndicator)
         {
-            case TurretCombatFSMStates.none:
+            case TurretCombatFSMStates.None:
                 break;
-            case TurretCombatFSMStates.idle:
+            case TurretCombatFSMStates.Idle:
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireSphere(target.transform.position, 1f);
                 break;
-            case TurretCombatFSMStates.attack:
+            case TurretCombatFSMStates.Attack:
                 Gizmos.color = Color.blue;
                 Gizmos.DrawWireSphere(target.transform.position, 1f);
                 Gizmos.DrawLine(target.transform.position, transform.position);

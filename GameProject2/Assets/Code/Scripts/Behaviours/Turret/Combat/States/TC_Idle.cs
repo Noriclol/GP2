@@ -6,7 +6,7 @@ public class TC_Idle : ITurretCombatState
 {
     public ITurretCombatState DoState(TurretCombatFSM obj)
     {
-        obj.stateIndicator  = TurretCombatFSMStates.idle;
+        obj.stateIndicator  = TurretCombatFSMStates.Idle;
 
         // State
         

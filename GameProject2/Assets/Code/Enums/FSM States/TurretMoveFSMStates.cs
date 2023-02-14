@@ -2,6 +2,6 @@
 public enum TurretMoveFSMStates
 {
     none,
-    idle,
-    attack,
+    AtLocation,
+    MovingToLocation,
 }
