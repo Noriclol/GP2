@@ -424,7 +424,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6429813150572686741}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0134a47921cc47f4fa1104ae79ce36b8, type: 3}
   m_Name: 
@@ -436,6 +436,8 @@ MonoBehaviour:
   moveSpeed: 4
   jumpForce: 4
   dodgeForce: 4
+  acceleration: 1
+  deceleration: 1
   minJumpInterval: 1
   minDodgeInterval: 1
 --- !u!114 &6429813150572686751
@@ -564,6 +566,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 0e0e4c11-39c3-484a-af93-831963ae57da
     m_ActionName: Player/Revive[/Keyboard/f]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0dfb9b34-2eb7-4338-affd-f3611852bd05
+    m_ActionName: Player/Secondary Fire[/Mouse/rightButton]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 386d68d3-7a7b-47a6-ba04-f1ff0f185411
+    m_ActionName: Player/Hack[/Keyboard/c,/Keyboard/e]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: KeyboardMouse
   m_DefaultActionMap: Player
@@ -584,16 +594,20 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  fireRate: 1
-  bulletSpeed: 4
-  damage: 2
   bulletPrefab: {fileID: 3626152247069801311, guid: 65f79ab0b3762334b81ad2b322b24324,
     type: 3}
+  bigBulletPrefab: {fileID: 0}
   firePoint: {fileID: 2377707748999720942}
   overheatHandler: {fileID: 5462940925866772858}
   overheatingSlider: {fileID: 0}
-  bulletHeat: 1
+  fireRate: 1
+  bulletSpeed: 4
+  damage: 2
   cooldownRate: 0
+  bulletHeat: 1
+  chargeTime: 0
+  chargedDamage: 0
+  bigBulletSpeed: 0
 --- !u!114 &5462940925866772858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -610,7 +624,6 @@ MonoBehaviour:
   warningTreshold: 3
   overheatThreshold: 5
   cooldownDuration: 2
-  cooldownRate: 0
 --- !u!114 &4213012309792546823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -650,7 +663,7 @@ SphereCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6429813150572686741}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.5
@@ -670,6 +683,8 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  secondPlayer: {fileID: 1937083189167438593, guid: a9c0787c8600a1145bfb70aa9f46b443,
+    type: 3}
   reviveVisualization: {fileID: 1161656102794845701}
   downedTime: 30
 --- !u!114 &-4074112696874892752
