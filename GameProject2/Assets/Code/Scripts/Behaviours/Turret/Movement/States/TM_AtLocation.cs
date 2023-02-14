@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class T_Idle : ITurretState
+public class TM_AtLocation : ITurretMoveState
 {
-    public ITurretState DoState(TurretFSM obj)
+    public virtual ITurretMoveState DoState(TurretMoveFSM obj)
     {
-        Debug.Log("Run Idle");
         return null;
     }
 }

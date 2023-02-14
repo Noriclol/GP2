@@ -34,7 +34,6 @@ public class PlayerInputController : NetworkBehaviour
     {
         _characterRB = GetComponent<Rigidbody>();
         //_animator = GetComponent<Animator>();
-
     }
 
     public override void OnStartAuthority()
@@ -63,9 +62,16 @@ public class PlayerInputController : NetworkBehaviour
     public void MovePlayer()
     {
         if (!isLocalPlayer) return;
-        
+
+        var right = Camera.main.transform.right;
+        var forward = Vector3.Cross(right, Vector3.up);
+
         // Calculate the movement vector
-        Vector3 movement = new Vector3(_move.x, 0, _move.y);
+        var movementRight = right * _move.x;
+        var movementForward = forward * _move.y;
+
+        var movement = movementRight + movementForward;
+        
         //_animator.SetFloat("Run", movement.magnitude);
         transform.Translate(movement * currentSpeed * Time.deltaTime, Space.World);
         

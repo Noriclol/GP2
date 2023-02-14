@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ITurretState
+public class TM_MovingToLocation : ITurretMoveState
 {
-    public virtual ITurretState DoState(TurretFSM obj)
+    public virtual ITurretMoveState DoState(TurretMoveFSM obj)
     {
-        Debug.Log("Run Base");
         return null;
     }
 }
