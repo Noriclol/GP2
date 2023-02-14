@@ -3,18 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Attack : IBossState
+public class T_Attack : ITurretState
 {
     public BossAttacks type;
-    public IBossState DoState()
+    public ITurretState DoState(TurretFSM obj)
     {
         Debug.Log("Run Attack");
         
-        return Shoot();
+        
+        
+        return obj.attackState;
     }
 
 
-    private IBossState Shoot()
+    private ITurretState Shoot(TurretFSM obj)
     {
         switch (type)
         {

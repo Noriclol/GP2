@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Idle : IBossState
+public class T_Idle : ITurretState
 {
-    public IBossState DoState()
+    public ITurretState DoState(TurretFSM obj)
     {
         Debug.Log("Run Idle");
         return null;
