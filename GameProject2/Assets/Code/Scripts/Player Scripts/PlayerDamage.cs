@@ -43,10 +43,10 @@ public class PlayerDamage : NetworkBehaviour
                 // Debug.Log("System is cool.");
                 break;
             case OverheatState.Warning:
-                Debug.Log("System is approaching overheating");
+                //Debug.Log("System is approaching overheating");
                 break;
             case OverheatState.Overheated:
-                Debug.Log("System is overheated");
+                //Debug.Log("System is overheated");
                 break;
             default:
                 break;
