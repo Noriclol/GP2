@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 3384268370488327489}
   - component: {fileID: 9070984814084342035}
   - component: {fileID: 2181704996039300305}
+  - component: {fileID: 2424373645266917201}
   m_Layer: 0
   m_Name: SupportPlayer
   m_TagString: Player
@@ -43,6 +44,7 @@ Transform:
   m_Children:
   - {fileID: 1148348349993277164}
   - {fileID: 6314585370500581981}
+  - {fileID: 7527358148232146977}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -114,7 +116,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1937083189167438593}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0134a47921cc47f4fa1104ae79ce36b8, type: 3}
   m_Name: 
@@ -194,9 +196,9 @@ MonoBehaviour:
     m_ActionName: Player/Jump[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8681471222202699047}
-        m_TargetAssemblyTypeName: Thrower, Assembly-CSharp
-        m_MethodName: OnMouse
+      - m_Target: {fileID: 2424373645266917201}
+        m_TargetAssemblyTypeName: SupportFire, Assembly-CSharp
+        m_MethodName: OnFire
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -253,10 +255,14 @@ MonoBehaviour:
     m_ActionId: 5f92aa7a-cd60-45a7-8d31-33e1293d60b7
     m_ActionName: Player/Look[/Mouse/position]
   - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0e0e4c11-39c3-484a-af93-831963ae57da
+    m_ActionName: Player/Revive[/Keyboard/f]
+  - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1613707092037843821}
-        m_TargetAssemblyTypeName: ReviveScript, Assembly-CSharp
-        m_MethodName: OnRevive
+      - m_Target: {fileID: 8681471222202699047}
+        m_TargetAssemblyTypeName: Thrower, Assembly-CSharp
+        m_MethodName: OnMouse
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -266,10 +272,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-    m_ActionId: 0e0e4c11-39c3-484a-af93-831963ae57da
-    m_ActionName: Player/Revive[/Keyboard/f]
-  - m_PersistentCalls:
-      m_Calls: []
     m_ActionId: 0dfb9b34-2eb7-4338-affd-f3611852bd05
     m_ActionName: Player/Secondary Fire[/Mouse/rightButton]
   - m_PersistentCalls:
@@ -497,6 +499,27 @@ MonoBehaviour:
   syncInterval: 0.1
   clientAuthority: 1
   animator: {fileID: 6417607933814410390}
+--- !u!114 &2424373645266917201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937083189167438593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc2893d7ffd25fd43a8338cdfdcabee0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  firePoint: {fileID: 7527358148232146977}
+  bulletPrefab: {fileID: 758051381944496451, guid: 65f79ab0b3762334b81ad2b322b24324,
+    type: 3}
+  fireRate: 1
+  bulletSpeed: 15
+  damage: 3
 --- !u!1 &3400366275565846837
 GameObject:
   m_ObjectHideFlags: 0
@@ -580,6 +603,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &8638530613323839655
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7527358148232146977}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7527358148232146977
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8638530613323839655}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.755, y: 1.03, z: 0.736}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1937083189167438602}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &605023590651015431
 PrefabInstance:
   m_ObjectHideFlags: 0
