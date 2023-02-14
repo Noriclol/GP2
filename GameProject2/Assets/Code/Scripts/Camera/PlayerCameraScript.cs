@@ -13,7 +13,7 @@ public class PlayerCameraScript : NetworkBehaviour
 
     private Vector3 playerRelative;
     private Vector2 camDir;
-    private float camDist = 50;
+    private float camDist = 40;
 
     private void Start()
     {
@@ -22,7 +22,7 @@ public class PlayerCameraScript : NetworkBehaviour
         {
             //FindObjectOfType is a "heavy" method
             cinemachineVirtual = CinemachineVirtualCamera.FindObjectOfType<CinemachineVirtualCamera>();
-            lookTarget = GameObject.Find("Cube").transform;
+            lookTarget = GameObject.Find("CameraTarget").transform;
         }
     }
 
