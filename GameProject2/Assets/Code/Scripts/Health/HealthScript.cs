@@ -40,7 +40,7 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
         health = healthSystem.Amount;
         healthBar.SetValue(health, health);
 
-        bossText = GameObject.Find("123abcBossText").GetComponent<TMP_Text>();
+        //bossText = GameObject.Find("123abcBossText").GetComponent<TMP_Text>();
 
     }
 

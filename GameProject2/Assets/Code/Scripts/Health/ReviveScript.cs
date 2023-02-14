@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
+using DG.Tweening.Core.Easing;
 
 [RequireComponent(typeof(SphereCollider))]
 public class ReviveScript : NetworkBehaviour
@@ -111,11 +112,14 @@ public class ReviveScript : NetworkBehaviour
     private void Update()
     {
 
-        //if (isPlayerDowned && Vector3.Distance(this.gameObject.transform.position, secondPlayer.transform.position) <= reviveRadius)
-        //{
-        //    testRevive = true;
-        //}
-        
+        if (isPlayerDowned && Vector3.Distance(this.gameObject.transform.position, secondPlayer.transform.position) <= reviveRadius)
+        {
+            testRevive = true;
+        }
+        else
+        {
+            testRevive = false;
+        }
 
         if (isPlayerDowned && !testRevive)
         {
