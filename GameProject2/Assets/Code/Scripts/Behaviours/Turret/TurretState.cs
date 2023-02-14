@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ITurretState
+public interface ITurretCombatState
 {
-    public virtual ITurretState DoState(TurretFSM obj)
+    public virtual ITurretCombatState DoState(TurretCombatFSM obj)
     {
-        Debug.Log("Run Base");
         return null;
     }
 }

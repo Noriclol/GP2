@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TurretFSM : MonoBehaviour
+public class TurretCombatFSM : MonoBehaviour
 {
-    private ITurretState state;
+    private ITurretCombatState combatState;
 
-    public T_Idle idleState = new T_Idle();
-    public T_Attack attackState = new T_Attack();
+    public TC_Idle TcIdleState = new TC_Idle();
+    public TC_Attack TcAttackState = new TC_Attack();
 
     public Turret turret;
     public TurretFSMStates StateViewer;
@@ -15,13 +15,13 @@ public class TurretFSM : MonoBehaviour
     
     public void Start()
     {
-        state = idleState;
+        combatState = TcIdleState;
         StateViewer = TurretFSMStates.none;
     }
 
     public void Update()
     {
-        state = state.DoState(this);
+        combatState = combatState.DoState(this);
     }
 }
 
