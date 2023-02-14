@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TC_Attack : ITurretCombatState
@@ -8,11 +9,15 @@ public class TC_Attack : ITurretCombatState
     public BossAttacks type;
     public ITurretCombatState DoState(TurretCombatFSM obj)
     {
+        obj.stateIndicator = TurretCombatFSMStates.attack;
         // State
         
         
         // State Exit
-        return obj.TcAttackState;
+        if (obj.distanceToTarget <= obj.combatRange)
+            return obj.Attacking;
+
+        return obj.Idle;
     }
 
 

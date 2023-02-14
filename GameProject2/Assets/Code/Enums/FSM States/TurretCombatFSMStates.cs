@@ -1,5 +1,5 @@
 
-public enum TurretFSMStates
+public enum TurretCombatFSMStates
 {
     none,
     idle,
