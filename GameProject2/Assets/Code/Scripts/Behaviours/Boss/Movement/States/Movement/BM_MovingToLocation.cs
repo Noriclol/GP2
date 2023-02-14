@@ -20,7 +20,7 @@ public class BM_MovingToLocation : IBossMoveState
     
     public IBossMoveState DoState(BossMoveFSM obj)
     {
-        
+        obj.stateIndicator = BossMoveFSMStates.movingToLocation;
         // State
 
         switch (obj.Moving)
@@ -35,7 +35,7 @@ public class BM_MovingToLocation : IBossMoveState
             
             
             case true:
-                obj.transform.DOMove(obj.NextNode.transform.position, 3f);
+                obj.transform.DOMove(obj.NextNode.transform.position, obj.MoveDuration);
                 boss = obj.transform;
                 
                 

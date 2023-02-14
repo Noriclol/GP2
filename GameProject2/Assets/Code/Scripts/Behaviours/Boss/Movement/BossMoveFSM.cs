@@ -12,18 +12,22 @@ public class BossMoveFSM : MonoBehaviour
     public BM_MovingToLocation MovingToLocation = new BM_MovingToLocation();
 
     //Refs
+    [Header("NodeReferences")]
     public List<BossNode> Nodes = new List<BossNode>();
     
     public BossNode TargetNode;
     public BossNode NextNode;
     
     public BossNode CurrentNode;
-    
-    public bool Moving;
-    
+    [Space]
+    [Header("Fields")]
     public Transform target;
+
+    public float MoveDuration = 3f;
     
-    
+    [Space][Header("No Touch")]
+    public bool Moving;
+    public BossMoveFSMStates stateIndicator;
     
     
     

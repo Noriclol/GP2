@@ -1423,6 +1423,29 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1223907758}
   m_CullTransparentMesh: 1
+--- !u!1 &1332381050 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 668482437127253027, guid: d9bc60fb189fb2f4482d314d1c0af985,
+    type: 3}
+  m_PrefabInstance: {fileID: 4524317643211862385}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1332381053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1332381050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 688173bcba679a44eb0f9809abfde3bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 1854810402}
+  decisionCooldown: 0.1
+  combatRange: 6
+  distanceToTarget: 0
+  stateIndicator: 0
 --- !u!1001 &1380346175
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2076,6 +2099,11 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 1854810402}
+    - target: {fileID: 7859072576114677674, guid: d9bc60fb189fb2f4482d314d1c0af985,
+        type: 3}
+      propertyPath: MoveDuration
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7859072576114677674, guid: d9bc60fb189fb2f4482d314d1c0af985,
         type: 3}
       propertyPath: Nodes.Array.size

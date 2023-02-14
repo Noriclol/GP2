@@ -6,6 +6,7 @@ public class BM_AtLocation : IBossMoveState
 {
     public IBossMoveState DoState(BossMoveFSM obj)
     {
+        obj.stateIndicator = BossMoveFSMStates.atLocation;
         //State
         
         
