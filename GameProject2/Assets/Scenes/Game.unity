@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -9065,7 +9065,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &774820105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15996,40 +15996,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlaceHolderBoss
       objectReference: {fileID: 0}
-    - target: {fileID: 3086157425335927378, guid: d9bc60fb189fb2f4482d314d1c0af985,
+    - target: {fileID: 7597039714001730168, guid: d9bc60fb189fb2f4482d314d1c0af985,
         type: 3}
-      propertyPath: target
-      value: 
-      objectReference: {fileID: 2422669640922458134}
-    - target: {fileID: 3086157425335927378, guid: d9bc60fb189fb2f4482d314d1c0af985,
-        type: 3}
-      propertyPath: combatRange
-      value: 20
-      objectReference: {fileID: 0}
-    - target: {fileID: 4963223597695490269, guid: d9bc60fb189fb2f4482d314d1c0af985,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 50c232df12e23264ea03e6fd34a64a49, type: 2}
-    - target: {fileID: 5238215065964858748, guid: d9bc60fb189fb2f4482d314d1c0af985,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 4.4055
-      objectReference: {fileID: 0}
-    - target: {fileID: 5238215065964858748, guid: d9bc60fb189fb2f4482d314d1c0af985,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 4.4055
-      objectReference: {fileID: 0}
-    - target: {fileID: 5238215065964858748, guid: d9bc60fb189fb2f4482d314d1c0af985,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 4.4055
-      objectReference: {fileID: 0}
-    - target: {fileID: 5238215065964858748, guid: d9bc60fb189fb2f4482d314d1c0af985,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 4.65
+      propertyPath: sceneId
+      value: 1026862127
       objectReference: {fileID: 0}
     - target: {fileID: 7859072576114677674, guid: d9bc60fb189fb2f4482d314d1c0af985,
         type: 3}
@@ -16115,6 +16085,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8724436273919294687, guid: d9bc60fb189fb2f4482d314d1c0af985,
+        type: 3}
+      propertyPath: target
+      value: 
+      objectReference: {fileID: 2422669640922458134}
+    - target: {fileID: 8724436273919294687, guid: d9bc60fb189fb2f4482d314d1c0af985,
+        type: 3}
+      propertyPath: combatRange
+      value: 20
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9bc60fb189fb2f4482d314d1c0af985, type: 3}
@@ -16866,6 +16846,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8739890660688512896, guid: cb78500a1a55ecd43bf5b71a38111e42,
+        type: 3}
+      propertyPath: radius
+      value: 30.26
+      objectReference: {fileID: 0}
+    - target: {fileID: 8739890660688512896, guid: cb78500a1a55ecd43bf5b71a38111e42,
+        type: 3}
+      propertyPath: centerpos.x
+      value: 2.92
+      objectReference: {fileID: 0}
+    - target: {fileID: 8739890660688512896, guid: cb78500a1a55ecd43bf5b71a38111e42,
+        type: 3}
+      propertyPath: centerpos.y
+      value: 1.21202
+      objectReference: {fileID: 0}
+    - target: {fileID: 8739890660688512896, guid: cb78500a1a55ecd43bf5b71a38111e42,
+        type: 3}
+      propertyPath: centerpos.z
+      value: 27.99
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cb78500a1a55ecd43bf5b71a38111e42, type: 3}

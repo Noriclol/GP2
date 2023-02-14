@@ -1,17 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
-public class TurretCombatFSM : MonoBehaviour
+public class TurretCombatFSM : NetworkBehaviour
 {
     private ITurretCombatState state;
 
     public TC_Idle Idle = new TC_Idle();
     public TC_Attack Attacking = new TC_Attack();
 
-    //public Turret turret;
+    public Turret turret;
     
-    [Header("Fields")]
+    [Header("Fields")][SyncVar]
     public Transform target;
     [Space]
     public float decisionCooldown = 0.1f;
@@ -22,8 +23,12 @@ public class TurretCombatFSM : MonoBehaviour
 
     public void Start()
     {
+        target = GameObject.FindWithTag("Player").transform;
         state = Idle;
-        StartCoroutine(MakeDecision());
+        if (isServer)
+        {
+            StartCoroutine(MakeDecision());
+        }
     }
 
 
@@ -33,7 +38,7 @@ public class TurretCombatFSM : MonoBehaviour
         while (true)
         {
             //Calculate values
-            //distanceToTarget = Vector3.Distance(transform.position, turret.Target.transform.position);
+            distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
             //Run States
             state = state.DoState(this);
             yield return new WaitForSeconds(decisionCooldown);

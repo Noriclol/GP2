@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
-public class BossMoveFSM : MonoBehaviour
+public class BossMoveFSM : NetworkBehaviour
 {
     private IBossMoveState state;
     
@@ -28,6 +29,18 @@ public class BossMoveFSM : MonoBehaviour
     [Space][Header("No Touch")]
     public bool Moving;
     public BossMoveFSMStates stateIndicator;
+
+    public void SetPlayerAsTarget()
+    {
+        var players = GameObject.FindGameObjectsWithTag("Player");
+
+        if (players.Length <= 0)
+            return;
+
+        target = players[0].transform;
+        GetComponent<BossCombatFSM>().target = target;
+    }
+    
     
     
     
@@ -43,6 +56,12 @@ public class BossMoveFSM : MonoBehaviour
     public void Update()
     {
         SetTargetNode();
+
+
+            
+        if (!target.gameObject.CompareTag("Player")) 
+            SetPlayerAsTarget();
+        
     }
     
     

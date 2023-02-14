@@ -28,7 +28,7 @@ public class Turret : NetworkBehaviour
     private void Start()
     {
         if (!isServer) return;
-
+        
 		StartCoroutine(FindTargets());
 		timeSinceFire = 5;
     }

@@ -1,9 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
-public class BossCombatFSM : MonoBehaviour
+public class BossCombatFSM : NetworkBehaviour
 {
     private IBossCombatState state;
     
@@ -12,15 +13,34 @@ public class BossCombatFSM : MonoBehaviour
     public BC_Attacking Attacking = new BC_Attacking();
     
     
+    // References
+    [Header("References")]
+    [SerializeField]
+    private Projectile projectile;
+
+    [SerializeField]
+    private Transform projectileSpawn;
     
+    [Space]
     
     // Fields
     [Header("Fields")]
     public Transform target;
     
     public float decisionCooldown = 0.1f;
+    public float shootCooldown = 2f;
+
+    
     public float combatRange = 5f;
     public float distanceToTarget = 0f;
+    public float timeSinceFire = 0f;
+
+    
+    
+    
+    
+    
+    
     public BossCombatFSMStates stateIndicator = BossCombatFSMStates.none;
     public void Start()
     {
@@ -41,6 +61,28 @@ public class BossCombatFSM : MonoBehaviour
     }
 
 
+    public void TryShoot()
+    {
+        //Debug.Log("Pang!");
+        if(!isServer) return;
+        if (timeSinceFire < Time.time + shootCooldown)
+        {
+            timeSinceFire = Time.time;
+            
+            projectileSpawn.transform.LookAt(target);
+            
+            var newBullet = Instantiate(projectile.Prefab, projectileSpawn.position, Quaternion.LookRotation(target.position));
+
+            var rb = newBullet.GetComponent<Rigidbody>();
+
+            rb.AddForce(projectileSpawn.forward * projectile.MuzzleSpeed, ForceMode.Impulse);
+
+            NetworkServer.Spawn(newBullet);
+        }
+    }
+    
+    
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;

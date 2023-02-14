@@ -12,7 +12,7 @@ public class ProjectileInstance : NetworkBehaviour
     void Start()
     {
         if (!isServer) return;
-		Destroy(this.gameObject, 5f);
+		Destroy(this.gameObject, 1f);
     }
 
 

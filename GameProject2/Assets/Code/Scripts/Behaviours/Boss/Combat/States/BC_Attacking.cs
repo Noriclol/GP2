@@ -10,13 +10,13 @@ public class BC_Attacking : IBossCombatState
         // State Run
         
         // Shooty thingies
+        obj.TryShoot();
         
         // State Exit
         if (obj.distanceToTarget <= obj.combatRange)
             return obj.Attacking;
 
         return obj.Idle;
-
 
     }
 }
