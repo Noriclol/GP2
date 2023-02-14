@@ -9,6 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
+using DG.Tweening.Core.Easing;
 
 [RequireComponent(typeof(SphereCollider))]
 public class ReviveScript : NetworkBehaviour
@@ -16,7 +17,7 @@ public class ReviveScript : NetworkBehaviour
 
     private HealthScript healthScript;
 
-    private GameObject secondPlayer;
+    [SerializeField] private GameObject secondPlayer;
     private ReviveScript reviveScript;
 
     private GameObject localReviveIcon;
@@ -32,7 +33,6 @@ public class ReviveScript : NetworkBehaviour
     //BOOLS
     [SyncVar(hook = nameof(SetPlayerDownedBool))]
     [NonSerialized] public bool isPlayerDowned;
-    private bool flag;
     private bool testRevive;
     private bool isPlayerCloseEnough;
 
@@ -53,8 +53,10 @@ public class ReviveScript : NetworkBehaviour
     {
         PlayerManager.playerList.Add(this.gameObject);
 
+        reviveScript = secondPlayer.GetComponent<ReviveScript>();
         healthScript = GetComponent<HealthScript>();
 
+        #region CURSED HUD
         const string hudTag = "Hud";
         var Hud = GameObject.FindGameObjectWithTag(hudTag);
 
@@ -72,6 +74,7 @@ public class ReviveScript : NetworkBehaviour
 
         reviveIcon.SetActive(false);
         localReviveIcon.SetActive(false);
+        #endregion
 
         reviveZone = GetComponent<SphereCollider>();
     }
@@ -80,7 +83,6 @@ public class ReviveScript : NetworkBehaviour
     {
         //REVIVE BOOLS
         isPlayerDowned = false;
-        flag = true;
         testRevive = false;
         isPlayerCloseEnough = false;
 
@@ -91,6 +93,7 @@ public class ReviveScript : NetworkBehaviour
         reviveTime = 5;
 
         //REVIVE RANGE VARIABLES
+        #region RANGE VARIABLES
         reviveRadius = 5;
         reviveZone.isTrigger = true;
         reviveZone.radius = reviveRadius;
@@ -98,13 +101,25 @@ public class ReviveScript : NetworkBehaviour
         reviveVisualizationLocation = new Vector3(0, 0, 0);
         reviveVisualization.transform.localScale = reviveVisualizationSize;
         reviveVisualization.transform.localPosition = reviveVisualizationLocation;
+        #endregion
+
         reviveVisualization.SetActive(false);
         reviveZone.enabled = false;
+
 
     }
 
     private void Update()
     {
+
+        if (isPlayerDowned && Vector3.Distance(this.gameObject.transform.position, secondPlayer.transform.position) <= reviveRadius)
+        {
+            testRevive = true;
+        }
+        else
+        {
+            testRevive = false;
+        }
 
         if (isPlayerDowned && !testRevive)
         {
@@ -114,30 +129,30 @@ public class ReviveScript : NetworkBehaviour
         if (isPlayerDowned && testRevive)
         {
 
-
+            RevivePlayer();
 
         }
     }
 
 
 
-    public void OnRevive(InputAction.CallbackContext context)
-    {
-        if (isPlayerDowned && /*isPlayerCloseEnough && isLocalPlayer &&*/ context.performed)
-        {
-            testRevive = true;
-            //RevivingPlayer();
-        }
+    //public void OnRevive(InputAction.CallbackContext context)
+    //{
+    //    if (isPlayerDowned && context.performed)
+    //    {
+    //        testRevive = true;
+    //        //RevivingPlayer();
+    //    }
 
-        if (isPlayerDowned && context.canceled)
-        {
-            testRevive = false;
-            countUp = 0;
-        }
-    }
+    //    if (isPlayerDowned && context.canceled)
+    //    {
+    //        testRevive = false;
+    //        countUp = 0;
+    //    }
+    //}
 
     //Gets a scaled value and changes the images fill based on the scaled value
-    public void ReviveCountdown()
+    private void ReviveCountdown()
     {
         countDown -= Time.deltaTime;
         scaledValue = countDown / downedTime;
@@ -150,7 +165,7 @@ public class ReviveScript : NetworkBehaviour
 
     }
 
-    private void ReviePlayer()
+    public void RevivePlayer()
     {
         countUp += Time.deltaTime;
         scaledValue = countUp / reviveTime;
@@ -158,30 +173,35 @@ public class ReviveScript : NetworkBehaviour
         if (countUp >= reviveTime)
         {
             isPlayerDowned = false;
+            testRevive = false;
             healthScript.health = healthScript.healthSystem.GainResource(healthScript.healthSystem.MaxAmount / 5);
             countDown = downedTime;
+            countUp = 0;
             //Debug.Log("player Healed");
         }
 
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject != this.gameObject && other.gameObject.CompareTag("Player"))
-        {
-            isPlayerCloseEnough = true;
-            Debug.Log("Is Close Enough");
-        }
-    }
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    if (other.gameObject != this.gameObject && other.gameObject.CompareTag("Player"))
+    //    {
+    //        //isPlayerCloseEnough = true;
+    //        //Debug.Log("Is Close Enough");
+    //        testRevive = true;
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject != this.gameObject && other.gameObject.CompareTag("Player"))
-        {
-            isPlayerCloseEnough = false;
-            Debug.Log("Isn't Close Enough");
-        }
-    }
+    //    }
+    //}
+
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    if (other.gameObject != this.gameObject && other.gameObject.CompareTag("Player"))
+    //    {
+    //        //isPlayerCloseEnough = false;
+    //        //Debug.Log("Isn't Close Enough");
+    //        testRevive = false;
+    //    }
+    //}
 
     private void GetSecondPlayer()
     {
@@ -227,4 +247,15 @@ public class ReviveScript : NetworkBehaviour
         reviveVisualization.SetActive(isPlayerDowned);
     }
 
+    [ClientRpc] //Runs on all clients
+    private void RPCRevivePlayer()
+    {
+        
+    }
+
+    [Command]
+    private void CMDRevivePlayer()
+    {
+        
+    }
 }
