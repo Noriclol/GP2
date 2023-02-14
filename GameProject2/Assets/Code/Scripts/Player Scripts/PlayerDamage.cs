@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Mirror;
 using UnityEngine.UI;
+using System;
 
 public class PlayerDamage : NetworkBehaviour
 {
@@ -18,10 +19,12 @@ public class PlayerDamage : NetworkBehaviour
     public float fireRate;
     public float bulletSpeed;
     public int damage;
-    private float fireCooldown;
     private int overheating = 0;
     [SerializeField] private int cooldownRate;
     [SerializeField] private int bulletHeat;
+
+    Coroutine fireCoroutine;
+    WaitForSeconds rapidFireWait;
 
     [Header("Secondary fire settings")]
     [SerializeField] private float chargeTime;
@@ -31,25 +34,36 @@ public class PlayerDamage : NetworkBehaviour
     private float chargeStartTime;
   
 
+
+    private void Awake(){
+        rapidFireWait = new WaitForSeconds(1 / fireRate);
+    }
+
     public void OnFire(InputAction.CallbackContext shootContext)
     {
         Shoot();
+
+        if(shootContext.performed){
+            StartFiring();
+        }
+
+        else if (shootContext.canceled){
+            StopFiring();
+        }
     }
 
     public void OnSecondaryFire(InputAction.CallbackContext chargeContext){
+        
         if(chargeContext.started){
             isCharging = true;
             chargeStartTime = Time.time;
         }
         if(chargeContext.canceled){
-            if(chargeTime < 2){
-                Shoot();
+            if(chargeTime < 3){
+                CMDShoot();
             }
             else{
-                GameObject bullet = Instantiate(bigBulletPrefab, firePoint.position, firePoint.rotation);
-                Rigidbody rb = bullet.GetComponent<Rigidbody>();
-                rb.AddForce(firePoint.forward * bigBulletSpeed, ForceMode.Impulse);
-                BulletController bc = bullet.GetComponent<BulletController>();
+                CMDSecondFire();
             }
             isCharging = false;
         }
@@ -57,10 +71,6 @@ public class PlayerDamage : NetworkBehaviour
 
     private void Update()
     {
-        if (fireCooldown > 0)
-        {
-            fireCooldown -= Time.deltaTime;
-        }
 
         OverheatState state = overheatHandler.CheckOverheat(overheating);
         switch (state)
@@ -69,10 +79,10 @@ public class PlayerDamage : NetworkBehaviour
                 // Debug.Log("System is cool.");
                 break;
             case OverheatState.Warning:
-                Debug.Log("System is approaching overheating");
+                //Debug.Log("System is approaching overheating");
                 break;
             case OverheatState.Overheated:
-                Debug.Log("System is overheated");
+                //Debug.Log("System is overheated");
                 break;
             default:
                 break;
@@ -102,11 +112,44 @@ public class PlayerDamage : NetworkBehaviour
 		GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
 		Rigidbody rb = bullet.GetComponent<Rigidbody>();
 		rb.AddForce(firePoint.forward * bulletSpeed, ForceMode.Impulse);
-		fireCooldown = fireRate;
 		overheating += bulletHeat;
 
 		BulletController bc = bullet.GetComponent<BulletController>();
 
 		NetworkServer.Spawn(bullet);
+    }
+
+    [Command]
+
+    void CMDSecondFire(){
+        GameObject bigBullet = Instantiate(bigBulletPrefab, firePoint.position, firePoint.rotation);
+        Rigidbody rb = bigBullet.GetComponent<Rigidbody>();
+        rb.AddForce(firePoint.forward * bigBulletSpeed, ForceMode.Impulse);
+        BulletController bc = bigBullet.GetComponent<BulletController>();
+
+        NetworkServer.Spawn(bigBullet);
+    }
+
+    public IEnumerator RapidFire(){
+        float nextFire = 0f;
+
+        while(true){
+            if (Time.time >= nextFire){
+            Shoot();
+            nextFire = Time.time + 1 /fireRate;
+            yield return rapidFireWait;
+            }
+        }
+    }
+
+    void StartFiring(){
+        fireCoroutine = StartCoroutine(RapidFire());
+    }
+
+
+    void StopFiring(){
+        if(fireCoroutine != null){
+            StopCoroutine(fireCoroutine);
+        }
     }
 }

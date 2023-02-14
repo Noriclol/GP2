@@ -18,12 +18,18 @@ public class BulletController : MonoBehaviour
         if(collision.gameObject.tag == "Player"){
             return;
         }
-        HealthScript health = collision.gameObject.GetComponent<HealthScript>();
-        if (health != null)
-        {
-            health.healthSystem.SubtractResource(PlayerDamage.damage);
-        }
 
+        if(collision.gameObject.tag == "Bullet"){
+            return;
+        }
+        HealthScript health = collision.gameObject.GetComponent<HealthScript>();
+
+        if(collision.gameObject.tag == "Enemy"){
+            if (health != null)
+            {
+                health.healthSystem.SubtractResource(PlayerDamage.damage);
+            }
+        }
         Destroy(gameObject);
     }
 

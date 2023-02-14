@@ -323,8 +323,8 @@ GameObject:
   - component: {fileID: 6429813150572686747}
   - component: {fileID: 6429813150572686746}
   - component: {fileID: 6429813150572686751}
+  - component: {fileID: 7337880238258831778}
   - component: {fileID: 5462940925866772858}
-  - component: {fileID: -4511905426154981379}
   - component: {fileID: 4213012309792546823}
   - component: {fileID: 4364993002339089012}
   - component: {fileID: 891961871477509866}
@@ -445,7 +445,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6429813150572686741}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
@@ -502,7 +502,7 @@ MonoBehaviour:
     m_ActionName: Player/Jump[/Keyboard/space]
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 7337880238258831778}
         m_TargetAssemblyTypeName: PlayerDamage, Assembly-CSharp
         m_MethodName: OnFire
         m_Mode: 0
@@ -549,18 +549,51 @@ MonoBehaviour:
     m_ActionId: 5f92aa7a-cd60-45a7-8d31-33e1293d60b7
     m_ActionName: Player/Look[/Mouse/position]
   - m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6534896594412601754}
+        m_TargetAssemblyTypeName: ReviveScript, Assembly-CSharp
+        m_MethodName: OnRevive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_ActionId: 0e0e4c11-39c3-484a-af93-831963ae57da
     m_ActionName: Player/Revive[/Keyboard/f]
-  - m_PersistentCalls:
-      m_Calls: []
-    m_ActionId: 0dfb9b34-2eb7-4338-affd-f3611852bd05
-    m_ActionName: Player/Secondary Fire[/Mouse/rightButton]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: KeyboardMouse
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &7337880238258831778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429813150572686741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddbc3a97ef8411e4f9f9c34f165bd2aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  fireRate: 1
+  bulletSpeed: 4
+  damage: 2
+  bulletPrefab: {fileID: 3626152247069801311, guid: 65f79ab0b3762334b81ad2b322b24324,
+    type: 3}
+  firePoint: {fileID: 2377707748999720942}
+  overheatHandler: {fileID: 5462940925866772858}
+  overheatingSlider: {fileID: 0}
+  bulletHeat: 1
+  cooldownRate: 0
 --- !u!114 &5462940925866772858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -577,36 +610,7 @@ MonoBehaviour:
   warningTreshold: 3
   overheatThreshold: 5
   cooldownDuration: 2
---- !u!114 &-4511905426154981379
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6429813150572686741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ddbc3a97ef8411e4f9f9c34f165bd2aa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0.1
-  bulletPrefab: {fileID: 3626152247069801311, guid: 65f79ab0b3762334b81ad2b322b24324,
-    type: 3}
-  bigBulletPrefab: {fileID: 3626152247069801311, guid: 098022d7e4e37504ba968b802c49cd44,
-    type: 3}
-  firePoint: {fileID: 2377707748999720942}
-  overheatHandler: {fileID: 5462940925866772858}
-  overheatingSlider: {fileID: 0}
-  fireRate: 3
-  bulletSpeed: 3
-  damage: 3
-  cooldownRate: 3
-  bulletHeat: 1
-  chargeTime: 3
-  chargedDamage: 4
-  bigBulletSpeed: 1
+  cooldownRate: 0
 --- !u!114 &4213012309792546823
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623,7 +627,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   stats: {fileID: 11400000, guid: c405c7f3acbd5164db0c41935028ed03, type: 2}
-  healthTest: 0
 --- !u!114 &4364993002339089012
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -668,7 +671,6 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   reviveVisualization: {fileID: 1161656102794845701}
-  isReviveTimed: 1
   downedTime: 30
 --- !u!114 &-4074112696874892752
 MonoBehaviour:
