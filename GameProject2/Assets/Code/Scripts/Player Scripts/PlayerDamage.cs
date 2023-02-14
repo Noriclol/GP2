@@ -27,7 +27,7 @@ public class PlayerDamage : NetworkBehaviour
     WaitForSeconds rapidFireWait;
 
     [Header("Secondary fire settings")]
-    [SerializeField] private float chargeTime;
+    [SerializeField] private int chargeTime;
     public int chargedDamage;
     public float bigBulletSpeed;
     private bool isCharging = false;
@@ -53,13 +53,14 @@ public class PlayerDamage : NetworkBehaviour
     }
 
     public void OnSecondaryFire(InputAction.CallbackContext chargeContext){
-        
+
         if(chargeContext.started){
             isCharging = true;
             chargeStartTime = Time.time;
         }
         if(chargeContext.canceled){
-            if(chargeTime < 3){
+            float chargeDuration = Time.time - chargeStartTime;
+            if(chargeDuration < chargeTime){
                 CMDShoot();
             }
             else{
@@ -79,10 +80,10 @@ public class PlayerDamage : NetworkBehaviour
                 // Debug.Log("System is cool.");
                 break;
             case OverheatState.Warning:
-                Debug.Log("System is approaching overheating");
+                //Debug.Log("System is approaching overheating");
                 break;
             case OverheatState.Overheated:
-                Debug.Log("System is overheated");
+                //Debug.Log("System is overheated");
                 break;
             default:
                 break;
@@ -95,6 +96,7 @@ public class PlayerDamage : NetworkBehaviour
         }
 
     }
+
 
 
     private void Shoot()
@@ -125,6 +127,7 @@ public class PlayerDamage : NetworkBehaviour
         GameObject bigBullet = Instantiate(bigBulletPrefab, firePoint.position, firePoint.rotation);
         Rigidbody rb = bigBullet.GetComponent<Rigidbody>();
         rb.AddForce(firePoint.forward * bigBulletSpeed, ForceMode.Impulse);
+    
         BulletController bc = bigBullet.GetComponent<BulletController>();
 
         NetworkServer.Spawn(bigBullet);

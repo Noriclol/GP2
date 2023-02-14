@@ -5,15 +5,18 @@ using Mirror;
 using TMPro;
 using Unity.VisualScripting;
 using System;
+using UnityEditor;
 
 public class HealthScript : NetworkBehaviour, IThrowableAction
 {
     //A ScriptableObject holding data
+    [SyncVar]
     [SerializeField] private Stats stats;
 
     [SyncVar]
-    [NonSerialized] public float playerHealth;
+    [NonSerialized] public float health;
     TMP_Text testText;
+    TMP_Text bossText;
 
     private ReviveScript reviveScript;
     private HealthBar healthBar;
@@ -34,8 +37,11 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
     private void Start()
     {
         healthSystem = new ResourceSystem(stats.maxHealth);
-        playerHealth = healthSystem.Amount;
-        healthBar.SetValue(playerHealth, playerHealth);
+        health = healthSystem.Amount;
+        healthBar.SetValue(health, health);
+
+        bossText = GameObject.Find("123abcBossText").GetComponent<TMP_Text>();
+
     }
 
     public override void OnStartLocalPlayer()
@@ -49,13 +55,13 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
 
     private void FixedUpdate()
     {
-	    //RPCUpdateBars();
+        //RPCUpdateBars();
 
         if (!isLocalPlayer) return;
-        testText.text = playerHealth.ToString();
+        testText.text = health.ToString();
 
         if (!isLocalPlayer) return;
-		if (stats.enableHealthRegeneration && stats.healthState == Stats.HealthState.Alive)
+		if (stats.enableHealthRegeneration && !reviveScript.isPlayerDowned) //Using a bool in revive script but if possible i would like to use the states in stats
         {
             CMDChangedHealth(stats.healthRegeneration);
 			//Debug.Log(stats.currentHealth);
@@ -71,7 +77,7 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
 
             if (isLocalPlayer)
             {
-               CMDChangedHealth(-10);
+               CMDChangedHealth(-50);
 
             }
 
@@ -79,18 +85,24 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
     }
 
     [ClientRpc]
-    private void RPCUpdateBars() // Gets called on all clients, currently only after Throwaction as in player stands in healing field
+    private void RPCUpdateBars() 
     {
-        healthBar.UpdateValue(playerHealth);
+        healthBar.UpdateValue(health);
         //healthBar.UpdateValue(healthSystem.Amount);
 
         //Debug.Log($"Health Updated to: {healthSystem.Amount}");
     }
 
     [Command]
-    private void CMDChangedHealth(float health) // Gets called on all clients, currently only after Throwaction as in player stands in healing field
+    private void CMDChangedHealth(float value) 
     {
-        playerHealth = healthSystem.ChangeValue(health);
+        this.health = healthSystem.ChangeValue(value);
+        if (this.health == 0)
+        {
+            //reviveScript.PlayerDown(true);
+            reviveScript.isPlayerDowned = true;
+            stats.healthState = Stats.HealthState.Downed;
+        }
         RPCUpdateBars();
     }
 
