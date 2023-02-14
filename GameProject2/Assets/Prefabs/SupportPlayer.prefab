@@ -19,7 +19,6 @@ GameObject:
   - component: {fileID: 4396779235497305787}
   - component: {fileID: 1882750184979811702}
   - component: {fileID: 1613707092037843821}
-  - component: {fileID: 3384268370488327489}
   - component: {fileID: 9070984814084342035}
   - component: {fileID: 2181704996039300305}
   - component: {fileID: 2424373645266917201}
@@ -453,19 +452,6 @@ MonoBehaviour:
     type: 3}
   reviveVisualization: {fileID: 3400366275565846837}
   downedTime: 30
---- !u!135 &3384268370488327489
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1937083189167438593}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.75
-  m_Center: {x: 0, y: 0, z: 0.5}
 --- !u!114 &9070984814084342035
 MonoBehaviour:
   m_ObjectHideFlags: 0
