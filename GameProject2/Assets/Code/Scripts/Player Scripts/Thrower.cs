@@ -6,188 +6,195 @@ using Mirror;
 
 public class Thrower : NetworkBehaviour
 {
-	[SerializeField] private Throwable healingThrowable;
-	// if less than 0, then no throwable is selected
-	[SerializeField] private int selected = 0;
-	[SerializeField] private float range = 10.0f;
-	[SerializeField] private float cooldown = 30.0f;
+    [SerializeField] private Throwable healingThrowable;
+    // if less than 0, then no throwable is selected
+    [SerializeField] private int selected = 0;
+    [SerializeField] private float range = 10.0f;
+    [SerializeField] private float cooldown = 20.0f;
 
-	[SerializeField] private LineRenderer lineRenderer;
+    [SerializeField] private LineRenderer lineRenderer;
 
-	private const int linePoints = 25;
+    private const int linePoints = 25;
 
-	private bool aiming = false;
+    private bool aiming = false;
 
-	private Vector3 target;
+    private Vector3 target;
 
-	private List<Vector3> path;
+    private List<Vector3> path;
 
-	private Vector2 mousePosition = new Vector2(0.0f, 0.0f);
+    private Vector2 mousePosition = new Vector2(0.0f, 0.0f);
+    private float lastThrown;
 
-	private void Awake()
-	{
-		RemoveLine();
-	}
+    private void Awake()
+    {
+        lastThrown = -cooldown;
 
-	public void OnMouse(InputAction.CallbackContext mouseContext)
-	{
-		if (selected < 0 && !aiming) return;
-		if (!mouseContext.performed) return;
+        RemoveLine();
+    }
 
-		if (mouseContext.ReadValue<float>() > 0.5f)
-		{ // Pressed
-			aiming = true;
-		}
-		else
-		{ // Released
-			aiming = false;
-			Throw();
-		}
-	}
+    public void OnMouse(InputAction.CallbackContext mouseContext)
+    {
+        if (selected < 0 && !aiming) return;
 
-	public void OnLook(InputAction.CallbackContext lookContext)
-	{
-		mousePosition = lookContext.ReadValue<Vector2>();
-	}
+        if (mouseContext.started)
+        {
+            if (lastThrown + cooldown >= Time.time) return;
+            aiming = true;
+        }
+        else if (mouseContext.canceled)
+        {
+            aiming = false;
+            Throw();
+        }
+    }
 
-	private void Throw()
-	{
-		if (path == null) return;
-		CMDThrow(target);
-		RemoveLine();
-	}
+    public void OnLook(InputAction.CallbackContext lookContext)
+    {
+        mousePosition = lookContext.ReadValue<Vector2>();
+    }
 
-	[Command] // Spawns it on server and then forces that onto the clients.
-	void CMDThrow(Vector3 target)
-	{
-		var distance = Vector3.Distance(target, transform.position);
+    private void Throw()
+    {
+        if (path == null) return;
 
-		var tSize = 1.0f / (float)linePoints;
+        CMDThrow(target);
+        RemoveLine();
+    }
 
-		var path = new List<Vector3>();
+    [Command] // Spawns it on server and then forces that onto the clients.
+    void CMDThrow(Vector3 target)
+    {
+        if (lastThrown + cooldown >= Time.time) return;
+        lastThrown = Time.time;
 
-		for (int i = 0; i < linePoints; i++)
-		{
-			float t = tSize * (float)(i + 1);
-			var point = SampleParabola(transform.position, target, distance / 3, t);
-			path.Add(point);
-		}
+        var distance = Vector3.Distance(target, transform.position);
 
-		var obj = Instantiate(healingThrowable, path[0], Quaternion.identity);
-		obj.path = path;
+        var tSize = 1.0f / (float)linePoints;
 
-		NetworkServer.Spawn(obj.gameObject);
-	}
+        var path = new List<Vector3>();
 
-	private void Update()
-	{
-		if (!aiming) return;
+        for (int i = 0; i < linePoints; i++)
+        {
+            float t = tSize * (float)(i + 1);
+            var point = SampleParabola(transform.position, target, distance / 3, t);
+            path.Add(point);
+        }
 
-		var nullableTarget = CalcTarget();
-		if (nullableTarget == null)
-		{
-			RemoveLine();
-			return;
-		}
-		else
-		{
-			target = nullableTarget.Value;
-		}
+        var obj = Instantiate(healingThrowable, path[0], Quaternion.identity);
+        obj.path = path;
 
-		var position = transform.position;
+        NetworkServer.Spawn(obj.gameObject);
+    }
 
-		DrawLine(position, target);
-	}
+    private void Update()
+    {
+        if (!aiming) return;
 
-	private void DrawLine(Vector3 start, Vector3 end)
-	{
-		lineRenderer.enabled = true;
-		lineRenderer.positionCount = linePoints;
+        var nullableTarget = CalcTarget();
+        if (nullableTarget == null)
+        {
+            RemoveLine();
+            return;
+        }
+        else
+        {
+            target = nullableTarget.Value;
+        }
 
-		var distance = Vector3.Distance(start, end);
+        var position = transform.position;
 
-		var tSize = 1.0f / (float)linePoints;
+        DrawLine(position, target);
+    }
 
-		path = new List<Vector3>();
+    private void DrawLine(Vector3 start, Vector3 end)
+    {
+        lineRenderer.enabled = true;
+        lineRenderer.positionCount = linePoints;
 
-		for (int i = 0; i < linePoints; i++)
-		{
-			float t = tSize * (float)(i + 1);
-			var point = SampleParabola(start, end, distance / 3, t);
-			lineRenderer.SetPosition(i, point);
-			path.Add(point);
-		}
-	}
+        var distance = Vector3.Distance(start, end);
 
-	private Vector3 SampleParabola(Vector3 start, Vector3 end, float height, float t)
-	{ // https://forum.unity.com/threads/generating-dynamic-parabola.211681/#post-1426169
-		float parabolicT = t * 2 - 1;
-		if (Mathf.Abs(start.y - end.y) < 0.1f)
-		{ // Start and end are roughly level, pretend they are - simpler solution with less steps
-			var travelDirection = end - start;
-			var result = start + t * travelDirection;
-			result.y += (-parabolicT * parabolicT + 1) * height;
-			return result;
-		}
-		else
-		{ //start and end are not level, gets more complicated
-			var travelDirection = end - start;
-			var levelDirection = end - new Vector3(start.x, end.y, start.z);
-			var right = Vector3.Cross(travelDirection, levelDirection);
-			var up = Vector3.Cross(right, travelDirection);
-			if (end.y > start.y) up = -up;
-			var result = start + t * travelDirection;
-			result += ((-parabolicT * parabolicT + 1) * height) * up.normalized;
-			return result;
-		}
-	}
+        var tSize = 1.0f / (float)linePoints;
 
-	private void RemoveLine()
-	{
-		lineRenderer.enabled = false;
-		path = null;
-	}
+        path = new List<Vector3>();
 
-	private Vector3? CalcTarget()
-	{
-		Ray ray = Camera.main.ScreenPointToRay(mousePosition);
+        for (int i = 0; i < linePoints; i++)
+        {
+            float t = tSize * (float)(i + 1);
+            var point = SampleParabola(start, end, distance / 3, t);
+            lineRenderer.SetPosition(i, point);
+            path.Add(point);
+        }
+    }
 
-		RaycastHit hit;
-		Vector3 target;
-		if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
-		{
-			target = hit.point;
-		}
-		else return null;
+    private Vector3 SampleParabola(Vector3 start, Vector3 end, float height, float t)
+    { // https://forum.unity.com/threads/generating-dynamic-parabola.211681/#post-1426169
+        float parabolicT = t * 2 - 1;
+        if (Mathf.Abs(start.y - end.y) < 0.1f)
+        { // Start and end are roughly level, pretend they are - simpler solution with less steps
+            var travelDirection = end - start;
+            var result = start + t * travelDirection;
+            result.y += (-parabolicT * parabolicT + 1) * height;
+            return result;
+        }
+        else
+        { //start and end are not level, gets more complicated
+            var travelDirection = end - start;
+            var levelDirection = end - new Vector3(start.x, end.y, start.z);
+            var right = Vector3.Cross(travelDirection, levelDirection);
+            var up = Vector3.Cross(right, travelDirection);
+            if (end.y > start.y) up = -up;
+            var result = start + t * travelDirection;
+            result += ((-parabolicT * parabolicT + 1) * height) * up.normalized;
+            return result;
+        }
+    }
 
-		var currentPosition = transform.position;
-		var distance = Mathf.Abs(Vector3.Distance(currentPosition, target));
+    private void RemoveLine()
+    {
+        lineRenderer.enabled = false;
+        path = null;
+    }
 
-		if (distance <= range)
-		{
-			if (distance < 2f) return null;
+    private Vector3? CalcTarget()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(mousePosition);
 
-			return target;
-		}
+        RaycastHit hit;
+        Vector3 target;
+        if (Physics.Raycast(ray, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+        {
+            target = hit.point;
+        }
+        else return null;
 
-		var direction = (target - currentPosition).normalized;
-		var newTarget = currentPosition + (direction * range);
+        var currentPosition = transform.position;
+        var distance = Mathf.Abs(Vector3.Distance(currentPosition, target));
 
-		newTarget.y += 2.0f;
+        if (distance <= range)
+        {
+            if (distance < 2f) return null;
 
-		RaycastHit hitUp;
-		bool up = Physics.Raycast(newTarget, Vector3.up, out hitUp, Mathf.Infinity);
+            return target;
+        }
 
-		RaycastHit hitDn;
-		bool dn = Physics.Raycast(newTarget, Vector3.down, out hitDn, Mathf.Infinity);
+        var direction = (target - currentPosition).normalized;
+        var newTarget = currentPosition + (direction * range);
 
-		if (up && dn)
-		{
-			if (Vector3.Distance(newTarget, hitUp.point) < Vector3.Distance(newTarget, hitDn.point)) return hitUp.point;
-			else return hitDn.point;
-		}
-		else if (up) return hitUp.point;
-		else if (dn) return hitDn.point;
-		else return null;
-	}
+        newTarget.y += 2.0f;
+
+        RaycastHit hitUp;
+        bool up = Physics.Raycast(newTarget, Vector3.up, out hitUp, Mathf.Infinity);
+
+        RaycastHit hitDn;
+        bool dn = Physics.Raycast(newTarget, Vector3.down, out hitDn, Mathf.Infinity);
+
+        if (up && dn)
+        {
+            if (Vector3.Distance(newTarget, hitUp.point) < Vector3.Distance(newTarget, hitDn.point)) return hitUp.point;
+            else return hitDn.point;
+        }
+        else if (up) return hitUp.point;
+        else if (dn) return hitDn.point;
+        else return null;
+    }
 }

@@ -4,9 +4,8 @@ using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
-    public int damageAmount;
     public float lifeTime;
-
+    PlayerDamage PlayerDamage;
     private float startTime;
 
     private void Start()
@@ -16,12 +15,21 @@ public class BulletController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        HealthScript health = collision.gameObject.GetComponent<HealthScript>();
-        if (health != null)
-        {
-            health.healthSystem.SubtractResource(damageAmount);
+        if(collision.gameObject.tag == "Player"){
+            return;
         }
 
+        if(collision.gameObject.tag == "Bullet"){
+            return;
+        }
+        HealthScript health = collision.gameObject.GetComponent<HealthScript>();
+
+        if(collision.gameObject.tag == "Enemy"){
+            if (health != null)
+            {
+                health.healthSystem.SubtractResource(PlayerDamage.damage);
+            }
+        }
         Destroy(gameObject);
     }
 
