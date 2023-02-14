@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8282767567473010022}
   - component: {fileID: 7859072576114677674}
+  - component: {fileID: 3086157425335927378}
   m_Layer: 0
   m_Name: PlaceHolderBoss
   m_TagString: Untagged
@@ -45,6 +46,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce571d752a24bce4289b9d5c4bddd4dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Nodes:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  TargetNode: {fileID: 0}
+  NextNode: {fileID: 0}
+  CurrentNode: {fileID: 0}
+  target: {fileID: 0}
+  MoveDuration: 1
+  Moving: 0
+  stateIndicator: 0
+--- !u!114 &3086157425335927378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668482437127253027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 688173bcba679a44eb0f9809abfde3bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  decisionCooldown: 0.1
+  combatRange: 6
+  distanceToTarget: 0
+  stateIndicator: 0
 --- !u!1 &5101408893251783442
 GameObject:
   m_ObjectHideFlags: 0
