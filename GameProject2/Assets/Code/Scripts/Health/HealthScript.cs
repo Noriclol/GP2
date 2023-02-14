@@ -10,7 +10,7 @@ using UnityEditor;
 public class HealthScript : NetworkBehaviour, IThrowableAction
 {
     //A ScriptableObject holding data
-    [SyncVar]
+
     [SerializeField] private Stats stats;
 
     [SyncVar]
@@ -63,7 +63,7 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
         if (!isLocalPlayer) return;
 		if (stats.enableHealthRegeneration && !reviveScript.isPlayerDowned) //Using a bool in revive script but if possible i would like to use the states in stats
         {
-            CMDChangedHealth(stats.healthRegeneration);
+            CMDChangedHealth(stats.healthRegeneration * Time.fixedDeltaTime);
 			//Debug.Log(stats.currentHealth);
 
 		}
@@ -77,7 +77,7 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
 
             if (isLocalPlayer)
             {
-               CMDChangedHealth(-50);
+               CMDChangedHealth(-600);
 
             }
 

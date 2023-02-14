@@ -5,16 +5,23 @@ using UnityEngine;
 public class PlayerManager : MonoBehaviour
 {
 
-    public static List<GameObject> playerList = new List<GameObject>();
-   [SerializeField] private List<GameObject> SerializeFieldHelper = new List<GameObject>();
+    public static GameObject[] playerArray;
 
+    [SerializeField] private GameObject[] SerializeFieldHelper;
     private void Awake()
     {
-        
+        //playerArray= new GameObject[2];
     }
 
     private void Start()
     {
-        SerializeFieldHelper = playerList;
+
     }
+
+    public static void SetUpArray()
+    {
+        playerArray = GameObject.FindGameObjectsWithTag("Player");
+       
+    }
+
 }

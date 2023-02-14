@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8464ed843e8d7ac47a22555a09993665, type: 3}
   m_Name: SupportCharacter
   m_EditorClassIdentifier: 
-  healthState: 0
+  healthState: 1
   currentHealth: 250
   maxHealth: 250
   enableHealthRegeneration: 1
-  healthRegeneration: 1
+  healthRegeneration: 25
   currentEnergy: 100
   maxEnergy: 100
   movementSpeed: 2

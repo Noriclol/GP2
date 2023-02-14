@@ -10,15 +10,16 @@ using System.Text;
 using UnityEngine.UIElements;
 using Image = UnityEngine.UI.Image;
 using DG.Tweening.Core.Easing;
+using Newtonsoft.Json.Linq;
 
-[RequireComponent(typeof(SphereCollider))]
+
 public class ReviveScript : NetworkBehaviour
 {
 
     private HealthScript healthScript;
 
-    [SerializeField] private GameObject secondPlayer;
-    private ReviveScript reviveScript;
+    private GameObject secondPlayer;
+    [SerializeField] private GameObject[] playerArray;
 
     private GameObject localReviveIcon;
     private GameObject reviveIcon;
@@ -27,16 +28,18 @@ public class ReviveScript : NetworkBehaviour
     private Image reviveBorder;
 
     [SerializeField] private GameObject reviveVisualization;
-    private SphereCollider reviveZone;
 
     [Header("Revive Settings")]
     //BOOLS
-    [SyncVar(hook = nameof(SetPlayerDownedBool))]
+    #region Bools
+    [SyncVar(hook = nameof(RPCSetPlayerDownedBool))]
     [NonSerialized] public bool isPlayerDowned;
     private bool testRevive;
     private bool isPlayerCloseEnough;
+    #endregion
 
     //FLOATS
+    #region Floats
     [SerializeField] private float downedTime;
     private float countDown;
     [SyncVar(hook = nameof(SetScaledValue))]
@@ -44,16 +47,18 @@ public class ReviveScript : NetworkBehaviour
     private float countUp;  
     private float reviveTime;
     private float reviveRadius;
+    #endregion
 
     //VECTORS
+    #region Vectors
     private Vector3 reviveVisualizationSize;
     private Vector3 reviveVisualizationLocation;
+    [SerializeField] private Vector3 secondPlayerPosition;
+    #endregion
 
     private void Awake()
     {
-        PlayerManager.playerList.Add(this.gameObject);
 
-        reviveScript = secondPlayer.GetComponent<ReviveScript>();
         healthScript = GetComponent<HealthScript>();
 
         #region CURSED HUD
@@ -76,11 +81,11 @@ public class ReviveScript : NetworkBehaviour
         localReviveIcon.SetActive(false);
         #endregion
 
-        reviveZone = GetComponent<SphereCollider>();
     }
 
     private void Start()
     {
+        #region Setting Values
         //REVIVE BOOLS
         isPlayerDowned = false;
         testRevive = false;
@@ -95,8 +100,6 @@ public class ReviveScript : NetworkBehaviour
         //REVIVE RANGE VARIABLES
         #region RANGE VARIABLES
         reviveRadius = 5;
-        reviveZone.isTrigger = true;
-        reviveZone.radius = reviveRadius;
         reviveVisualizationSize = new Vector3(reviveRadius * 2, 0.3f, reviveRadius * 2);
         reviveVisualizationLocation = new Vector3(0, 0, 0);
         reviveVisualization.transform.localScale = reviveVisualizationSize;
@@ -104,21 +107,25 @@ public class ReviveScript : NetworkBehaviour
         #endregion
 
         reviveVisualization.SetActive(false);
-        reviveZone.enabled = false;
+        #endregion
 
 
     }
 
     private void Update()
     {
-
-        if (isPlayerDowned && Vector3.Distance(this.gameObject.transform.position, secondPlayer.transform.position) <= reviveRadius)
+        if (secondPlayer != null)
         {
-            testRevive = true;
+            if (isPlayerDowned && Vector3.Distance(this.gameObject.transform.position, secondPlayer.transform.position) < reviveRadius)
+            {
+                testRevive = true;
+            }
+
         }
         else
         {
             testRevive = false;
+            countUp = 0;
         }
 
         if (isPlayerDowned && !testRevive)
@@ -132,9 +139,17 @@ public class ReviveScript : NetworkBehaviour
             RevivePlayer();
 
         }
+
+        if (playerArray.Length < 2)
+        {
+            playerArray = GameObject.FindGameObjectsWithTag("Player");
+        }
+
     }
 
-
+    private void FixedUpdate()
+    {
+    }
 
     //public void OnRevive(InputAction.CallbackContext context)
     //{
@@ -182,37 +197,9 @@ public class ReviveScript : NetworkBehaviour
 
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject != this.gameObject && other.gameObject.CompareTag("Player"))
-    //    {
-    //        //isPlayerCloseEnough = true;
-    //        //Debug.Log("Is Close Enough");
-    //        testRevive = true;
 
-    //    }
-    //}
 
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.gameObject != this.gameObject && other.gameObject.CompareTag("Player"))
-    //    {
-    //        //isPlayerCloseEnough = false;
-    //        //Debug.Log("Isn't Close Enough");
-    //        testRevive = false;
-    //    }
-    //}
-
-    private void GetSecondPlayer()
-    {
-        foreach (GameObject player in PlayerManager.playerList)
-        {
-            if (player != this.gameObject)
-            {
-                secondPlayer = player;
-            }
-        }
-    }
+    
 
     private void SetScaledValue(float oldValue, float newValue)
     {
@@ -230,7 +217,10 @@ public class ReviveScript : NetworkBehaviour
         }
     }
 
-    private void SetPlayerDownedBool(bool oldBool, bool newBool)
+
+
+    [ClientRpc] //Runs on all clients
+    private void RPCSetPlayerDownedBool(bool oldBool, bool newBool)
     {
         isPlayerDowned = newBool;
 
@@ -243,14 +233,34 @@ public class ReviveScript : NetworkBehaviour
             reviveIcon.SetActive(isPlayerDowned);
         }
 
-        reviveZone.enabled = isPlayerDowned;
         reviveVisualization.SetActive(isPlayerDowned);
+
+        if (secondPlayer == null)
+        {
+            FindPlayer();
+        }
     }
 
-    [ClientRpc] //Runs on all clients
-    private void RPCRevivePlayer()
+    private void FindPlayer()
     {
-        
+        NetworkIdentity thisNetworkIdentity;
+        NetworkIdentity otherNetworkIdentity;
+
+        foreach (GameObject player in playerArray)
+        {
+            //thisNetworkIdentity = this.gameObject.GetComponent<NetworkIdentity>();
+            //otherNetworkIdentity= player.GetComponent<NetworkIdentity>();
+
+            //if (thisNetworkIdentity.netId != otherNetworkIdentity.netId)
+            //{
+            //    secondPlayer = player;
+            //}
+
+            if (this.gameObject != player)
+            {
+                secondPlayer = player;
+            }
+        }
     }
 
     [Command]
