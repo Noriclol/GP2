@@ -79,7 +79,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""id"": ""0a019890-04b4-4101-b873-489786414458"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
-                    ""interactions"": """",
+                    ""interactions"": ""Hold"",
                     ""initialStateCheck"": true
                 },
                 {
@@ -104,6 +104,24 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""name"": ""Revive"",
                     ""type"": ""Button"",
                     ""id"": ""0e0e4c11-39c3-484a-af93-831963ae57da"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Secondary Fire"",
+                    ""type"": ""Value"",
+                    ""id"": ""0dfb9b34-2eb7-4338-affd-f3611852bd05"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Hack"",
+                    ""type"": ""Button"",
+                    ""id"": ""386d68d3-7a7b-47a6-ba04-f1ff0f185411"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -201,6 +219,17 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""d5d4d1b6-1006-4715-b9b6-2bda4d682edb"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Dodge"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""d216fbd1-802d-4253-9000-89e22087357d"",
                     ""path"": ""<Mouse>/position"",
                     ""interactions"": """",
@@ -218,6 +247,39 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Revive"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc91b97d-2e1b-4510-b88f-5f27c8d28d25"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Secondary Fire"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0b72f580-9dd2-4006-b2e6-ef519f47f8b8"",
+                    ""path"": ""<Keyboard>/c"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6403ff55-41ca-4663-aa38-4d6926b49727"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Hack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -254,6 +316,8 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
         m_Player_Dodge = m_Player.FindAction("Dodge", throwIfNotFound: true);
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Revive = m_Player.FindAction("Revive", throwIfNotFound: true);
+        m_Player_SecondaryFire = m_Player.FindAction("Secondary Fire", throwIfNotFound: true);
+        m_Player_Hack = m_Player.FindAction("Hack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -352,6 +416,8 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Dodge;
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Revive;
+    private readonly InputAction m_Player_SecondaryFire;
+    private readonly InputAction m_Player_Hack;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -362,6 +428,8 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
         public InputAction @Dodge => m_Wrapper.m_Player_Dodge;
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Revive => m_Wrapper.m_Player_Revive;
+        public InputAction @SecondaryFire => m_Wrapper.m_Player_SecondaryFire;
+        public InputAction @Hack => m_Wrapper.m_Player_Hack;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -389,6 +457,12 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 @Revive.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRevive;
                 @Revive.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRevive;
                 @Revive.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnRevive;
+                @SecondaryFire.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondaryFire;
+                @SecondaryFire.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondaryFire;
+                @SecondaryFire.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSecondaryFire;
+                @Hack.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHack;
+                @Hack.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHack;
+                @Hack.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnHack;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -411,6 +485,12 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
                 @Revive.started += instance.OnRevive;
                 @Revive.performed += instance.OnRevive;
                 @Revive.canceled += instance.OnRevive;
+                @SecondaryFire.started += instance.OnSecondaryFire;
+                @SecondaryFire.performed += instance.OnSecondaryFire;
+                @SecondaryFire.canceled += instance.OnSecondaryFire;
+                @Hack.started += instance.OnHack;
+                @Hack.performed += instance.OnHack;
+                @Hack.canceled += instance.OnHack;
             }
         }
     }
@@ -436,5 +516,7 @@ public partial class @InputMaster : IInputActionCollection2, IDisposable
         void OnDodge(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnRevive(InputAction.CallbackContext context);
+        void OnSecondaryFire(InputAction.CallbackContext context);
+        void OnHack(InputAction.CallbackContext context);
     }
 }
