@@ -129,6 +129,7 @@ MonoBehaviour:
   dodgeForce: 4
   acceleration: 1
   deceleration: 1
+  _animator: {fileID: 6417607933814410390}
   minJumpInterval: 1
   minDodgeInterval: 1
 --- !u!114 &1937083189167438603
@@ -448,10 +449,10 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  secondPlayer: {fileID: 6429813150572686741, guid: 1606dc9c777d52d41835ba62bc71578a,
-    type: 3}
+  playerArray: []
   reviveVisualization: {fileID: 3400366275565846837}
   downedTime: 30
+  secondPlayerPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &9070984814084342035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,6 +469,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   cinemachineVirtual: {fileID: 0}
+  lookTarget: {fileID: 0}
 --- !u!114 &2181704996039300305
 MonoBehaviour:
   m_ObjectHideFlags: 0

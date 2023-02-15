@@ -12,7 +12,7 @@ public class PlayerInputController : NetworkBehaviour
     [SerializeField] private Rigidbody _characterRB;
     [SerializeField] public float moveSpeed, jumpForce, dodgeForce, acceleration, deceleration;
 
-    private Animator _animator;
+    [SerializeField] private Animator _animator;
     private float currentSpeed;
 
     // Private Vector2 field to store the player's movement input
@@ -33,7 +33,6 @@ public class PlayerInputController : NetworkBehaviour
     void Awake()
     {
         _characterRB = GetComponent<Rigidbody>();
-        //_animator = GetComponent<Animator>();
     }
 
     public override void OnStartAuthority()
@@ -71,14 +70,24 @@ public class PlayerInputController : NetworkBehaviour
         var movementForward = forward * _move.y;
 
         var movement = movementRight + movementForward;
-        
+
+        var playerForward = transform.forward;
+        var playerRight = transform.right;
+
+        var localMovement = transform.InverseTransformDirection(movement).normalized;
+
+        _animator.SetFloat("X", localMovement.x);
+        _animator.SetFloat("Y", localMovement.z);
+
         //_animator.SetFloat("Run", movement.magnitude);
         transform.Translate(movement * currentSpeed * Time.deltaTime, Space.World);
-        
-        if(movement != Vector3.zero){
+
+        if (movement != Vector3.zero)
+        {
             currentSpeed = Mathf.Lerp(currentSpeed, moveSpeed, acceleration * Time.deltaTime);
         }
-        else{
+        else
+        {
             currentSpeed = Mathf.Lerp(currentSpeed, 0, deceleration * Time.deltaTime);
         }
         // Translate the player's position based on the movement vector
