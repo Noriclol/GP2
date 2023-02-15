@@ -241,6 +241,7 @@ MonoBehaviour:
   dodgeForce: 4
   acceleration: 1
   deceleration: 1
+  _animator: {fileID: 365660251893039977}
   minJumpInterval: 1
   minDodgeInterval: 1
 --- !u!114 &6429813150572686751
@@ -473,10 +474,10 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  secondPlayer: {fileID: 1937083189167438593, guid: a9c0787c8600a1145bfb70aa9f46b443,
-    type: 3}
+  playerArray: []
   reviveVisualization: {fileID: 1161656102794845701}
   downedTime: 30
+  secondPlayerPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &-4074112696874892752
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -493,6 +494,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   cinemachineVirtual: {fileID: 0}
+  lookTarget: {fileID: 0}
 --- !u!1001 &8803322822478738961
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -582,6 +584,26 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!95 &365660251893039977
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8568879661199788864}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 878802114c4d96b4fb6ca6504a664125, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!4 &9052540960114889210 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 3c4e557820fea8042a3201ae2a84ac6e,
