@@ -133,6 +133,7 @@ GameObject:
   - component: {fileID: 4364993002339089012}
   - component: {fileID: 6534896594412601754}
   - component: {fileID: -4074112696874892752}
+  - component: {fileID: 611301855071361757}
   m_Layer: 0
   m_Name: DamagePlayer
   m_TagString: Player
@@ -477,6 +478,21 @@ MonoBehaviour:
   syncInterval: 0.1
   cinemachineVirtual: {fileID: 0}
   lookTarget: {fileID: 0}
+--- !u!114 &611301855071361757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6429813150572686741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a135f5259a9eeb045b1dbf2c84a84e86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxEnergy: 100
+  rechargeSpeed: 10
+  energySlider: {fileID: 0}
 --- !u!1001 &8803322822478738961
 PrefabInstance:
   m_ObjectHideFlags: 0
