@@ -129,7 +129,6 @@ GameObject:
   - component: {fileID: 6429813150572686746}
   - component: {fileID: 6429813150572686751}
   - component: {fileID: 7337880238258831778}
-  - component: {fileID: 5462940925866772858}
   - component: {fileID: 4213012309792546823}
   - component: {fileID: 4364993002339089012}
   - component: {fileID: 6534896594412601754}
@@ -241,6 +240,7 @@ MonoBehaviour:
   dodgeForce: 4
   acceleration: 1
   deceleration: 1
+  dodgeTime: 0
   _animator: {fileID: 365660251893039977}
   minJumpInterval: 1
   minDodgeInterval: 1
@@ -402,32 +402,14 @@ MonoBehaviour:
     type: 3}
   bigBulletPrefab: {fileID: 0}
   firePoint: {fileID: 2377707748999720942}
-  overheatHandler: {fileID: 5462940925866772858}
-  overheatingSlider: {fileID: 0}
   fireRate: 1
   bulletSpeed: 4
   damage: 2
-  cooldownRate: 0
-  bulletHeat: 1
+  bulletEnergyCost: 0
   chargeTime: 0
   chargedDamage: 0
+  bigBulletEnergyCost: 0
   bigBulletSpeed: 0
---- !u!114 &5462940925866772858
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6429813150572686741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e101f0e9af61d9448b0f901b5376b269, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coolThreshold: 1
-  warningTreshold: 3
-  overheatThreshold: 5
-  cooldownDuration: 2
 --- !u!114 &4213012309792546823
 MonoBehaviour:
   m_ObjectHideFlags: 0
