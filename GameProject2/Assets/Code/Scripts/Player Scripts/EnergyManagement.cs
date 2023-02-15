@@ -21,12 +21,12 @@ public class EnergyManagement : MonoBehaviour
     void Update()
     {
         Recharge();
+
         if (energySlider != null)
         {
             energySlider.value = currentEnergy;
 
-        }
-        
+        }       
     }
 
     private void Recharge(){
