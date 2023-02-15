@@ -21,14 +21,14 @@ public class HealthBar : NetworkBehaviour
         
 
 
-        localPlayerProfile = Hud.transform.Find("PlayerProfile").gameObject;
+        localPlayerProfile = Hud.transform.Find("LocalPlayerPortrait").gameObject;
 
-        playerProfile = Hud.transform.Find("SecondPlayerProfile").gameObject;
+        playerProfile = Hud.transform.Find("SecondPlayerPortrait").gameObject;
 
 
-        localHealthBar = localPlayerProfile.transform.Find("PlayerHealthbar").GetComponent<Slider>();
-        healthBar = playerProfile.transform.Find("PlayerHealthbar").GetComponent<Slider>();
-        bossHealthBar = Hud.transform.Find("BossHealth").GetComponent<Slider>();
+        localHealthBar = localPlayerProfile.transform.Find("HealthBarSlider").GetComponent<Slider>();
+        healthBar = playerProfile.transform.Find("HealthBarSlider").GetComponent<Slider>();
+        bossHealthBar = Hud.transform.Find("BossHealthBar").GetComponent<Slider>();
 
         //Debug.Log(this.gameObject.name + healthBar);
     }

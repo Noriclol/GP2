@@ -15,7 +15,7 @@ using Newtonsoft.Json.Linq;
 
 public class ReviveScript : NetworkBehaviour
 {
-
+    GameManager gameManager;
     private HealthScript healthScript;
 
     private GameObject secondPlayer;
@@ -23,9 +23,13 @@ public class ReviveScript : NetworkBehaviour
 
     private GameObject localReviveIcon;
     private GameObject reviveIcon;
+    private GameObject reviveIndicator;
+    private GameObject localReviveIndicator;
 
     private Image localReviveBorder;
     private Image reviveBorder;
+    private Image indicatorBorder;
+    private Image localIndicatorBorder;
 
     [SerializeField] private GameObject reviveVisualization;
 
@@ -58,6 +62,8 @@ public class ReviveScript : NetworkBehaviour
 
     private void Awake()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameManager.AllPlayersReadyListener(FindPlayer);
 
         healthScript = GetComponent<HealthScript>();
 
@@ -65,20 +71,26 @@ public class ReviveScript : NetworkBehaviour
         const string hudTag = "Hud";
         var Hud = GameObject.FindGameObjectWithTag(hudTag);
 
-        GameObject localPlayerProfile;
-        GameObject playerProfile;
+        //GameObject localPlayerProfile;
+        //GameObject playerProfile;
 
-        localPlayerProfile = Hud.transform.Find("PlayerProfile").gameObject;
-        playerProfile = Hud.transform.Find("SecondPlayerProfile").gameObject;
+        //localPlayerProfile = Hud.transform.Find("PlayerProfile").gameObject;
+        //playerProfile = Hud.transform.Find("SecondPlayerProfile").gameObject;
 
-        reviveIcon = playerProfile.transform.Find("ReviveIcon").gameObject;
+        reviveIcon = Hud.transform.Find("OnlineReviveProgression").gameObject;
         reviveBorder = reviveIcon.transform.Find("Border").GetComponent<Image>();
+        reviveIndicator = Hud.transform.Find("OnlineReviveIndicator").gameObject;
+        indicatorBorder = reviveIcon.transform.Find("Border").GetComponent<Image>();
 
-        localReviveIcon = localPlayerProfile.transform.Find("ReviveIcon").gameObject;
+        localReviveIcon = Hud.transform.Find("LocalReviveProgression").gameObject;
         localReviveBorder = localReviveIcon.transform.Find("Border").GetComponent<Image>();
+        localReviveIndicator = Hud.transform.Find("LocalReviveIndicator").gameObject;
+        localIndicatorBorder = reviveIcon.transform.Find("Border").GetComponent<Image>();
 
         reviveIcon.SetActive(false);
         localReviveIcon.SetActive(false);
+        localReviveIndicator.SetActive(false);
+        reviveIndicator.SetActive(false);
         #endregion
 
     }
@@ -243,19 +255,9 @@ public class ReviveScript : NetworkBehaviour
 
     private void FindPlayer()
     {
-        NetworkIdentity thisNetworkIdentity;
-        NetworkIdentity otherNetworkIdentity;
 
-        foreach (GameObject player in playerArray)
+        foreach (GameObject player in gameManager.players)
         {
-            //thisNetworkIdentity = this.gameObject.GetComponent<NetworkIdentity>();
-            //otherNetworkIdentity= player.GetComponent<NetworkIdentity>();
-
-            //if (thisNetworkIdentity.netId != otherNetworkIdentity.netId)
-            //{
-            //    secondPlayer = player;
-            //}
-
             if (this.gameObject != player)
             {
                 secondPlayer = player;

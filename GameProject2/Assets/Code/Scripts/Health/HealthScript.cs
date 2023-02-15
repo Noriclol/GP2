@@ -15,8 +15,7 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
 
     [SyncVar]
     [NonSerialized] public float health;
-    TMP_Text testText;
-    TMP_Text bossText;
+
 
     private ReviveScript reviveScript;
     private HealthBar healthBar;
@@ -47,18 +46,12 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-        testText = GameObject.Find("123abc").GetComponent<TMP_Text>();
-
-
+       
     }
 
 
     private void FixedUpdate()
     {
-        //RPCUpdateBars();
-
-        if (!isLocalPlayer) return;
-        testText.text = health.ToString();
 
         if (!isLocalPlayer) return;
 		if (stats.enableHealthRegeneration && !reviveScript.isPlayerDowned) //Using a bool in revive script but if possible i would like to use the states in stats
