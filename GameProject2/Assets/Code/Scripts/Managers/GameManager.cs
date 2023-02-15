@@ -25,7 +25,7 @@ public class GameManager : NetworkBehaviour
 
     public void AllPlayersReadyListener(UnityAction call)
     {
-        if (_players.Length == 2)
+        if (_players != null && _players.Length == 2)
         {
             call.Invoke();
         }

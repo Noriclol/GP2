@@ -183,7 +183,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &35760833
 GameObject:
@@ -1898,7 +1898,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1326798782
 MonoBehaviour:
@@ -2003,6 +2003,7 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 210313982762696299, guid: 94daf1a3d5ce869469c9c4946a7797ee, type: 3}
   - {fileID: 3626152247069801311, guid: 65f79ab0b3762334b81ad2b322b24324, type: 3}
+  - {fileID: 1582381843119449205, guid: dee701545eb68b1479d18b69fb2905fe, type: 3}
   timeInterpolationGui: 0
   showRoomGUI: 0
   minPlayers: 2

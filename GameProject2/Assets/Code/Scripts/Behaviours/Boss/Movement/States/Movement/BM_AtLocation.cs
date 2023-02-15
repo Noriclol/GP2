@@ -8,9 +8,7 @@ public class BM_AtLocation : IBossMoveState
     {
         obj.stateIndicator = BossMoveFSMStates.atLocation;
         //State
-        
-        
-        
+
         //State Exit
         if (obj.TargetNode == obj.CurrentNode)
         {
@@ -20,7 +18,5 @@ public class BM_AtLocation : IBossMoveState
         {
             return obj.MovingToLocation;
         }
-        
-        return null;
     }
 }

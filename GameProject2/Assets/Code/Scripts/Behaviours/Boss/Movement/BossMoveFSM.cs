@@ -7,7 +7,7 @@ using UnityEngine;
 public class BossMoveFSM : NetworkBehaviour
 {
     private IBossMoveState state;
-    
+
     //States
     public BM_AtLocation AtLocation = new BM_AtLocation();
     public BM_MovingToLocation MovingToLocation = new BM_MovingToLocation();
@@ -15,60 +15,51 @@ public class BossMoveFSM : NetworkBehaviour
     //Refs
     [Header("NodeReferences")]
     public List<BossNode> Nodes = new List<BossNode>();
-    
+
     public BossNode TargetNode;
     public BossNode NextNode;
-    
+
     public BossNode CurrentNode;
     [Space]
     [Header("Fields")]
-    public Transform target;
+
+    [SyncVar]
+    private Transform target;
 
     public float MoveDuration = 3f;
-    
-    [Space][Header("No Touch")]
+
+    [Space]
+    [Header("No Touch")]
     public bool Moving;
     public BossMoveFSMStates stateIndicator;
 
-    public void SetPlayerAsTarget()
-    {
-        var players = GameObject.FindGameObjectsWithTag("Player");
+    private GameManager gameManager;
 
-        if (players.Length <= 0)
-            return;
-
-        target = players[0].transform;
-        GetComponent<BossCombatFSM>().target = target;
-    }
-    
-    
-    
-    
     public void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameManager.AllPlayersReadyListener(AllPlayersReady);
+
         CurrentNode = Nodes[0];
         state = AtLocation;
-        
-        //StartCoroutine(SetTargetNode());
+
+    }
+
+    private void AllPlayersReady()
+    {
+        target = gameManager.players[0].transform;
+
         StartCoroutine(MakeDecision());
     }
 
     public void Update()
     {
+        if (!target) return;
+        if (!isServer) return;
+
         SetTargetNode();
-
-
-            
-        if (!target.gameObject.CompareTag("Player")) 
-            SetPlayerAsTarget();
-        
     }
-    
-    
-    
-    
-    
-    
+
     private IEnumerator MakeDecision()
     {
         while (true)
@@ -82,7 +73,7 @@ public class BossMoveFSM : NetworkBehaviour
     {
         bool nodeFound = false;
         BossNode foundNode = null;
-        
+
         //look for Target in node neighbours
         foreach (var node in CurrentNode.Neighbours)
         {
@@ -91,7 +82,7 @@ public class BossMoveFSM : NetworkBehaviour
                 return node;
             }
         }
-        
+
         //Look for Node that will have target in its neighbours
         foreach (var node in CurrentNode.Neighbours)
         {
@@ -107,28 +98,10 @@ public class BossMoveFSM : NetworkBehaviour
         return null;
     }
 
-    // private IEnumerator SetTargetNode()
-    // {
-    //     float closest = 1000f;
-    //     float measuredDistance;
-    //     BossNode closestNode = null;
-    //     foreach (var node in Nodes)
-    //     {
-    //         measuredDistance = Vector3.Distance(target.transform.position, node.transform.position);
-    //         Debug.Log($"{node.name} Distance from target = {measuredDistance}");
-    //         if (measuredDistance < closest)
-    //         {
-    //             closest = measuredDistance;
-    //             closestNode = node;
-    //         }
-    //     }
-    //
-    //     TargetNode = closestNode;
-    //     yield return new WaitForSeconds(0.1f);
-    // }
-    
     private void SetTargetNode()
     {
+        if (!isServer) return;
+
         float closest = 1000f;
         float measuredDistance;
         BossNode closestNode = null;
@@ -145,7 +118,4 @@ public class BossMoveFSM : NetworkBehaviour
 
         TargetNode = closestNode;
     }
-    
-    
-
 }
