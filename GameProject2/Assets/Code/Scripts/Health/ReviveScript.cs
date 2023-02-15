@@ -132,12 +132,12 @@ public class ReviveScript : NetworkBehaviour
             {
                 testRevive = true;
             }
+            else
+            {
+                testRevive = false;
+                countUp = 0;
+            }
 
-        }
-        else
-        {
-            testRevive = false;
-            countUp = 0;
         }
 
         if (isPlayerDowned && !testRevive)

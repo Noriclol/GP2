@@ -16,12 +16,14 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
     [SyncVar]
     [NonSerialized] public float health;
 
+    [SerializeField] public bool isBoss;
 
     private ReviveScript reviveScript;
     private HealthBar healthBar;
     private PlayerInputController playerInputController;
     public ResourceSystem healthSystem;
 
+    //[SerializeField]
 
 
     private void Awake()
@@ -65,15 +67,20 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Danger"))
+        if (collision.gameObject.CompareTag("BossAttack") && !isBoss)
         {
 
             if (isLocalPlayer)
             {
-               CMDChangedHealth(-600);
+               CMDChangedHealth(-10);
 
             }
 
+        }
+
+        if (collision.gameObject.CompareTag("Bullet") && isBoss)
+        {
+                
         }
     }
 

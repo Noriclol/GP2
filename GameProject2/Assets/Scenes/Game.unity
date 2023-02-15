@@ -14290,6 +14290,58 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d9bc60fb189fb2f4482d314d1c0af985, type: 3}
+--- !u!1 &1449491949115635295 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 668482437127253027, guid: d9bc60fb189fb2f4482d314d1c0af985,
+    type: 3}
+  m_PrefabInstance: {fileID: 1449491949115635294}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1449491949115635296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449491949115635295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70f4fd844a4f6f64eb39c66eeda78433, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+--- !u!114 &1449491949115635297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449491949115635295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6eb1027b3ff40704492927c69afc0166, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  stats: {fileID: 11400000, guid: aa4ffff0f6a005e48809b30cd0f4dcdc, type: 2}
+  isBoss: 1
+--- !u!136 &1449491949115635298
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1449491949115635295}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!224 &2350431133171264871 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2350431134107058886, guid: 9f2f563b1e1ec5f43be9c76474a3f28e,
@@ -17630,7 +17682,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0.57
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []

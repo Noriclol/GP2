@@ -10,6 +10,7 @@ public class HealthBar : NetworkBehaviour
     private Slider healthBar;
     private Slider localHealthBar;
     private Slider bossHealthBar;
+    private HealthScript healthScript;
 
     private void Awake()
     {
@@ -19,7 +20,7 @@ public class HealthBar : NetworkBehaviour
         GameObject localPlayerProfile;
         GameObject playerProfile;
         
-
+        healthScript = GetComponent<HealthScript>();
 
         localPlayerProfile = Hud.transform.Find("LocalPlayerPortrait").gameObject;
 
@@ -49,6 +50,11 @@ public class HealthBar : NetworkBehaviour
 
         }
 
+        if (healthScript.isBoss)
+        {
+            bossHealthBar.maxValue = maxHealth;
+            bossHealthBar.value = currentHealth;
+        }
 
     }
 
@@ -65,6 +71,11 @@ public class HealthBar : NetworkBehaviour
 
         }
 
+        if (healthScript.isBoss)
+        {
+            
+            bossHealthBar.value = currentHealth;
+        }
 
     }
 }

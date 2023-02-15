@@ -11,6 +11,8 @@ TagManager:
   - LobbyManager
   - Throwable
   - Hud
+  - Bullet
+  - BossAttack
   layers:
   - Default
   - TransparentFX
