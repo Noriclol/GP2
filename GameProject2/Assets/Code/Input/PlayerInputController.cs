@@ -10,7 +10,7 @@ public class PlayerInputController : NetworkBehaviour
 
     // Serialized fields for the Rigidbody component of the player and the move speed and jump force values
     [SerializeField] private Rigidbody _characterRB;
-    [SerializeField] public float moveSpeed, jumpForce, dodgeForce, acceleration, deceleration;
+    [SerializeField] public float moveSpeed, jumpForce, dodgeForce, acceleration, deceleration, dodgeTime;
 
     [SerializeField] private Animator _animator;
     private float currentSpeed;
@@ -28,7 +28,8 @@ public class PlayerInputController : NetworkBehaviour
 
     // Bool to check if the player is grounded
     private bool _isGrounded;
-
+    private bool isDodging = false;
+    private Vector3 dodgeDirection;
 
     void Awake()
     {
@@ -61,6 +62,19 @@ public class PlayerInputController : NetworkBehaviour
     public void MovePlayer()
     {
         if (!isLocalPlayer) return;
+        if (isDodging) 
+        {
+            if (_dodgeTimeStamp + dodgeTime <= Time.time) 
+            {
+                isDodging = false;
+                
+            }
+            else
+            {
+                transform.Translate(dodgeDirection * dodgeForce * Time.deltaTime, Space.World);
+                return;
+            }
+        }
 
         var right = Camera.main.transform.right;
         var forward = Vector3.Cross(right, Vector3.up);
@@ -71,15 +85,12 @@ public class PlayerInputController : NetworkBehaviour
 
         var movement = movementRight + movementForward;
 
-        var playerForward = transform.forward;
-        var playerRight = transform.right;
-
+        // Convert the movement to a direction vector relative to the character look direction
         var localMovement = transform.InverseTransformDirection(movement).normalized;
 
-        _animator.SetFloat("X", localMovement.x);
-        _animator.SetFloat("Y", localMovement.z);
+        _animator.SetFloat("X", localMovement.x, 0.15f, Time.deltaTime);
+        _animator.SetFloat("Y", localMovement.z, 0.15f, Time.deltaTime);
 
-        //_animator.SetFloat("Run", movement.magnitude);
         transform.Translate(movement * currentSpeed * Time.deltaTime, Space.World);
 
         if (movement != Vector3.zero)
@@ -141,9 +152,10 @@ public class PlayerInputController : NetworkBehaviour
         // If the dodge cooldown has ended and the player is grounded, dodge
         if (dodgeCooldownOver)
         {
+            _animator.SetTrigger("Dash");
+            isDodging = true;
             _dodgeTimeStamp = Time.time;
-            Vector3 dodgeDirection = transform.forward;
-            _characterRB.AddForce(dodgeDirection * dodgeForce, ForceMode.Impulse);
+            dodgeDirection = transform.forward;
         }
     }
 

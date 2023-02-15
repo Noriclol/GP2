@@ -126,9 +126,10 @@ MonoBehaviour:
   _characterRB: {fileID: 1937083189167438605}
   moveSpeed: 4
   jumpForce: 4
-  dodgeForce: 4
+  dodgeForce: 8
   acceleration: 1
   deceleration: 1
+  dodgeTime: 0.5
   _animator: {fileID: 6417607933814410390}
   minJumpInterval: 1
   minDodgeInterval: 1
