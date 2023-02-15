@@ -7,12 +7,12 @@ using UnityEngine;
 public class BossCombatFSM : NetworkBehaviour
 {
     private IBossCombatState state;
-    
+
     // States
     public BC_Idle Idle = new BC_Idle();
     public BC_Attacking Attacking = new BC_Attacking();
-    
-    
+
+
     // References
     [Header("References")]
     [SerializeField]
@@ -20,31 +20,40 @@ public class BossCombatFSM : NetworkBehaviour
 
     [SerializeField]
     private Transform projectileSpawn;
-    
+
     [Space]
-    
+
     // Fields
     [Header("Fields")]
-    public Transform target;
-    
+    private Transform target;
+
     public float decisionCooldown = 0.1f;
     public float shootCooldown = 2f;
 
-    
+
     public float combatRange = 5f;
     public float distanceToTarget = 0f;
     public float timeSinceFire = 0f;
 
-    
-    
-    
-    
-    
-    
+    private GameManager gameManager;
+
+
+
+
+
     public BossCombatFSMStates stateIndicator = BossCombatFSMStates.none;
     public void Start()
     {
         state = Idle;
+
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameManager.AllPlayersReadyListener(OnPlayersReady);
+    }
+
+    private void OnPlayersReady()
+    {
+        if (!isServer) return;
+        target = gameManager.players[0].transform;
         StartCoroutine(MakeDecision());
     }
 
@@ -53,7 +62,7 @@ public class BossCombatFSM : NetworkBehaviour
         while (true)
         {
             //Calculate values
-            distanceToTarget = Vector3.Distance(transform.position, target.transform.position);
+            distanceToTarget = Vector3.Distance(transform.position, target.transform.position);  // OMG CANT FIND TARGET XD LMAO
             //Run States
             state = state.DoState(this);
             yield return new WaitForSeconds(decisionCooldown);
@@ -63,14 +72,13 @@ public class BossCombatFSM : NetworkBehaviour
 
     public void TryShoot()
     {
-        //Debug.Log("Pang!");
-        if(!isServer) return;
+        if (!isServer) return;
         if (timeSinceFire < Time.time + shootCooldown)
         {
             timeSinceFire = Time.time;
-            
+
             projectileSpawn.transform.LookAt(target);
-            
+
             var newBullet = Instantiate(projectile.Prefab, projectileSpawn.position, Quaternion.LookRotation(target.position));
 
             var rb = newBullet.GetComponent<Rigidbody>();
@@ -80,9 +88,9 @@ public class BossCombatFSM : NetworkBehaviour
             NetworkServer.Spawn(newBullet);
         }
     }
-    
-    
-    
+
+
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
