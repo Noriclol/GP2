@@ -8,20 +8,18 @@ using System;
 
 public class PlayerDamage : NetworkBehaviour
 {
-    [Header("GameObjects")]
+    
+    [Header("GameObjects, transforms etc")]
     public GameObject bulletPrefab;
     public GameObject bigBulletPrefab;
     public Transform firePoint;
-    public OverheatHandler overheatHandler;
-    public Slider overheatingSlider;
+    private EnergyManagement energyManager;
 
     [Header("Primary fire settings")]
     public float fireRate;
     public float bulletSpeed;
     public int damage;
-    private int overheating = 0;
-    [SerializeField] private int cooldownRate;
-    [SerializeField] private int bulletHeat;
+    public float bulletEnergyCost;
 
     Coroutine fireCoroutine;
     WaitForSeconds rapidFireWait;
@@ -29,16 +27,20 @@ public class PlayerDamage : NetworkBehaviour
     [Header("Secondary fire settings")]
     [SerializeField] private int chargeTime;
     public int chargedDamage;
+    public float bigBulletEnergyCost;
     public float bigBulletSpeed;
     private bool isCharging = false;
     private float chargeStartTime;
   
 
-
+    
     private void Awake(){
         rapidFireWait = new WaitForSeconds(1 / fireRate);
     }
 
+    void Start(){
+        energyManager = GetComponent<EnergyManagement>();
+    }
     public void OnFire(InputAction.CallbackContext shootContext)
     {
         Shoot();
@@ -70,67 +72,37 @@ public class PlayerDamage : NetworkBehaviour
         }
     }
 
-    private void Update()
-    {
-
-        OverheatState state = overheatHandler.CheckOverheat(overheating);
-        switch (state)
-        {
-            case OverheatState.Cool:
-                // Debug.Log("System is cool.");
-                break;
-            case OverheatState.Warning:
-                //Debug.Log("System is approaching overheating");
-                break;
-            case OverheatState.Overheated:
-                //Debug.Log("System is overheated");
-                break;
-            default:
-                break;
-        }       
-
-        if (overheating > 0 && state != OverheatState.Overheated)
-        {
-            overheating -= (int)(cooldownRate * Time.deltaTime);
-            // overheatingSlider.value = overheating;
-        }
-
-    }
-
-
-
-    private void Shoot()
-    {
-        if (overheatHandler.CheckOverheat(overheating) != OverheatState.Overheated) 
-        {
-			CMDShoot();
-			return;
-        }
+    void Shoot(){
+        CMDShoot();
+        return;
     }
 
     [Command]
     void CMDShoot()
     {
-		GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
-		Rigidbody rb = bullet.GetComponent<Rigidbody>();
-		rb.AddForce(firePoint.forward * bulletSpeed, ForceMode.Impulse);
-		overheating += bulletHeat;
+		if (energyManager.ConsumeEnergy(bulletEnergyCost)){
 
-		BulletController bc = bullet.GetComponent<BulletController>();
-
-		NetworkServer.Spawn(bullet);
+            // The player has enough energy, shoot the bullet.
+            GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+            Rigidbody rb = bullet.GetComponent<Rigidbody>();
+            rb.AddForce(firePoint.forward * bulletSpeed, ForceMode.Impulse);
+            BulletController bc = bullet.GetComponent<BulletController>();
+            NetworkServer.Spawn(bullet);
+        }
     }
 
     [Command]
 
     void CMDSecondFire(){
-        GameObject bigBullet = Instantiate(bigBulletPrefab, firePoint.position, firePoint.rotation);
-        Rigidbody rb = bigBullet.GetComponent<Rigidbody>();
-        rb.AddForce(firePoint.forward * bigBulletSpeed, ForceMode.Impulse);
-    
-        BulletController bc = bigBullet.GetComponent<BulletController>();
-
-        NetworkServer.Spawn(bigBullet);
+        if (energyManager.ConsumeEnergy(bigBulletEnergyCost))
+        {
+            // The player has enough energy, shoot the big bullet.
+            GameObject bigBullet = Instantiate(bigBulletPrefab, firePoint.position, firePoint.rotation);
+            Rigidbody rb = bigBullet.GetComponent<Rigidbody>();
+            rb.AddForce(firePoint.forward * bigBulletSpeed, ForceMode.Impulse);
+            BulletController bc = bigBullet.GetComponent<BulletController>();
+            NetworkServer.Spawn(bigBullet);
+        }
     }
 
     public IEnumerator RapidFire(){
@@ -138,7 +110,7 @@ public class PlayerDamage : NetworkBehaviour
 
         while(true){
             if (Time.time >= nextFire){
-            Shoot();
+            CMDShoot();
             nextFire = Time.time + 1 /fireRate;
             yield return rapidFireWait;
             }
