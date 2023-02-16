@@ -1,7 +1,5 @@
 using Cinemachine;
 using Mirror;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerCameraScript : NetworkBehaviour
@@ -33,7 +31,7 @@ public class PlayerCameraScript : NetworkBehaviour
             playerRelative = gameObject.transform.position - lookTarget.position;
             camDir = new Vector2(playerRelative.x, playerRelative.z).normalized;
             cinemachineVirtual.transform.position = lookTarget.position + new Vector3(camDir.x * camDist, 20, camDir.y * camDist);
-            cinemachineVirtual.LookAt = lookTarget;
+            cinemachineVirtual.LookAt = transform;
         }
     }
 

@@ -238,11 +238,11 @@ MonoBehaviour:
   _characterRB: {fileID: 6429813150572686745}
   moveSpeed: 4
   jumpForce: 4
-  dodgeForce: 4
+  dodgeForce: 8
   acceleration: 1
   deceleration: 1
-  dodgeTime: 0
-  _animator: {fileID: 365660251893039977}
+  dodgeTime: 0.5
+  _animator: {fileID: 0}
   minJumpInterval: 1
   minDodgeInterval: 1
 --- !u!114 &6429813150572686751
@@ -457,7 +457,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  playerArray: []
   reviveVisualization: {fileID: 1161656102794845701}
   downedTime: 30
   secondPlayerPosition: {x: 0, y: 0, z: 0}
