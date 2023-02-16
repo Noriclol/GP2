@@ -17,6 +17,7 @@ public class ReviveScript : NetworkBehaviour
 {
     GameManager gameManager;
     private HealthScript healthScript;
+    private PlayerInputController playerInput;
 
     private GameObject secondPlayer;
 
@@ -59,12 +60,17 @@ public class ReviveScript : NetworkBehaviour
     [SerializeField] private Vector3 secondPlayerPosition;
     #endregion
 
+    private float originalMovementSpeed;
+    private float originalJumpForce;
+    private float originalDodgeTime;
+
     private void Awake()
     {
         gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
         gameManager.AllPlayersReadyListener(FindPlayer);
 
         healthScript = GetComponent<HealthScript>();
+        playerInput = GetComponent<PlayerInputController>();
 
         #region CURSED HUD
         const string hudTag = "Hud";
@@ -120,6 +126,9 @@ public class ReviveScript : NetworkBehaviour
         reviveVisualization.SetActive(false);
         #endregion
 
+        originalMovementSpeed = playerInput.moveSpeed;
+        originalJumpForce = playerInput.jumpForce;
+        originalDodgeTime = playerInput.dodgeTime;
 
     }
 
@@ -241,9 +250,19 @@ public class ReviveScript : NetworkBehaviour
 
         reviveVisualization.SetActive(isPlayerDowned);
 
-        if (secondPlayer == null)
+        if (isPlayerDowned)
         {
-            FindPlayer();
+            playerInput.enabled = false;
+            //playerInput.moveSpeed = 0;
+            //playerInput.jumpForce = 0;
+            //playerInput.dodgeTime = 0;
+        }
+        if (!isPlayerDowned)
+        {
+            playerInput.enabled = true;
+            //playerInput.moveSpeed = originalMovementSpeed;
+            //playerInput.jumpForce = originalJumpForce;
+            //playerInput.dodgeTime = originalDodgeTime;
         }
     }
 
