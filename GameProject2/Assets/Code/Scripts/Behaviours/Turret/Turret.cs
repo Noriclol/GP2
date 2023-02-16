@@ -15,73 +15,72 @@ public class Turret : NetworkBehaviour
 
     [SerializeField]
     private Transform projectileSpawn;
+    [SerializeField] private float timeBetweenFire = 5.0f;
 
-    private float timeSinceFire;
+    [SerializeField] private Transform basePlatform;
+    [SerializeField] private Transform barrel;
+
+    private float lastFireTimeStamp;
 
     private bool targetInBounds;
-
-    private List<Transform> targets = new List<Transform>();
 
     [SyncVar]
     private Transform currentTarget;
 
+    private GameManager gameManager;
+
+    private bool ready = false;
+
     private void Start()
     {
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+        gameManager.AllPlayersReadyListener(AllPlayersReady);
+
         if (!isServer) return;
-        
-		StartCoroutine(FindTargets());
-		timeSinceFire = 5;
     }
 
-    IEnumerator FindTargets()
+    private void AllPlayersReady()
     {
-        while(true)        
-        {
-			var players = GameObject.FindGameObjectsWithTag("Player"); // Get all possible targets
-			float minDistance = Mathf.Infinity;
-			foreach (var player in players)
-			{
-				targets.Add(player.transform);
-				var distance = Vector3.Distance(player.transform.position, transform.position);
-				if (minDistance > distance)
-                {
-					minDistance = distance;
-					currentTarget = player.transform;
-				}
-
-			}
-
-
-
-			yield return new WaitForSeconds(0.5f);
-		}
-	}
+        ready = true;
+    }
 
     private void Update()
     {
-        //Look At TargetPosition
-        if (Vector3.Distance(this.transform.position, currentTarget.position) <= range)
+        if (!ready) return;
+
+        // Find closest player
+        float minDistance = Mathf.Infinity;
+        foreach(var player in gameManager.players)
         {
-            transform.LookAt(currentTarget);
-            targetInBounds = true;
-            if (isServer)
+            var distance = Vector3.Distance(transform.position, player.transform.position);
+
+            if (distance < minDistance)
             {
-                TryShoot();
+                minDistance = distance;
+                currentTarget = player.transform;
             }
+        }
+
+        //Look At TargetPosition
+        if (minDistance <= range)
+        {
+            var baseForward = (currentTarget.position - transform.position).normalized;
+
+            basePlatform.forward = new Vector3(baseForward.x, 0.0f, baseForward.z);
+            barrel.LookAt(currentTarget);
+            TryShoot();
+            targetInBounds = true;
         }
         else
         {
             targetInBounds = false;
         }
 
-        if (!isServer) return;
-		timeSinceFire += Time.deltaTime;
     }
-
 
     private void OnDrawGizmos()
     {
-
+        if (!ready) return;
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, range);
 
@@ -104,9 +103,9 @@ public class Turret : NetworkBehaviour
     private void TryShoot()
     {
         if(!isServer) return;
-        if (timeSinceFire > 5)
+        if (Time.time - lastFireTimeStamp > timeBetweenFire)
         {
-            timeSinceFire = 0;
+            lastFireTimeStamp = Time.time;
             var newBullet = Instantiate(projectile.Prefab, projectileSpawn.position, Quaternion.LookRotation(currentTarget.position));
 
             var rb = newBullet.GetComponent<Rigidbody>();

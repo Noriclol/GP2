@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 9070984814084342035}
   - component: {fileID: 2181704996039300305}
   - component: {fileID: 2424373645266917201}
+  - component: {fileID: 8032240225200448345}
   m_Layer: 0
   m_Name: SupportPlayer
   m_TagString: Player
@@ -420,6 +421,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   stats: {fileID: 11400000, guid: 7514deef11d62a14684fb74c9230b191, type: 2}
+  isBoss: 0
 --- !u!114 &1882750184979811702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,6 +511,26 @@ MonoBehaviour:
   fireRate: 1
   bulletSpeed: 15
   damage: 3
+--- !u!95 &8032240225200448345
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1937083189167438593}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: 8f2005a354c583343a1319c20aa4744a, type: 3}
+  m_Controller: {fileID: 9100000, guid: d06a3f44ee526a04e83e1f0ebc81fa42, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3400366275565846837
 GameObject:
   m_ObjectHideFlags: 0
