@@ -6,6 +6,10 @@ public class TM_MovingToLocation : ITurretMoveState
 {
     public virtual ITurretMoveState DoState(TurretMoveFSM obj)
     {
-        return null;
+        
+        
+        return obj.AtLocation;
+        return obj.MovingToLocation;
+
     }
 }
