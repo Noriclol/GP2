@@ -28,16 +28,7 @@ public class BossHealthScript : NetworkBehaviour
 
     }
 
-
-    void Start()
-    {
-    }
-
-
-    void Update()
-    {
-
-    }
+    
 
     private void SetHealthBar()
     {
