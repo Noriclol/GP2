@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8464ed843e8d7ac47a22555a09993665, type: 3}
   m_Name: DPSCharacterStats
   m_EditorClassIdentifier: 
-  healthState: 1
-  currentHealth: 500
-  maxHealth: 500
+  healthState: 0
+  currentHealth: 700
+  maxHealth: 700
   enableHealthRegeneration: 1
   healthRegeneration: 5
   currentEnergy: 100
