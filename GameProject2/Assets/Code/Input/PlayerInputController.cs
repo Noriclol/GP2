@@ -34,7 +34,6 @@ public class PlayerInputController : NetworkBehaviour
     void Awake()
     {
         _characterRB = GetComponent<Rigidbody>();
-        _animator = GetComponent<Animator>();
     }
 
     public override void OnStartAuthority()
@@ -89,8 +88,11 @@ public class PlayerInputController : NetworkBehaviour
         // Convert the movement to a direction vector relative to the character look direction
         var localMovement = transform.InverseTransformDirection(movement).normalized;
 
-        _animator.SetFloat("MoveSpeed", localMovement.x, 0.15f, Time.deltaTime);
-        _animator.SetFloat("MoveSpeed", localMovement.z, 0.15f, Time.deltaTime);
+        if (_animator != null)
+        {
+            _animator.SetFloat("MoveSpeed", localMovement.x, 0.15f, Time.deltaTime);
+            _animator.SetFloat("MoveSpeed", localMovement.z, 0.15f, Time.deltaTime);
+        }
 
         transform.Translate(movement * currentSpeed * Time.deltaTime, Space.World);
 
@@ -152,7 +154,10 @@ public class PlayerInputController : NetworkBehaviour
         // If the dodge cooldown has ended and the player is grounded, dodge
         if (dodgeCooldownOver)
         {
-            _animator.SetTrigger("Dash");
+            if (_animator != null)
+            {
+                _animator.SetTrigger("Dash");
+            }
             isDodging = true;
             _dodgeTimeStamp = Time.time;
             dodgeDirection = transform.forward;
