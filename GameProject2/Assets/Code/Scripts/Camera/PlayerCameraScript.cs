@@ -11,7 +11,7 @@ public class PlayerCameraScript : NetworkBehaviour
 
     private Vector3 playerRelative;
     private Vector2 camDir;
-    private float camDist = 40;
+    private float camDist = 45;
 
     private void Start()
     {
