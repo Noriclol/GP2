@@ -7,10 +7,12 @@ public class BulletController : MonoBehaviour
     public float lifeTime;
     PlayerDamage PlayerDamage;
     private float startTime;
+    public float damage;
 
     private void Start()
     {
         startTime = Time.time;
+        damage = 5;
     }
 
     private void OnCollisionEnter(Collision collision)
