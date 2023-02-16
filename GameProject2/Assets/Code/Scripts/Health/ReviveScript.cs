@@ -19,7 +19,6 @@ public class ReviveScript : NetworkBehaviour
     private HealthScript healthScript;
 
     private GameObject secondPlayer;
-    [SerializeField] private GameObject[] playerArray;
 
     private GameObject localReviveIcon;
     private GameObject reviveIcon;
@@ -150,11 +149,6 @@ public class ReviveScript : NetworkBehaviour
 
             RevivePlayer();
 
-        }
-
-        if (playerArray.Length < 2)
-        {
-            playerArray = GameObject.FindGameObjectsWithTag("Player");
         }
 
     }

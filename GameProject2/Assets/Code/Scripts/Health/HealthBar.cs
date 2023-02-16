@@ -40,21 +40,23 @@ public class HealthBar : NetworkBehaviour
         if (isLocalPlayer)
         {
             localHealthBar.maxValue = maxHealth;
-            localHealthBar.value = currentHealth;
+            localHealthBar.value = currentHealth * 0.75f;
 
         }
         else if (!isLocalPlayer)
         {
             healthBar.maxValue = maxHealth;
-            healthBar.value = currentHealth;
+            healthBar.value = currentHealth * 0.75f;
 
         }
 
-        if (healthScript.isBoss)
-        {
-            bossHealthBar.maxValue = maxHealth;
-            bossHealthBar.value = currentHealth;
-        }
+        //if (!gameObject.CompareTag("Player"))
+        //{
+        //    bossHealthBar.maxValue = maxHealth;
+        //    bossHealthBar.value = currentHealth;
+
+            
+        //}
 
     }
 
@@ -62,20 +64,20 @@ public class HealthBar : NetworkBehaviour
     {
         if (isLocalPlayer)
         {
-            localHealthBar.value = currentHealth;
+            localHealthBar.value = currentHealth * 0.75f;
 
         }
         else if (!isLocalPlayer)
         {
-            healthBar.value = currentHealth;
+            healthBar.value = currentHealth * 0.75f;
 
         }
 
-        if (healthScript.isBoss)
-        {
+        //if (!gameObject.CompareTag("Player"))
+        //{
             
-            bossHealthBar.value = currentHealth;
-        }
+        //    bossHealthBar.value = currentHealth;
+        //}
 
     }
 }

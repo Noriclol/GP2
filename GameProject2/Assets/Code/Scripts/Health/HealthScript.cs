@@ -16,15 +16,10 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
     [SyncVar]
     [NonSerialized] public float health;
 
-    [SerializeField] public bool isBoss;
-
     private ReviveScript reviveScript;
     private HealthBar healthBar;
     private PlayerInputController playerInputController;
     public ResourceSystem healthSystem;
-
-    //[SerializeField]
-
 
     private void Awake()
     {
@@ -41,14 +36,7 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
         health = healthSystem.Amount;
         healthBar.SetValue(health, health);
 
-        //bossText = GameObject.Find("123abcBossText").GetComponent<TMP_Text>();
 
-    }
-
-    public override void OnStartLocalPlayer()
-    {
-        base.OnStartLocalPlayer();
-       
     }
 
 
@@ -56,36 +44,40 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
     {
 
         if (!isLocalPlayer) return;
-		if (stats.enableHealthRegeneration && !reviveScript.isPlayerDowned) //Using a bool in revive script but if possible i would like to use the states in stats
+        if (stats.enableHealthRegeneration && !reviveScript.isPlayerDowned)
         {
             CMDChangedHealth(stats.healthRegeneration * Time.fixedDeltaTime);
-			//Debug.Log(stats.currentHealth);
+            //Debug.Log(stats.currentHealth);
 
-		}
+        }
 
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("BossAttack") && !isBoss)
+        if (collision.gameObject.CompareTag("BossAttack") || collision.gameObject.CompareTag("Danger") && gameObject.CompareTag("Player"))
         {
 
             if (isLocalPlayer)
             {
-               CMDChangedHealth(-10);
+                CMDChangedHealth(-10);
 
             }
 
         }
 
-        if (collision.gameObject.CompareTag("Bullet") && isBoss)
-        {
-                
-        }
+        //if (collision.gameObject.CompareTag("Bullet") && gameObject.CompareTag("Boss"))
+        //{
+        //    if (isLocalPlayer) return;
+        //    NotCMDChangedHealth(-25);
+
+
+        //}
+
     }
 
     [ClientRpc]
-    private void RPCUpdateBars() 
+    private void RPCUpdateBars()
     {
         healthBar.UpdateValue(health);
         //healthBar.UpdateValue(healthSystem.Amount);
@@ -94,7 +86,7 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
     }
 
     [Command]
-    private void CMDChangedHealth(float value) 
+    private void CMDChangedHealth(float value)
     {
         this.health = healthSystem.ChangeValue(value);
         if (this.health == 0)
@@ -105,6 +97,18 @@ public class HealthScript : NetworkBehaviour, IThrowableAction
         }
         RPCUpdateBars();
     }
+
+    //private void NotCMDChangedHealth(float value)
+    //{
+    //    this.health = healthSystem.ChangeValue(value);
+    //    if (this.health == 0)
+    //    {
+    //        //reviveScript.PlayerDown(true);
+    //        reviveScript.isPlayerDowned = true;
+    //        stats.healthState = Stats.HealthState.Downed;
+    //    }
+    //    RPCUpdateBars();
+    //}
 
     [ClientRpc]
     private void RPCTrowAction(ThrowableAction action, float value)
